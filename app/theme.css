@@ -1,0 +1,165 @@
+/* ==========================================================================
+   DHL Operations Platform - Liquid Glass & OKLCH Theme Architecture
+   ========================================================================== */
+
+:root {
+  /* --------------------------------------------------------------------------
+     Core OKLCH Color Palette
+     L = Lightness (0-1), C = Chroma (0-0.4), H = Hue (0-360)
+     -------------------------------------------------------------------------- */
+
+  /* DHL Brand Primaries */
+  --dhl-red: oklch(0.54 0.24 25.8);
+  --dhl-red-hover: oklch(0.48 0.25 25.8);
+  --dhl-red-active: oklch(0.42 0.26 25.8);
+  --dhl-red-subtle: oklch(0.96 0.03 25.8);
+  --dhl-red-glow: oklch(0.54 0.24 25.8 / 0.25);
+
+  --dhl-yellow: oklch(0.88 0.19 92.5);
+  --dhl-yellow-hover: oklch(0.84 0.20 92.5);
+  --dhl-yellow-subtle: oklch(0.97 0.05 92.5);
+  --dhl-yellow-glow: oklch(0.88 0.19 92.5 / 0.35);
+
+  /* Sophisticated Neutrals & Dark Surface OKLCH */
+  --surface-base: oklch(0.985 0.003 250);
+  --surface-raised: oklch(0.995 0.002 250);
+  --surface-sunken: oklch(0.95 0.008 250);
+  
+  --surface-dark-900: oklch(0.16 0.015 260);
+  --surface-dark-800: oklch(0.22 0.018 260);
+  --surface-dark-700: oklch(0.28 0.02 260);
+
+  /* Text Contrast Hierarchy */
+  --text-primary: oklch(0.18 0.02 260);
+  --text-secondary: oklch(0.42 0.015 260);
+  --text-tertiary: oklch(0.60 0.01 260);
+  --text-inverse: oklch(0.99 0.001 260);
+  --text-accent: oklch(0.54 0.24 25.8);
+
+  /* Status Colors in OKLCH */
+  --status-emerald: oklch(0.62 0.17 145);
+  --status-emerald-bg: oklch(0.96 0.04 145);
+  --status-blue: oklch(0.58 0.18 245);
+  --status-blue-bg: oklch(0.95 0.04 245);
+  --status-amber: oklch(0.72 0.16 75);
+  --status-amber-bg: oklch(0.96 0.05 75);
+  --status-purple: oklch(0.55 0.20 300);
+  --status-purple-bg: oklch(0.95 0.05 300);
+
+  /* --------------------------------------------------------------------------
+     Liquid Glass UI System (Blur, Translucency, Specular Refraction)
+     -------------------------------------------------------------------------- */
+  --glass-bg-primary: oklch(1 0 0 / 0.72);
+  --glass-bg-secondary: oklch(0.98 0.005 250 / 0.60);
+  --glass-bg-card: oklch(1 0 0 / 0.82);
+  --glass-bg-dark: oklch(0.18 0.02 260 / 0.80);
+  --glass-bg-red: oklch(0.54 0.24 25.8 / 0.08);
+  --glass-bg-yellow: oklch(0.88 0.19 92.5 / 0.12);
+
+  --glass-border-subtle: oklch(0.90 0.01 260 / 0.70);
+  --glass-border-specular: oklch(1 0 0 / 0.85);
+  --glass-border-colored: oklch(0.54 0.24 25.8 / 0.35);
+
+  --glass-blur-sm: 8px;
+  --glass-blur-md: 16px;
+  --glass-blur-lg: 24px;
+  --glass-blur-xl: 40px;
+
+  --glass-shadow-ambient: 0 4px 20px -2px oklch(0.15 0.02 260 / 0.06);
+  --glass-shadow-elevated: 0 12px 36px -4px oklch(0.15 0.02 260 / 0.10), 0 2px 8px -1px oklch(0.15 0.02 260 / 0.04);
+  --glass-shadow-floating: 0 20px 48px -6px oklch(0.15 0.02 260 / 0.14), 0 1px 3px 0 oklch(1 0 0 / 0.60) inset;
+  --glass-shadow-inner-glow: inset 0 1px 1px 0 oklch(1 0 0 / 0.8), inset 0 -1px 1px 0 oklch(0 0 0 / 0.05);
+
+  /* --------------------------------------------------------------------------
+     Typography & Layout Geometry
+     -------------------------------------------------------------------------- */
+  --font-family-display: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-family-body: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-family-mono: "JetBrains Mono", "SF Mono", Menlo, Consolas, monospace;
+
+  --h1-size: clamp(2rem, 3.5vw + 1rem, 3.25rem);
+  --h1-weight: 900;
+  --h1-tracking: -0.035em;
+  --h1-line-height: 1.1;
+
+  --h2-size: clamp(1.5rem, 2.2vw + 0.8rem, 2.25rem);
+  --h2-weight: 800;
+  --h2-tracking: -0.025em;
+
+  --h3-size: clamp(1.25rem, 1.5vw + 0.6rem, 1.65rem);
+  --h3-weight: 800;
+  --h3-tracking: -0.02em;
+
+  --border-radius-xs: 6px;
+  --border-radius-sm: 10px;
+  --border-radius-md: 14px;
+  --border-radius-lg: 20px;
+  --border-radius-xl: 28px;
+  --border-radius-pill: 9999px;
+}
+
+/* --------------------------------------------------------------------------
+   Liquid Glass Utility Classes
+   -------------------------------------------------------------------------- */
+.liquid-glass {
+  background: var(--glass-bg-primary);
+  backdrop-filter: blur(var(--glass-blur-md)) saturate(180%);
+  -webkit-backdrop-filter: blur(var(--glass-blur-md)) saturate(180%);
+  border: 1px solid var(--glass-border-subtle);
+  box-shadow: var(--glass-shadow-floating);
+}
+
+.liquid-glass-subtle {
+  background: var(--glass-bg-secondary);
+  backdrop-filter: blur(var(--glass-blur-sm)) saturate(150%);
+  -webkit-backdrop-filter: blur(var(--glass-blur-sm)) saturate(150%);
+  border: 1px solid var(--glass-border-subtle);
+  box-shadow: var(--glass-shadow-ambient);
+}
+
+.liquid-glass-card {
+  background: var(--glass-bg-card);
+  backdrop-filter: blur(var(--glass-blur-lg)) saturate(190%);
+  -webkit-backdrop-filter: blur(var(--glass-blur-lg)) saturate(190%);
+  border: 1px solid oklch(1 0 0 / 0.65);
+  box-shadow: var(--glass-shadow-elevated), var(--glass-shadow-inner-glow);
+  border-radius: var(--border-radius-lg);
+}
+
+.liquid-glass-dark {
+  background: var(--glass-bg-dark);
+  backdrop-filter: blur(var(--glass-blur-xl)) saturate(200%);
+  -webkit-backdrop-filter: blur(var(--glass-blur-xl)) saturate(200%);
+  border: 1px solid oklch(1 0 0 / 0.12);
+  box-shadow: 0 16px 40px -8px oklch(0 0 0 / 0.4), inset 0 1px 1px 0 oklch(1 0 0 / 0.15);
+  color: var(--text-inverse);
+}
+
+.liquid-glass-red {
+  background: var(--glass-bg-red);
+  backdrop-filter: blur(var(--glass-blur-sm));
+  border: 1px solid var(--glass-border-colored);
+}
+
+.liquid-glass-yellow {
+  background: var(--glass-bg-yellow);
+  backdrop-filter: blur(var(--glass-blur-sm));
+  border: 1px solid oklch(0.88 0.19 92.5 / 0.4);
+}
+
+.liquid-specular-edge {
+  position: relative;
+}
+.liquid-specular-edge::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, oklch(1 0 0 / 0.7), oklch(1 0 0 / 0.1) 40%, oklch(0.54 0.24 25.8 / 0.3) 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}

@@ -1,0 +1,232 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Shipment {
+  id                 String   @id @default(cuid())
+  trackingId         String   @unique
+  orderId            String
+  customerName       String
+  customerPhone      String
+  senderName         String
+  senderAddress      String
+  recipientAddress   String
+  originCity         String
+  destinationCity    String
+  destCity           String?
+  status             String   @default("Pending")
+  priority           String   @default("Standard")
+  weightKg           Float
+  parcelType         String
+  pieces             Int?     @default(1)
+  serviceType        String?  @default("Express Air")
+  carrier            String?  @default("DHL Express")
+  temperatureCelsius Float?
+  estimatedDelivery  String
+  actualDelivery     String?
+  createdAt          String
+  driverId           String?
+  driverName         String?
+  vehicleNo          String?
+  assignedDriverId   String?
+  costUsd            Float    @default(0)
+  revenueUsd         Float    @default(0)
+  fuelCostUsd        Float    @default(0)
+  routePointsJson    String   @default("[]") // JSON string of RoutePoint[]
+  currentLocationLat Float
+  currentLocationLng Float
+  currentLocationAddr String
+  proofOfDeliveryJson String? // JSON string of ProofOfDelivery
+  flaggedForDelay    Boolean  @default(false)
+  delayReason        String?
+  
+  timeline           TimelineEntry[]
+  alerts             LogisticsAlert[]
+}
+
+model TimelineEntry {
+  id         String   @id @default(cuid())
+  shipmentId String
+  status     String
+  location   String
+  timestamp  String
+  note       String
+  updatedBy  String
+
+  shipment   Shipment @relation(fields: [shipmentId], references: [id], onDelete: Cascade)
+}
+
+model Driver {
+  id                  String   @id @default(cuid())
+  name                String
+  phone               String
+  avatar              String
+  status              String   @default("Available")
+  vehicleType         String
+  vehicleNo           String
+  currentLat          Float
+  currentLng          Float
+  assignedShipmentIds String   @default("[]") // JSON array of string IDs
+  rating              Float    @default(4.9)
+  completedToday      Int      @default(0)
+  fuelLevelPct        Int      @default(100)
+  activeRouteName     String?
+}
+
+model Vehicle {
+  id                   String  @id @default(cuid())
+  plateNo              String  @unique
+  model                String
+  type                 String
+  status               String  @default("Available")
+  driverId             String?
+  driverName           String?
+  fuelLevelPct         Int     @default(100)
+  mileageKm            Int     @default(0)
+  nextServiceDate      String
+  maxPayloadKg         Int     @default(1000)
+  lastInspectionPassed Boolean @default(true)
+  gpsDeviceId          String
+}
+
+model WarehouseHub {
+  id                 String @id @default(cuid())
+  name               String
+  code               String @unique
+  city               String
+  country            String
+  address            String
+  totalCapacityTons  Int
+  currentUsageTons   Int
+  managerName        String
+  contactPhone       String
+  activeDocks        Int    @default(4)
+  totalDocks         Int    @default(8)
+  inboundToday       Int    @default(0)
+  outboundToday      Int    @default(0)
+  status             String @default("Normal Operations")
+}
+
+model LogisticsAlert {
+  id         String   @id @default(cuid())
+  shipmentId String
+  trackingId String
+  type       String
+  severity   String
+  message    String
+  timestamp  String
+  resolved   Boolean  @default(false)
+
+  shipment   Shipment? @relation(fields: [shipmentId], references: [id], onDelete: Cascade)
+}
+
+model InvoiceRecord {
+  id            String  @id @default(cuid())
+  invoiceNo     String  @unique
+  orderId       String
+  customerName  String
+  customerEmail String
+  amountUsd     Float
+  paymentType   String  @default("Prepaid")
+  status        String  @default("Pending")
+  issueDate     String
+  dueDate       String
+  paidAt        String?
+  itemsSummary  String
+}
+
+model RateTariff {
+  id                  String @id @default(cuid())
+  name                String
+  zoneFrom            String
+  zoneTo              String
+  basePriceUsd        Float
+  pricePerKgUsd       Float
+  expressMultiplier   Float  @default(1.5)
+  overnightMultiplier Float  @default(2.0)
+  fuelSurchargePct    Float  @default(12.5)
+  handlingFeeUsd      Float  @default(15.0)
+}
+
+model InventoryItem {
+  id            String @id @default(cuid())
+  sku           String @unique
+  name          String
+  category      String
+  warehouseHub  String
+  quantity      Int
+  minThreshold  Int
+  unit          String
+  unitCostUsd   Float
+  status        String @default("In Stock")
+  lastRestocked String
+}
+
+model ExpenseRecord {
+  id         String @id @default(cuid())
+  date       String
+  category   String
+  amountUsd  Float
+  vehicleNo  String
+  driverName String
+  note       String
+}
+
+model SystemPermission {
+  id          String  @id
+  name        String
+  description String
+  superadmin  Boolean @default(true)
+  admin       Boolean @default(false)
+  driver      Boolean @default(false)
+  customer    Boolean @default(false)
+}
+
+model AuthUser {
+  id         String  @id @default(cuid())
+  name       String
+  email      String  @unique
+  role       String  @default("customer")
+  staffId    String  @unique
+  hub        String?
+  vehicleId  String?
+  avatarUrl  String?
+  department String?
+  phone      String?
+  lastLogin  String?
+}
+
+model AIGovernanceConfig {
+  id                      String   @id @default("singleton_governance")
+  aiEnabled               Boolean  @default(true)
+  lastModifiedBy          String   @default("SuperAdmin")
+  lastModifiedAt          String   @default("2026-08-14 09:30")
+  dataAccessMode          String   @default("human_in_the_loop")
+  readPermissionsJson     String   @default("{\"shipments\":true,\"fleetAndDrivers\":true,\"telemetryAndGPS\":true,\"financialsAndTariffs\":true,\"alertsAndExceptions\":true}")
+  writePermissionsJson    String   @default("{\"updateShipmentStatus\":true,\"assignDrivers\":true,\"createAlerts\":true,\"modifyTariffs\":false}")
+}
+
+model PendingAIAction {
+  id             String @id @default(cuid())
+  actionType     String
+  title          String
+  description    String
+  payloadJson    String // JSON representation of payload
+  status         String @default("pending") // pending, approved, rejected
+  timestamp      String
+  proposerPrompt String?
+}
+
+model AIAuditLog {
+  id        String @id @default(cuid())
+  timestamp String
+  actor     String
+  action    String
+  details   String
+  status    String
+}
