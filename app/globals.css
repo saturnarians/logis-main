@@ -47,6 +47,68 @@
   code, pre {
     font-family: var(--font-family-mono);
   }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  button,
+  input {
+    font: inherit;
+  }
+}
+
+.dhl-logo {
+  display: inline-flex;
+  align-items: center;
+  font-weight: 900;
+  font-style: italic;
+  font-size: 2rem;
+  color: var(--dhl-red);
+  letter-spacing: -1px;
+  position: relative;
+  user-select: none;
+}
+
+.dhl-stripes {
+  height: 18px;
+  width: 32px;
+  margin-right: 6px;
+  background: linear-gradient(
+    to bottom,
+    var(--dhl-red) 0%,
+    var(--dhl-red) 20%,
+    var(--dhl-yellow) 20%,
+    var(--dhl-yellow) 40%,
+    var(--dhl-red) 40%,
+    var(--dhl-red) 60%,
+    var(--dhl-yellow) 60%,
+    var(--dhl-yellow) 80%,
+    var(--dhl-red) 80%,
+    var(--dhl-red) 100%
+  );
+}
+
+.hero-bg {
+  background: linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.25)),
+    url('https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1800&q=80') center/cover no-repeat;
+}
+
+.yellow-corner-badge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 42px 42px 0;
+  border-color: transparent var(--dhl-yellow) transparent transparent;
+  border-top-right-radius: 0.75rem;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 /* Custom Scrollbar for Operations Consoles */

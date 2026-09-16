@@ -25,12 +25,12 @@ import { SuperAdminPortal } from '@/components/roles/superadmin/SuperAdminPortal
 import { useLogistics } from '@/context/LogisticsContext';
 
 export function AdminPortal() {
-  const { activeNavSection, role } = useLogistics();
+  const { activeNavSection, setActiveNavSection, role } = useLogistics();
 
   const views = {
     overview_dashboard: <div className="space-y-6"><KPIOverview /><LiveMapAndList /><AnalyticsCharts /><OrderDispatchTable /><FinancialSnapshotView /></div>,
     overview_reports: <OverviewReportsView />,
-    orders_shipments: <ShipmentsOrdersView />, orders_dispatch: <DispatchBookingView />, orders_tracking: <LiveMapAndList />,
+    orders_shipments: <ShipmentsOrdersView onOpenCreateOrder={() => setActiveNavSection('orders_dispatch')} />, orders_dispatch: <DispatchBookingView />, orders_tracking: <LiveMapAndList />,
     fleet_vehicles: <FleetManagementView />, fleet_drivers: <DriversPersonnelView />, fleet_routes: <RoutesPlanningView />,
     inventory_stock: <InventoryStockView />, inventory_warehouses: <WarehousesHubsView />,
     finance_invoices: <InvoicesPaymentsView />, finance_tariffs: <RatesTariffsView />,

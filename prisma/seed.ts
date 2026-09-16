@@ -12,6 +12,8 @@ import {
   INITIAL_EXPENSES,
   INITIAL_AI_GOVERNANCE,
 } from '../lib/mockData';
+import { PrismaUserRepository } from '../server/services/repository/auth.prisma.repository';
+import { ScryptPasswordHasher } from '../server/services/repository/argon2.passwordhasher';
 
 const prisma = new PrismaClient();
 
@@ -257,7 +259,95 @@ async function main() {
     });
   }
 
-  console.log('✅ SQLite Database seeded successfully with Prisma!');
+  // 11. Seed Auth Users via repository with secure scrypt password hashing
+  const userRepository = new PrismaUserRepository(prisma);
+  const passwordHasher = new ScryptPasswordHasher();
+
+  const seedPassword = process.env.SEED_DEFAULT_PASSWORD || 'password123';
+
+  const staffUsers = [
+    {
+      id: 'usr-superadmin',
+      name: 'Alex Rodriguez',
+      email: 'superadmin@dhl.com',
+      passwordHash: await passwordHasher.hash(seedPassword),
+      role: 'superadmin' as const,
+      staffId: 'DHL-DIR-001',
+      hub: 'Global Operations Headquarters',
+      department: 'Executive Logistics Command',
+      phone: '+44 20 7946 0991',
+      avatarUrl: 'https://picsum.photos/seed/superadmin/120/120',
+      isActive: true,
+    },
+    {
+      id: 'usr-admin',
+      name: 'Sarah Jenkins',
+      email: 'admin@dhl.com',
+      passwordHash: await passwordHasher.hash(seedPassword),
+      role: 'admin' as const,
+      staffId: 'DHL-MGR-442',
+      hub: 'London Central Gateway',
+      department: 'Dispatch & Fleet Logistics',
+      phone: '+44 20 7946 0834',
+      avatarUrl: 'https://picsum.photos/seed/admin/120/120',
+      isActive: true,
+    },
+    {
+      id: 'usr-customer',
+      name: 'Customer User',
+      email: 'customer@dhl.com',
+      passwordHash: await passwordHasher.hash(seedPassword),
+      role: 'customer' as const,
+      staffId: 'DHL-CUST-001',
+      hub: 'London Central Gateway',
+      department: 'Retail Logistics',
+      phone: '+44 20 7946 0000',
+      avatarUrl: 'https://picsum.photos/seed/customer/120/120',
+      isActive: true,
+    },
+    {
+      id: 'usr-driver-default',
+      name: 'Marcus Vance',
+      email: 'driver@dhl.com',
+      passwordHash: await passwordHasher.hash(seedPassword),
+      role: 'driver' as const,
+      staffId: 'DHL-DRV-101',
+      hub: 'London Central Gateway',
+      vehicleId: 'DHL-V-901',
+      department: 'Express Last-Mile Courier',
+      phone: '+1 (555) 234-5678',
+      avatarUrl: 'https://picsum.photos/seed/driver1/120/120',
+      isActive: true,
+    },
+  ];
+
+  for (const user of staffUsers) {
+    await userRepository.upsertUser(user);
+  }
+
+  // Seed all drivers from INITIAL_DRIVERS
+  for (const driver of INITIAL_DRIVERS) {
+    const emailName = driver.name.toLowerCase().replace(/\s+/g, '.');
+    const staffId = `DHL-DRV-${driver.id.replace('drv-', '')}`;
+    const passwordHash = await passwordHasher.hash(seedPassword);
+
+    await userRepository.upsertUser({
+      id: `usr-${driver.id}`,
+      name: driver.name,
+      email: `${emailName}@dhl.com`,
+      passwordHash,
+      role: 'driver',
+      staffId,
+      hub: driver.activeRouteName || 'London Central Gateway',
+      vehicleId: driver.vehicleNo,
+      department: 'Express Fleet Courier',
+      phone: driver.phone,
+      avatarUrl: driver.avatar,
+      isActive: driver.status !== 'Off Duty',
+    });
+  }
+
+  console.log('✅ SQLite Database seeded successfully with SuperAdmin, Admin, Driver, and Customer Auth Users!');
 }
 
 main()

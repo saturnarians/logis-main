@@ -1,8 +1,9 @@
 'use client';
 
-import React, { useState, useEffect, Suspense } from 'react';
+import React, { useState, useEffect, useMemo, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useLogistics } from '@/context/LogisticsContext';
+import { downloadWaybillPdf } from '@/lib/waybillPdf';
 import { PublicHeader } from '@/components/public/PublicHeader';
 import { PublicFooter } from '@/components/public/PublicFooter';
 import { 
@@ -48,6 +49,39 @@ function TrackPageContent() {
   const activeShipment = shipments.find(
     (s) => s.trackingId.toUpperCase() === effectiveCode || s.trackingId.toUpperCase() === inputCode.trim().toUpperCase() || s.id === effectiveCode
   );
+
+  const visibleTimeline = useMemo(() => {
+    if (!activeShipment?.timeline || activeShipment.timeline.length === 0) return [];
+
+    // Map: status -> latest entry (newer updates override older updates)
+    const statusMap = new Map<string, typeof activeShipment.timeline[0]>();
+
+    // Iterate through entries so later/newer entries override earlier ones
+    const entries = [...activeShipment.timeline];
+    for (let i = entries.length - 1; i >= 0; i--) {
+      const entry = entries[i];
+      const existing = statusMap.get(entry.status);
+      if (!existing) {
+        statusMap.set(entry.status, { ...entry, updatedBy: 'DHL' });
+      } else {
+        const timeEntry = new Date(entry.timestamp).getTime() || 0;
+        const timeExisting = new Date(existing.timestamp).getTime() || 0;
+        if (timeEntry >= timeExisting) {
+          statusMap.set(entry.status, { ...entry, updatedBy: 'DHL' });
+        }
+      }
+    }
+
+    // Sort chronologically (Order Placed -> Pending -> In Transit -> Out for Delivery -> Delivered)
+    const result = Array.from(statusMap.values());
+    result.sort((a, b) => {
+      const timeA = new Date(a.timestamp).getTime() || 0;
+      const timeB = new Date(b.timestamp).getTime() || 0;
+      return timeA - timeB;
+    });
+
+    return result;
+  }, [activeShipment]);
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -244,6 +278,14 @@ function TrackPageContent() {
                     </span>
 
                     <button
+                      onClick={() => downloadWaybillPdf(activeShipment)}
+                      className="p-2 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded-xl transition-colors"
+                      title="Download & Print Official Waybill PDF"
+                    >
+                      <Download className="w-4 h-4" />
+                    </button>
+
+                    <button
                       onClick={handleCopyLink}
                       className="p-2 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded-xl transition-colors"
                       title="Copy Direct Tracking URL"
@@ -380,32 +422,36 @@ function TrackPageContent() {
                       Waybill Activity & Transit Checkpoints
                     </h3>
                     <span className="text-xs text-gray-500 font-mono">
-                      {activeShipment.timeline.length} Recorded Events
+                      {visibleTimeline.length} Recorded Events
                     </span>
                   </div>
 
                   <div className="relative pl-6 space-y-6 before:absolute before:left-2 before:top-2 before:bottom-2 before:w-0.5 before:bg-gray-200">
-                    {activeShipment.timeline.map((entry, idx) => (
-                      <div key={entry.id || idx} className="relative group">
-                        <div className={`absolute -left-6 top-1 w-4 h-4 rounded-full border-2 border-white shadow ${
-                          idx === 0 ? 'bg-[#D40511] ring-2 ring-red-200' : 'bg-gray-400'
-                        }`} />
+                    {visibleTimeline.map((entry, idx) => {
+                      const isCurrent = entry.status === activeShipment.status || idx === visibleTimeline.length - 1;
 
-                        <div className="bg-slate-50 p-4 rounded-xl border border-gray-200 space-y-1">
-                          <div className="flex flex-wrap items-center justify-between gap-2">
-                            <span className="font-bold text-xs text-gray-900">{entry.status}</span>
-                            <span className="text-[11px] font-mono text-gray-500">{entry.timestamp}</span>
-                          </div>
-                          <p className="text-xs text-gray-700 font-medium">{entry.note}</p>
-                          <div className="text-[10px] text-gray-400 flex items-center space-x-1 pt-1">
-                            <Building2 className="w-3 h-3" />
-                            <span>Location: {entry.location}</span>
-                            <span>•</span>
-                            <span>Recorded by: {entry.updatedBy}</span>
+                      return (
+                        <div key={entry.id || idx} className="relative group">
+                          <div className={`absolute -left-6 top-1 w-4 h-4 rounded-full border-2 border-white shadow transition-all ${
+                            isCurrent ? 'bg-[#D40511] ring-4 ring-red-200 animate-pulse' : 'bg-gray-400'
+                          }`} />
+
+                          <div className="bg-slate-50 p-4 rounded-xl border border-gray-200 space-y-1">
+                            <div className="flex flex-wrap items-center justify-between gap-2">
+                              <span className="font-bold text-xs text-gray-900">{entry.status}</span>
+                              <span className="text-[11px] font-mono text-gray-500">{entry.timestamp}</span>
+                            </div>
+                            <p className="text-xs text-gray-700 font-medium">{entry.note}</p>
+                            <div className="text-[10px] text-gray-400 flex items-center space-x-1 pt-1">
+                              <Building2 className="w-3 h-3" />
+                              <span>Location: {entry.location}</span>
+                              <span>•</span>
+                              <span>Recorded by: DHL</span>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 </div>
               )}

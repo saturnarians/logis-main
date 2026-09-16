@@ -2,7 +2,8 @@
 
 import React, { useState } from 'react';
 import { useLogistics } from '@/context/LogisticsContext';
-import { PriorityLevel } from '@/types/logistics';
+import { PriorityLevel, Shipment, ShipmentStatus } from '@/types/logistics';
+import { downloadWaybillPdf } from '@/lib/waybillPdf';
 import { 
   Send, 
   User, 
@@ -15,7 +16,8 @@ import {
   CheckCircle2,
   FileCheck,
   Calculator,
-  ArrowRight
+  ArrowRight,
+  Download
 } from 'lucide-react';
 
 interface DispatchBookingViewProps {
@@ -43,6 +45,7 @@ export const DispatchBookingView: React.FC<DispatchBookingViewProps> = ({ onSucc
   const [fuelCostUsd, setFuelCostUsd] = useState<number>(12.50);
 
   const [bookingSuccess, setBookingSuccess] = useState<string | null>(null);
+  const [createdShipment, setCreatedShipment] = useState<any | null>(null);
 
   // Auto calculate cost when weight or priority changes
   const handleRecalculateRate = () => {
@@ -63,10 +66,12 @@ export const DispatchBookingView: React.FC<DispatchBookingViewProps> = ({ onSucc
     }
 
     const assignedDriver = drivers.find((d) => d.id === selectedDriverId);
+    const trackingId = `DHL-${Math.floor(1000 + Math.random() * 9000)}-${Math.floor(10 + Math.random() * 90)}`;
+    const orderId = `ORD-${Math.floor(1000 + Math.random() * 9000)}`;
 
-    createShipment({
-      orderId: `ORD-${Math.floor(1000 + Math.random() * 9000)}`,
-      trackingId: `DHL-${Math.floor(1000 + Math.random() * 9000)}-${Math.floor(10 + Math.random() * 90)}`,
+    const newShipmentData = {
+      orderId,
+      trackingId,
       customerName,
       customerPhone: customerPhone || '+44 20 7946 0000',
       senderName,
@@ -74,7 +79,7 @@ export const DispatchBookingView: React.FC<DispatchBookingViewProps> = ({ onSucc
       recipientAddress,
       originCity,
       destinationCity,
-      status: selectedDriverId ? 'In Transit' : 'Pending',
+      status: (selectedDriverId ? 'In Transit' : 'Pending') as ShipmentStatus,
       priority,
       weightKg: Number(weightKg),
       parcelType,
@@ -89,9 +94,11 @@ export const DispatchBookingView: React.FC<DispatchBookingViewProps> = ({ onSucc
         verified: false,
         otpCode: Math.floor(100000 + Math.random() * 900000).toString(),
       },
-    });
+    };
 
-    setBookingSuccess(`Waybill booked and registered! Notification sent to courier ${assignedDriver?.name || 'Pending Queue'}.`);
+    createShipment(newShipmentData);
+    setCreatedShipment(newShipmentData);
+    setBookingSuccess(`Waybill booked and registered! Assigned to ${assignedDriver?.name || 'Pending Dispatch Queue'}.`);
     
     // Reset form
     setCustomerName('');
@@ -126,18 +133,40 @@ export const DispatchBookingView: React.FC<DispatchBookingViewProps> = ({ onSucc
         </button>
       </div>
 
-      {bookingSuccess && (
-        <div className="bg-emerald-50 border border-emerald-300 p-4 rounded-xl flex items-center justify-between text-emerald-900 text-xs font-bold animate-fadeIn">
-          <div className="flex items-center space-x-2">
-            <CheckCircle2 className="w-5 h-5 text-emerald-600 flex-shrink-0" />
-            <span>{bookingSuccess}</span>
+      {bookingSuccess && createdShipment && (
+        <div className="bg-emerald-50 border border-emerald-300 p-4 sm:p-5 rounded-2xl flex flex-wrap items-center justify-between gap-4 text-emerald-950 text-xs font-bold animate-fadeIn shadow-sm">
+          <div className="flex items-center space-x-3">
+            <CheckCircle2 className="w-6 h-6 text-emerald-600 flex-shrink-0" />
+            <div>
+              <div className="font-extrabold text-sm text-emerald-900">
+                Waybill Registered: <span className="font-mono text-[#D40511] font-black">{createdShipment.trackingId}</span>
+              </div>
+              <p className="text-emerald-700 text-xs mt-0.5 font-normal">
+                {bookingSuccess}
+              </p>
+            </div>
           </div>
-          <button
-            onClick={() => setBookingSuccess(null)}
-            className="text-emerald-700 hover:text-emerald-900 text-xs font-black uppercase"
-          >
-            Dismiss
-          </button>
+          <div className="flex items-center space-x-2">
+            <button
+              type="button"
+              onClick={() => downloadWaybillPdf(createdShipment)}
+              className="bg-[#D40511] hover:bg-red-700 text-white font-black text-xs px-4 py-2.5 rounded-xl shadow transition-all flex items-center space-x-1.5"
+              title="Download & Print Official Waybill PDF"
+            >
+              <Download className="w-4 h-4" />
+              <span>Download Waybill PDF</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setBookingSuccess(null);
+                setCreatedShipment(null);
+              }}
+              className="text-gray-500 hover:text-gray-800 text-xs font-bold px-3 py-2"
+            >
+              Dismiss
+            </button>
+          </div>
         </div>
       )}
 

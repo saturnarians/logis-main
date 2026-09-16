@@ -1,22 +1,13 @@
 import { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { logger } from '@/lib/logger';
+import { prisma } from '@/lib/prisma';
+import { PrismaUserRepository } from '@/server/services/repository/auth.prisma.repository';
+import { ScryptPasswordHasher } from '@/server/services/repository/argon2.passwordhasher';
 import { LoginCredentialsSchema } from '@/types/dto';
 
-const DEMO_USERS: Record<string, any> = {
-  'superadmin@dhl.com': {
-    id: 'usr-superadmin-01', name: 'Dr. Evelyn Vogel', email: 'superadmin@dhl.com', role: 'superadmin', staffId: 'DHL-HQ-001',
-    department: 'Executive Governance & AI Security', avatarUrl: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&auto=format&fit=crop&q=80', phone: '+49 228 182-0', hub: 'Bonn HQ Global Control Center',
-  },
-  'admin@dhl.com': {
-    id: 'usr-admin-01', name: 'Marcus Reinhardt', email: 'admin@dhl.com', role: 'admin', staffId: 'DHL-OPS-492',
-    department: 'European Road & Air Network Operations', avatarUrl: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&auto=format&fit=crop&q=80', phone: '+49 69 690-7000', hub: 'Frankfurt Hub (FRA-HUB-01)',
-  },
-  'driver@dhl.com': {
-    id: 'usr-driver-01', name: 'Klaus Lindner', email: 'driver@dhl.com', role: 'driver', staffId: 'DHL-DRV-088',
-    department: 'Express City Fleet Operations', avatarUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80', phone: '+49 171 555-0199', vehicleId: 'BN-DL-4922 (Mercedes Sprinter EV)', hub: 'Frankfurt Gateway Hub',
-  },
-};
+const users = new PrismaUserRepository(prisma);
+const passwords = new ScryptPasswordHasher();
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -35,11 +26,15 @@ export const authOptions: NextAuthOptions = {
             return null;
           }
 
-          const user = DEMO_USERS[parsed.data.email];
-          if (!user || parsed.data.password !== 'password123') return null;
+          const user = await users.findByIdentifier(parsed.data.email);
+          if (!user || !user.isActive || !(await passwords.verify(user.passwordHash, parsed.data.password))) {
+            return null;
+          }
 
           logger.info('NextAuth', `Authorized login for ${user.email}`);
-          return user;
+          await users.updateLastLogin(user.id, new Date());
+          const { passwordHash, ...authorizedUser } = user;
+          return authorizedUser;
         } catch (error: any) {
           logger.error('NextAuth', 'Authentication error in authorize()', error);
           return null;
@@ -49,11 +44,12 @@ export const authOptions: NextAuthOptions = {
   ],
   session: {
     strategy: 'jwt',
-    maxAge: 30 * 24 * 60 * 60, // 30 days
+    maxAge: 15 * 60, // 15 minutes session duration handled natively by NextAuth
   },
   secret: process.env.NEXTAUTH_SECRET || 'dhl-super-secret-nextauth-encryption-key-2026',
   callbacks: {
     async jwt({ token, user }) {
+      // 1. Initial sign-in: populate token from user payload
       if (user) {
         token.id = user.id;
         token.role = (user as any).role;
@@ -63,20 +59,31 @@ export const authOptions: NextAuthOptions = {
         token.vehicleId = (user as any).vehicleId;
         token.department = (user as any).department;
         token.phone = (user as any).phone;
+        token.lastActive = Date.now();
+        token.version = process.env.SESSION_VERSION || '1';
+        return token;
       }
+
+      // 2. Subsequent requests: update timestamp safely
+      token.lastActive = Date.now();
       return token;
     },
     async session({ session, token }) {
-      if (token && session.user) {
-        session.user.id = token.id as string;
-        session.user.role = token.role as any;
-        session.user.staffId = token.staffId as string;
-        session.user.avatarUrl = token.avatarUrl as string;
-        session.user.hub = token.hub as string;
-        session.user.vehicleId = token.vehicleId as string;
-        session.user.department = token.department as string;
-        session.user.phone = token.phone as string;
+      // Guard clause: stop if token or session user is missing
+      if (!token?.id || !session.user) {
+        return session;
       }
+
+      session.user.id = token.id as string;
+      session.user.role = token.role as any;
+      session.user.staffId = token.staffId as string;
+      session.user.avatarUrl = token.avatarUrl as string;
+      session.user.hub = token.hub as string;
+      session.user.vehicleId = token.vehicleId as string;
+      session.user.department = token.department as string;
+      session.user.phone = token.phone as string;
+      (session as any).version = token.version;
+
       return session;
     },
   },

@@ -1,6 +1,7 @@
 export type Role = 'superadmin' | 'admin' | 'driver' | 'customer';
 
 export type ShipmentStatus = 
+  | 'Order Placed'
   | 'Pending' 
   | 'In Transit' 
   | 'Out for Delivery' 

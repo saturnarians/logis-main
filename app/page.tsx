@@ -1,5 +1,5 @@
-import { redirect } from 'next/navigation';
+import { DHLHomepageLanding } from '@/components/public/DHLHomepageLanding';
 
 export default function Home() {
-  redirect('/track');
+  return <DHLHomepageLanding />;
 }

@@ -16,8 +16,12 @@ import {
   Eye, 
   Truck,
   FileSpreadsheet,
-  AlertCircle
+  AlertCircle,
+  Edit3,
+  FileText
 } from 'lucide-react';
+import { downloadWaybillPdf } from '@/lib/waybillPdf';
+import { UpdateWaybillModal } from '../UpdateWaybillModal';
 
 interface ShipmentsOrdersViewProps {
   onOpenCreateOrder?: () => void;
@@ -30,14 +34,15 @@ export const ShipmentsOrdersView: React.FC<ShipmentsOrdersViewProps> = ({
   onOpenPodModal,
   onSelectShipment,
 }) => {
-  const { 
-    shipments, 
-    statusFilter, 
-    setStatusFilter, 
-    searchQuery, 
-    setSearchQuery, 
+  const {
+    shipments,
+    statusFilter,
+    setStatusFilter,
+    searchQuery,
+    setSearchQuery,
     updateShipmentStatus,
     setTrackedShipmentId,
+    role,
   } = useLogistics();
 
   const handleSelect = (trackingId: string) => {
@@ -51,6 +56,7 @@ export const ShipmentsOrdersView: React.FC<ShipmentsOrdersViewProps> = ({
   const [priorityFilter, setPriorityFilter] = useState<string>('All');
   const [sortField, setSortField] = useState<'createdAt' | 'estimatedDelivery' | 'weightKg'>('createdAt');
   const [sortAsc, setSortAsc] = useState(false);
+  const [updatingShipment, setUpdatingShipment] = useState<Shipment | null>(null);
 
   // Status Filter Tabs
   const statuses: (ShipmentStatus | 'All')[] = [
@@ -327,6 +333,38 @@ export const ShipmentsOrdersView: React.FC<ShipmentsOrdersViewProps> = ({
                     {/* Actions */}
                     <td className="py-3 px-4 text-right">
                       <div className="flex items-center justify-end space-x-1.5">
+                        <select
+                          onChange={(e) => {
+                            const val = e.target.value as ShipmentStatus;
+                            if (val) updateShipmentStatus(shipment.trackingId, val);
+                          }}
+                          defaultValue=""
+                          className="text-[11px] font-semibold border border-gray-300 rounded px-2 py-1 outline-none text-gray-800 bg-white"
+                        >
+                          <option value="" disabled>
+                            Update Status
+                          </option>
+                          <option value="Pending">Pending</option>
+                          <option value="In Transit">In Transit</option>
+                          <option value="Out for Delivery">Out for Delivery</option>
+                          <option value="Delivered">Delivered</option>
+                          <option value="Delayed">Delayed</option>
+                          <option value="Canceled">Canceled</option>
+                        </select>
+                        <button
+                          onClick={() => setUpdatingShipment(shipment)}
+                          className="p-1 rounded text-gray-600 hover:text-[#D40511]"
+                          title="Edit Waybill"
+                        >
+                          <Edit3 className="w-4 h-4" />
+                        </button>
+                        <button
+                          onClick={() => downloadWaybillPdf(shipment)}
+                          className="p-1.5 rounded-lg bg-red-50 hover:bg-red-100 text-[#D40511] transition-colors"
+                          title="Download & Print Waybill PDF"
+                        >
+                          <FileText className="w-4 h-4" />
+                        </button>
                         <button
                           onClick={() => handleSelect(shipment.trackingId)}
                           className="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-gray-700 transition-colors"
@@ -352,6 +390,14 @@ export const ShipmentsOrdersView: React.FC<ShipmentsOrdersViewProps> = ({
           </table>
         </div>
       </div>
+
+      {updatingShipment && (
+        <UpdateWaybillModal
+          isOpen={true}
+          shipment={updatingShipment}
+          onClose={() => setUpdatingShipment(null)}
+        />
+      )}
     </div>
   );
 };

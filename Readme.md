@@ -1,30 +1,99 @@
-## **DHL Express & Logistics Platform**
+# DHL Clone Logistics Platform
 
-This is a **real-time logistics tracking and dispatch management system** built with modern web technologies. Here's what it provides:
+A simple DHL-inspired logistics and operations dashboard built with Next.js. This project includes a public landing page, shipment tracking flow, staff login, and role-based dashboard experiences for operations teams.
 
-### **Core Features**
-- **Real-time Logistics Tracking** – Monitor shipments and packages in transit
-- **Dispatch Dashboard** – Manage orders, track drivers, and optimize routing
-- **Fleet Management** – Oversee vehicle inventory, maintenance, and deployment
-- **Public Tracking Portal** – Customers can track shipments independently
-- **AI Copilot Integration** – Powered by Google Gemini API for intelligent assistance
+## Project Overview
 
-### **Technical Stack**
-- **Frontend**: Next.js 15, React 19, TypeScript, TailwindCSS
-- **Backend**: Next.js API routes with server-side Gemini AI
-- **Database**: PostgreSQL with Prisma ORM
-- **State Management**: Redux Toolkit + React Query
-- **Authentication**: NextAuth.js with role-based access control
-- **Monitoring**: Sentry & Datadog for observability
+This app is designed to mimic a modern logistics company experience with:
 
-### **Key Modules**
-- **Drivers Management** – Track driver profiles, personnel, and locations
-- **Shipments/Orders** – Manage order dispatch, delivery status, and invoicing
-- **Governance** – System administration and compliance management
-- **Finance** – Billing, payments, and financial reporting
-- **Dashboard** – KPI overview, analytics charts, and live map integration
+- public DHL-style homepage
+- shipment tracking page
+- staff login and access flow
+- operations dashboard for admin and driver roles
+- AI-style operational assistant panel
+- logistics data and route/tracking interfaces
 
-### **User Roles**
-- Admin, Superadmin, Driver, and Public roles with specialized views and permissions
+## Tech Stack
 
-This is an enterprise-grade logistics platform designed for companies like DHL to manage complex supply chain operations in real-time.
+- Next.js
+- TypeScript
+- React
+- Tailwind CSS
+- Prisma
+- NextAuth
+- Lucide Icons
+
+## Main Features
+
+- Responsive public homepage inspired by DHL branding
+- Tracking search for consignments and shipments
+- Secure login flow for staff users
+- Role-based dashboard structure
+- Logistics operations overview
+- AI assistant support and operational controls
+- Routing and shipment management interfaces
+
+## Project Structure
+
+```bash
+app/
+  dashboard/
+  login/
+  track/
+  agent/
+  api/
+components/
+  public/
+  dashboard/
+  auth/
+context/
+lib/
+prisma/
+server/
+store/
+```
+
+## Getting Started
+
+### 1. Install dependencies
+
+```bash
+npm install
+```
+
+### 2. Run the app locally
+
+```bash
+npm run dev
+```
+
+Then open:
+
+```bash
+http://localhost:3000
+```
+
+## Available Scripts
+
+```bash
+npm run dev
+npm run build
+npm run start
+npm run lint
+```
+
+## Default Public Pages
+
+- Home page: `/`
+- Tracking page: `/track`
+- Staff login: `/login`
+- Dashboard: `/dashboard`
+- AI agent center: `/agent`
+
+## Notes
+
+This is a frontend-heavy DHL-inspired clone and operations prototype. It is intended to demonstrate a logistics platform UI and workflow rather than a production-grade shipping system.
+
+## License
+
+This project is for demo and learning purposes.

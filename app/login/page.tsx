@@ -56,12 +56,14 @@ function LoginPageContent() {
   // Feedback status
   const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showAuthLoader, setShowAuthLoader] = useState(false);
   const [copilotOpen, setCopilotOpen] = useState(false);
 
   // Fast Demo 1-Click Login handlers with NextAuth signIn
   const handleQuickDemoLogin = async (targetRole: 'driver' | 'admin' | 'superadmin') => {
     setSelectedRole(targetRole);
     setIsSubmitting(true);
+    setShowAuthLoader(true);
     setFeedback(null);
 
     let defaultEmail = 'superadmin@dhl.com';
@@ -107,6 +109,7 @@ function LoginPageContent() {
       window.location.assign(destination);
     } catch (err: any) {
       setFeedback({ type: 'error', message: 'Authentication error occurred.' });
+      setShowAuthLoader(false);
     } finally {
       setIsSubmitting(false);
     }
@@ -116,6 +119,7 @@ function LoginPageContent() {
   const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setShowAuthLoader(true);
     setFeedback(null);
 
     try {
@@ -148,6 +152,7 @@ function LoginPageContent() {
       window.location.assign(destination);
     } catch (err: any) {
       setFeedback({ type: 'error', message: 'Sign in failed. Please retry.' });
+      setShowAuthLoader(false);
     } finally {
       setIsSubmitting(false);
     }
@@ -158,6 +163,29 @@ function LoginPageContent() {
     e.preventDefault();
     setFeedback({ type: 'error', message: 'Registration is not available. Use an approved staff account to sign in.' });
   };
+
+  if (isSubmitting) {
+    return (
+      <div className="min-h-screen bg-[radial-gradient(circle_at_top,_#fff6d6,_#f5f5f5_35%,_#e5e7eb_100%)] flex items-center justify-center px-4">
+        <div className="w-full max-w-md rounded-[28px] border border-[#D40511]/15 bg-white/80 p-8 text-center shadow-[0_20px_60px_rgba(0,0,0,0.12)] backdrop-blur-sm">
+          <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-[#D40511] text-[#FFCC00] shadow-lg shadow-red-200">
+            <div className="h-8 w-8 animate-spin rounded-full border-4 border-[#FFCC00]/30 border-t-[#FFCC00]" />
+          </div>
+          <div className="mb-3 flex items-center justify-center gap-2">
+            <span className="text-3xl font-black italic tracking-tighter text-[#D40511]">DHL</span>
+            <span className="text-xs font-black uppercase tracking-[0.25em] text-gray-500">Operations</span>
+          </div>
+          <h2 className="text-xl font-black text-gray-900">Secure access in progress</h2>
+          <p className="mt-2 text-sm text-gray-600">Authenticating your staff profile and preparing the dashboard…</p>
+          <div className="mt-6 flex items-center justify-center gap-2">
+            <span className="h-2.5 w-2.5 animate-pulse rounded-full bg-[#D40511]" />
+            <span className="h-2.5 w-2.5 animate-pulse rounded-full bg-[#FFCC00] [animation-delay:0.15s]" />
+            <span className="h-2.5 w-2.5 animate-pulse rounded-full bg-emerald-500 [animation-delay:0.3s]" />
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-slate-100/70 flex flex-col justify-between text-gray-900 font-sans">

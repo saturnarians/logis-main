@@ -147,7 +147,7 @@ export class ShipmentService {
                 location: dto.originCity,
                 timestamp: new Date().toISOString().replace('T', ' ').substring(0, 16),
                 note: `Electronic shipping instructions received. Package ready for pickup in ${dto.originCity}.`,
-                updatedBy: 'Operations Dispatcher',
+                updatedBy: 'DHL',
               },
             ],
           },
@@ -192,12 +192,13 @@ export class ShipmentService {
 
       if (dto.timelineEntry) {
         updateData.timeline = {
+          deleteMany: { status: dto.timelineEntry.status },
           create: {
             status: dto.timelineEntry.status,
             location: dto.timelineEntry.location,
             timestamp: dto.timelineEntry.timestamp || new Date().toISOString().replace('T', ' ').substring(0, 16),
             note: dto.timelineEntry.note,
-            updatedBy: dto.timelineEntry.updatedBy,
+            updatedBy: 'DHL',
           },
         };
       }

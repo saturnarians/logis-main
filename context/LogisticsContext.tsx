@@ -267,6 +267,16 @@ export const LogisticsProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     if (account.role === 'driver') {
       setActiveDriverId('drv-101');
     }
+
+    try {
+      fetch('/api/users', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(account),
+      });
+    } catch (err) {
+      console.warn('Failed to persist user to backend DB:', err);
+    }
     return true;
   };
 
@@ -425,7 +435,8 @@ export const LogisticsProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     id: string,
     newStatus: ShipmentStatus,
     note?: string,
-    location?: string
+    location?: string,
+    estimatedDelivery?: string
   ) => {
     const timestamp = new Date().toISOString().replace('T', ' ').substring(0, 16);
 
@@ -438,7 +449,7 @@ export const LogisticsProvider: React.FC<{ children: React.ReactNode }> = ({ chi
             location: location || s.currentLocation.address,
             timestamp,
             note: note || `Status updated to ${newStatus}`,
-            updatedBy: role === 'driver' ? `Driver (${s.driverName || 'Field Agent'})` : `${role.toUpperCase()} Admin`,
+            updatedBy: 'DHL',
           };
 
           const isDelivered = newStatus === 'Delivered';
@@ -446,7 +457,9 @@ export const LogisticsProvider: React.FC<{ children: React.ReactNode }> = ({ chi
             ...s,
             status: newStatus,
             actualDelivery: isDelivered ? timestamp : s.actualDelivery,
-            timeline: [newTimelineEntry, ...s.timeline],
+            estimatedDelivery: estimatedDelivery || s.estimatedDelivery,
+            currentLocation: location ? { ...s.currentLocation, address: location } : s.currentLocation,
+            timeline: [newTimelineEntry, ...s.timeline.filter((entry) => entry.status !== newStatus)],
             proofOfDelivery: isDelivered && !s.proofOfDelivery?.verified
               ? { verified: true, verifiedAt: timestamp, signedByCustomerName: s.customerName }
               : s.proofOfDelivery,
@@ -455,6 +468,31 @@ export const LogisticsProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         return s;
       })
     );
+
+    // Persist status update to SQLite DB
+    try {
+      const targetShipment = shipments.find((s) => s.id === id || s.trackingId === id);
+      const effectiveTrackingId = targetShipment?.trackingId || id;
+
+      fetch('/api/shipments', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          trackingId: effectiveTrackingId,
+          status: newStatus,
+          estimatedDelivery,
+          timelineEntry: {
+            status: newStatus,
+            location: location || targetShipment?.currentLocation.address || 'Transit Depot',
+            timestamp,
+            note: note || `Status updated to ${newStatus}`,
+            updatedBy: 'DHL',
+          },
+        }),
+      });
+    } catch (err) {
+      console.warn('Failed to persist shipment status to backend:', err);
+    }
   };
 
   const createShipment = (
@@ -463,8 +501,8 @@ export const LogisticsProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     const timestamp = new Date().toISOString().replace('T', ' ').substring(0, 16);
     const id = `ship-${Date.now().toString().slice(-4)}`;
     const randomCode = Math.floor(100000 + Math.random() * 900000).toString();
-    const trackingId = `DHL-${Math.floor(1000 + Math.random() * 9000)}-${Math.floor(10 + Math.random() * 90)}`;
-    const orderId = `ORD-2026-${Math.floor(100 + Math.random() * 900)}`;
+    const trackingId = newShipmentData.trackingId || `DHL-${Math.floor(1000 + Math.random() * 9000)}-${Math.floor(10 + Math.random() * 90)}`;
+    const orderId = newShipmentData.orderId || `ORD-2026-${Math.floor(100 + Math.random() * 900)}`;
 
     const driver = drivers.find((d) => d.id === newShipmentData.driverId);
 
@@ -491,8 +529,8 @@ export const LogisticsProvider: React.FC<{ children: React.ReactNode }> = ({ chi
           status: 'Pending',
           location: `${newShipmentData.originCity} Central Depot`,
           timestamp,
-          note: `Shipment order created by ${role.toUpperCase()}. Assigned to driver: ${driver ? driver.name : 'Pending Dispatch'}`,
-          updatedBy: `${role.toUpperCase()} Dispatch`,
+          note: `Shipment order registered. Assigned to courier: ${driver ? driver.name : 'Pending Dispatch Queue'}`,
+          updatedBy: 'DHL',
         },
       ],
       proofOfDelivery: {
@@ -512,6 +550,37 @@ export const LogisticsProvider: React.FC<{ children: React.ReactNode }> = ({ chi
             : d
         )
       );
+    }
+
+    // Persist new shipment to SQLite DB via POST /api/shipments
+    try {
+      fetch('/api/shipments', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          trackingId,
+          orderId,
+          customerName: newShipmentData.customerName,
+          customerPhone: newShipmentData.customerPhone || '+44 20 7946 0000',
+          senderName: newShipmentData.senderName || 'DHL Hub',
+          senderAddress: newShipmentData.senderAddress || `${newShipmentData.originCity} Logistics Depot`,
+          recipientAddress: newShipmentData.recipientAddress,
+          originCity: newShipmentData.originCity,
+          destinationCity: newShipmentData.destinationCity,
+          priority: newShipmentData.priority || 'Standard',
+          weightKg: Number(newShipmentData.weightKg) || 1.0,
+          parcelType: newShipmentData.parcelType || 'Parcel Box',
+          estimatedDelivery: newShipmentData.estimatedDelivery || timestamp,
+          costUsd: Number(newShipmentData.costUsd) || 0,
+          revenueUsd: Number(newShipmentData.revenueUsd) || 0,
+          fuelCostUsd: Number(newShipmentData.fuelCostUsd) || 0,
+          driverId: newShipmentData.driverId,
+          driverName: driver ? driver.name : newShipmentData.driverName,
+          vehicleNo: driver ? driver.vehicleNo : 'Unassigned',
+        }),
+      });
+    } catch (err) {
+      console.warn('Failed to persist shipment to database:', err);
     }
   };
 
@@ -547,6 +616,17 @@ export const LogisticsProvider: React.FC<{ children: React.ReactNode }> = ({ chi
           : d
       )
     );
+
+    // Persist driver assignment to SQLite DB
+    try {
+      fetch('/api/drivers/assign', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ shipmentId, driverId }),
+      });
+    } catch (err) {
+      console.warn('Failed to persist driver assignment:', err);
+    }
   };
 
   const submitProofOfDelivery = (shipmentId: string, pod: ProofOfDelivery) => {

@@ -9,6 +9,9 @@
     "lint": "eslint .",
     "clean": "next clean"
   },
+  "prisma": {
+    "seed": "bun run prisma/seed.ts"
+  },
   "dependencies": {
     "@google/genai": "*",
     "@hookform/resolvers": "^3.9.1",

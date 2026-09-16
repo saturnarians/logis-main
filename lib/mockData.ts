@@ -151,9 +151,9 @@ export const INITIAL_SHIPMENTS: Shipment[] = [
     revenueUsd: 135.00,
     fuelCostUsd: 12.40,
     timeline: [
-      { id: 't1', status: 'Pending', location: 'Slough Depot', timestamp: '2026-08-08 08:15', note: 'Order manifest created and assigned to driver Marcus Vance.', updatedBy: 'Admin (Sarah J.)' },
-      { id: 't2', status: 'In Transit', location: 'Slough Distribution Center', timestamp: '2026-08-08 08:30', note: 'Package loaded and dispatch scanned.', updatedBy: 'Driver (Marcus Vance)' },
-      { id: 't3', status: 'In Transit', location: 'Paddington Sorting Facility', timestamp: '2026-08-08 14:20', note: 'Passed mid-route security check.', updatedBy: 'System Automated Barcode' }
+      { id: 't1', status: 'Order Placed', location: 'Slough Depot', timestamp: '2026-08-08 08:15', note: 'Electronic shipping instructions received. Package ready for pickup in London.', updatedBy: 'DHL' },
+      { id: 't2', status: 'In Transit', location: 'Slough Distribution Center', timestamp: '2026-08-08 08:30', note: 'Package loaded and dispatch scanned.', updatedBy: 'DHL' },
+      { id: 't3', status: 'In Transit', location: 'Paddington Sorting Facility', timestamp: '2026-08-08 14:20', note: 'Passed mid-route security check.', updatedBy: 'DHL' }
     ],
     proofOfDelivery: {
       verified: false,
@@ -194,9 +194,9 @@ export const INITIAL_SHIPMENTS: Shipment[] = [
     revenueUsd: 190.00,
     fuelCostUsd: 18.20,
     timeline: [
-      { id: 't1', status: 'Pending', location: 'Oxford', timestamp: '2026-08-08 07:00', note: 'Cold-chain parcel pre-logged.', updatedBy: 'System' },
-      { id: 't2', status: 'In Transit', location: 'Oxford Bio Depot', timestamp: '2026-08-08 07:30', note: 'Refrigerated container verified at 4°C.', updatedBy: 'Driver (Marcus Vance)' },
-      { id: 't3', status: 'Delayed', location: 'Marylebone Road', timestamp: '2026-08-08 15:45', note: 'Severe traffic congestion on M4/A40 entrance corridor. SLA pushed back 45 mins.', updatedBy: 'System Exception Engine' }
+      { id: 't1', status: 'Pending', location: 'Oxford', timestamp: '2026-08-08 07:00', note: 'Cold-chain parcel pre-logged.', updatedBy: 'DHL' },
+      { id: 't2', status: 'In Transit', location: 'Oxford Bio Depot', timestamp: '2026-08-08 07:30', note: 'Refrigerated container verified at 4°C.', updatedBy: 'DHL' },
+      { id: 't3', status: 'Delayed', location: 'Marylebone Road', timestamp: '2026-08-08 15:45', note: 'Severe traffic congestion on M4/A40 entrance corridor. SLA pushed back 45 mins.', updatedBy: 'DHL' }
     ],
     flaggedForDelay: true,
     delayReason: 'M4 Highway Congestion & Roadwork Hold',
@@ -238,8 +238,8 @@ export const INITIAL_SHIPMENTS: Shipment[] = [
     revenueUsd: 85.00,
     fuelCostUsd: 8.50,
     timeline: [
-      { id: 't1', status: 'Pending', location: 'Ikeja Hub', timestamp: '2026-08-08 10:00', note: 'Cargo scanned at airfreight terminal.', updatedBy: 'Hub Ops (Daniel K.)' },
-      { id: 't2', status: 'Out for Delivery', location: 'Ikeja Hub', timestamp: '2026-08-08 11:30', note: 'Out for final mile delivery with Driver Aisha Bello.', updatedBy: 'Driver (Aisha Bello)' }
+      { id: 't1', status: 'Pending', location: 'Ikeja Hub', timestamp: '2026-08-08 10:00', note: 'Cargo scanned at airfreight terminal.', updatedBy: 'DHL' },
+      { id: 't2', status: 'Out for Delivery', location: 'Ikeja Hub', timestamp: '2026-08-08 11:30', note: 'Out for final mile delivery with Driver Aisha Bello.', updatedBy: 'DHL' }
     ],
     proofOfDelivery: {
       verified: false,
@@ -280,9 +280,9 @@ export const INITIAL_SHIPMENTS: Shipment[] = [
     revenueUsd: 110.00,
     fuelCostUsd: 11.20,
     timeline: [
-      { id: 't1', status: 'In Transit', location: 'JFK Airport', timestamp: '2026-08-08 08:00', note: 'Customs cleared. Loaded into express sprinter.', updatedBy: 'Dispatch Admin' },
-      { id: 't2', status: 'Out for Delivery', location: 'Manhattan Midtown Hub', timestamp: '2026-08-08 11:15', note: 'En route to customer.', updatedBy: 'Driver (David Chen)' },
-      { id: 't3', status: 'Delivered', location: 'Fifth Avenue', timestamp: '2026-08-08 13:42', note: 'Delivered safely to receiving dock. Signed by James Miller (Store Mgr).', updatedBy: 'Driver (David Chen)' }
+      { id: 't1', status: 'In Transit', location: 'JFK Airport', timestamp: '2026-08-08 08:00', note: 'Customs cleared. Loaded into express sprinter.', updatedBy: 'DHL' },
+      { id: 't2', status: 'Out for Delivery', location: 'Manhattan Midtown Hub', timestamp: '2026-08-08 11:15', note: 'En route to customer.', updatedBy: 'DHL' },
+      { id: 't3', status: 'Delivered', location: 'Fifth Avenue', timestamp: '2026-08-08 13:42', note: 'Delivered safely to receiving dock. Signed by James Miller (Store Mgr).', updatedBy: 'DHL' }
     ],
     proofOfDelivery: {
       verified: true,
@@ -326,8 +326,8 @@ export const INITIAL_SHIPMENTS: Shipment[] = [
     revenueUsd: 98.00,
     fuelCostUsd: 4.80, // Electric EV low fuel expense
     timeline: [
-      { id: 't1', status: 'Pending', location: 'Orly Depot', timestamp: '2026-08-08 09:30', note: 'Order registered in Paris e-fleet system.', updatedBy: 'System' },
-      { id: 't2', status: 'In Transit', location: 'Orly Airport', timestamp: '2026-08-08 10:15', note: 'Dispatched in EV Sprinter 05.', updatedBy: 'Driver (Sophie Martin)' }
+      { id: 't1', status: 'Pending', location: 'Orly Depot', timestamp: '2026-08-08 09:30', note: 'Order registered in Paris e-fleet system.', updatedBy: 'DHL' },
+      { id: 't2', status: 'In Transit', location: 'Orly Airport', timestamp: '2026-08-08 10:15', note: 'Dispatched in EV Sprinter 05.', updatedBy: 'DHL' }
     ],
     proofOfDelivery: {
       verified: false,
@@ -364,7 +364,7 @@ export const INITIAL_SHIPMENTS: Shipment[] = [
     revenueUsd: 520.00,
     fuelCostUsd: 45.00,
     timeline: [
-      { id: 't1', status: 'Pending', location: 'Frankfurt Hub', timestamp: '2026-08-08 14:00', note: 'Awaiting heavy vehicle assignment.', updatedBy: 'Ops Center (Klaus B.)' }
+      { id: 't1', status: 'Pending', location: 'Frankfurt Hub', timestamp: '2026-08-08 14:00', note: 'Awaiting heavy vehicle assignment.', updatedBy: 'DHL' }
     ],
     proofOfDelivery: {
       verified: false
@@ -399,8 +399,8 @@ export const INITIAL_SHIPMENTS: Shipment[] = [
     revenueUsd: 0.00,
     fuelCostUsd: 0.00,
     timeline: [
-      { id: 't1', status: 'Pending', location: 'Narita Depot', timestamp: '2026-08-08 06:00', note: 'Manifest logged.', updatedBy: 'System' },
-      { id: 't2', status: 'Canceled', location: 'Narita Depot', timestamp: '2026-08-08 08:30', note: 'Order canceled by customer request before dispatch.', updatedBy: 'Customer Service' }
+      { id: 't1', status: 'Pending', location: 'Narita Depot', timestamp: '2026-08-08 06:00', note: 'Manifest logged.', updatedBy: 'DHL' },
+      { id: 't2', status: 'Canceled', location: 'Narita Depot', timestamp: '2026-08-08 08:30', note: 'Order canceled by customer request before dispatch.', updatedBy: 'DHL' }
     ]
   }
 ];

@@ -138,12 +138,14 @@
 .liquid-glass-red {
   background: var(--glass-bg-red);
   backdrop-filter: blur(var(--glass-blur-sm));
+  -webkit-backdrop-filter: blur(var(--glass-blur-sm));
   border: 1px solid var(--glass-border-colored);
 }
 
 .liquid-glass-yellow {
   background: var(--glass-bg-yellow);
   backdrop-filter: blur(var(--glass-blur-sm));
+  -webkit-backdrop-filter: blur(var(--glass-blur-sm));
   border: 1px solid oklch(0.88 0.19 92.5 / 0.4);
 }
 

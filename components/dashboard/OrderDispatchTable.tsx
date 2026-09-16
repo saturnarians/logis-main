@@ -17,8 +17,11 @@ import {
   Clock, 
   FileText,
   Calendar,
-  ExternalLink
+  ExternalLink,
+  Edit3
 } from 'lucide-react';
+import { downloadWaybillPdf } from '@/lib/waybillPdf';
+import { UpdateWaybillModal } from './UpdateWaybillModal';
 
 interface OrderDispatchTableProps {
   onOpenCreateModal?: () => void;
@@ -33,19 +36,21 @@ export const OrderDispatchTable: React.FC<OrderDispatchTableProps> = ({
   onOpenPodModal,
   onSelectShipment,
 }) => {
-  const { 
-    shipments, 
-    drivers, 
-    statusFilter, 
-    setStatusFilter, 
-    searchQuery, 
+  const {
+    shipments,
+    drivers,
+    statusFilter,
+    setStatusFilter,
+    searchQuery,
     setSearchQuery,
     dateRange,
     setDateRange,
     updateShipmentStatus,
-    assignDriverToShipment
+    assignDriverToShipment,
+    role,
   } = useLogistics();
 
+  const [updatingShipment, setUpdatingShipment] = useState<Shipment | null>(null);
   const [assigningShipmentId, setAssigningShipmentId] = useState<string | null>(null);
   const [selectedDriverForAssign, setSelectedDriverForAssign] = useState<string>('');
 
@@ -269,12 +274,22 @@ export const OrderDispatchTable: React.FC<OrderDispatchTableProps> = ({
                         </button>
                       </div>
                     ) : s.driverName ? (
-                      <div className="flex items-center space-x-1.5">
-                        <Truck className="w-3.5 h-3.5 text-gray-500" />
-                        <div>
-                          <span className="font-bold text-gray-900 block text-xs">{s.driverName}</span>
-                          <span className="text-[10px] text-gray-400 font-mono block">{s.vehicleNo}</span>
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-1.5">
+                          <Truck className="w-3.5 h-3.5 text-gray-500" />
+                          <div>
+                            <span className="font-bold text-gray-900 block text-xs">{s.driverName}</span>
+                            <span className="text-[10px] text-gray-400 font-mono block">{s.vehicleNo}</span>
+                          </div>
                         </div>
+                        { role === 'admin' || role === 'superadmin' ? (
+                         <button
+                           onClick={() => setUpdatingShipment(s)}
+                           className="p-1.5 rounded-full hover:bg-gray-100 text-gray-400 hover:text-[#D40511]"
+                         >
+                           <Edit3 className="w-3.5 h-3.5" />
+                         </button>
+                       ) : null }
                       </div>
                     ) : (
                       <button
@@ -328,6 +343,13 @@ export const OrderDispatchTable: React.FC<OrderDispatchTableProps> = ({
                         <option value="Delayed">Delayed</option>
                         <option value="Canceled">Canceled</option>
                       </select>
+                      <button
+                        onClick={() => downloadWaybillPdf(s)}
+                        className="p-1 rounded text-gray-500 hover:text-[#D40511] transition-colors"
+                        title="Download & Print Waybill PDF"
+                      >
+                        <FileText className="w-4 h-4" />
+                      </button>
                     </div>
                   </td>
                 </tr>
@@ -336,6 +358,13 @@ export const OrderDispatchTable: React.FC<OrderDispatchTableProps> = ({
           </tbody>
         </table>
       </div>
+      {updatingShipment && (
+        <UpdateWaybillModal
+          isOpen={true}
+          shipment={updatingShipment}
+          onClose={() => setUpdatingShipment(null)}
+        />
+      )}
     </div>
   );
 };

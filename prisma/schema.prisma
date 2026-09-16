@@ -7,6 +7,7 @@ generator client {
   provider = "prisma-client-js"
 }
 
+
 model Shipment {
   id                 String   @id @default(cuid())
   trackingId         String   @unique
@@ -191,6 +192,7 @@ model AuthUser {
   id         String  @id @default(cuid())
   name       String
   email      String  @unique
+  passwordHash String 
   role       String  @default("customer")
   staffId    String  @unique
   hub        String?
@@ -198,7 +200,13 @@ model AuthUser {
   avatarUrl  String?
   department String?
   phone      String?
+  isActive     Boolean  @default(true)
   lastLogin  String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([role])
+
 }
 
 model AIGovernanceConfig {

@@ -1,12 +1,14 @@
 import { z } from 'zod';
 
-export const UserRoleSchema = z.enum(['superadmin', 'admin', 'driver', 'customer']);
+export const UserRoleSchema = z.enum(
+  ['superadmin', 'admin', 'driver', 'customer']
+);
 export type UserRole = z.infer<typeof UserRoleSchema>;
 
 export const LoginCredentialsSchema = z.object({
-  email: z.string().email('Invalid email address'),
+  email: z.string().min(1, 'Email or Staff ID is required'),
   password: z.string().min(4, 'Password must be at least 4 characters'),
-  role: UserRoleSchema.optional(),
+  // role: UserRoleSchema.optional(),
 });
 export type LoginCredentialsDto = z.infer<typeof LoginCredentialsSchema>;
 
@@ -26,6 +28,7 @@ export const AuthUserSchema = z.object({
   id: z.string(),
   name: z.string(),
   email: z.string(),
+  passwordHash: z.string(),
   role: UserRoleSchema,
   staffId: z.string(),
   phone: z.string().optional(),
@@ -33,6 +36,9 @@ export const AuthUserSchema = z.object({
   vehicleId: z.string().optional(),
   avatarUrl: z.string().optional(),
   department: z.string().optional(),
+  isActive: z.boolean(),
   lastLogin: z.string().optional(),
+  createdAt: z.string(),
+  updatedAt: z.string(),
 });
 export type AuthUserDto = z.infer<typeof AuthUserSchema>;
