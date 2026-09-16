@@ -15,7 +15,11 @@ model Shipment {
   customerName       String
   customerPhone      String
   senderName         String
+  senderEmail        String   @default("")
+  senderPhone        String?
   senderAddress      String
+  recipientEmail     String   @default("")
+  recipientPhone     String?
   recipientAddress   String
   originCity         String
   destinationCity    String

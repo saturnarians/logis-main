@@ -5,6 +5,64 @@ import type {
   UserRole 
 } from '@/types/dto';
 import { monitoring } from '@/lib/monitoring';
+import { Resend } from 'resend';
+import twilio from 'twilio';
+
+const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
+const twilioClient = process.env.TWILIO_ACCOUNT_SID && process.env.TWILIO_AUTH_TOKEN
+  ? twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN)
+  : null;
+
+const DEFAULT_FROM_EMAIL = process.env.RESEND_FROM_EMAIL || 'onboarding@resend.dev';
+const DEFAULT_TWILIO_FROM = process.env.TWILIO_FROM_NUMBER || ''; 
+
+async function sendEmailWithResend(email: string, subject: string, html: string) {
+  if (!resend) {
+    monitoring.warn('NotificationEngine:Email', 'RESEND_API_KEY is not configured; skipping real email send.', { email, subject });
+    return false;
+  }
+
+  try {
+    const response = await resend.emails.send({
+      from: DEFAULT_FROM_EMAIL,
+      to: [email],
+      subject,
+      html,
+      text: html.replace(/<[^>]*>/g, '').trim() || subject,
+    });
+
+    if (response.error) {
+      throw new Error(response.error.message || 'Resend email send failed');
+    }
+
+    monitoring.info('NotificationEngine:Email', `Real email sent via Resend to ${email}`, { subject, id: response.data?.id });
+    return true;
+  } catch (error) {
+    monitoring.error('NotificationEngine:Email', 'Resend email delivery failed', error, { email, subject });
+    return false;
+  }
+}
+
+async function sendSmsWithTwilio(phone: string, title: string, body: string) {
+  if (!twilioClient || !DEFAULT_TWILIO_FROM) {
+    monitoring.warn('NotificationEngine:SMS', 'Twilio credentials are not configured; skipping real SMS send.', { phone, title });
+    return false;
+  }
+
+  try {
+    const message = await twilioClient.messages.create({
+      from: DEFAULT_TWILIO_FROM,
+      to: phone,
+      body: `${title} - ${body}`.slice(0, 1600),
+    });
+
+    monitoring.info('NotificationEngine:SMS', `Real SMS sent via Twilio to ${phone}`, { sid: message.sid, status: message.status });
+    return true;
+  } catch (error) {
+    monitoring.error('NotificationEngine:SMS', 'Twilio SMS delivery failed', error, { phone, title });
+    return false;
+  }
+}
 
 /**
  * Centralized Multi-Channel Notification Dispatcher
@@ -76,14 +134,24 @@ class NotificationEngine {
 
     // 2. Process SMS Channel
     if (payload.channel === 'sms' || payload.channel === 'all') {
-      deliveredChannels.push('sms');
-      this.dispatchSmsSimulation(payload.recipientPhone || '+49 171 000-0000', payload.title, payload.message);
+      const phone = payload.recipientPhone?.trim();
+      if (phone) {
+        const sent = await sendSmsWithTwilio(phone, payload.title, payload.message);
+        if (sent) deliveredChannels.push('sms');
+      } else {
+        monitoring.warn('NotificationEngine', 'SMS channel selected without a recipient phone number.', { payload });
+      }
     }
 
     // 3. Process Email Channel
     if (payload.channel === 'email' || payload.channel === 'all') {
-      deliveredChannels.push('email');
-      this.dispatchEmailSimulation(payload.recipientEmail || 'dispatch@dhl.com', payload.title, payload.message);
+      const email = payload.recipientEmail?.trim();
+      if (email) {
+        const sent = await sendEmailWithResend(email, payload.title, `<p>${payload.message}</p>`);
+        if (sent) deliveredChannels.push('email');
+      } else {
+        monitoring.warn('NotificationEngine', 'Email channel selected without a recipient email address.', { payload });
+      }
     }
 
     const item: NotificationItemDto = {
@@ -125,17 +193,19 @@ class NotificationEngine {
   /**
    * Simulate or execute SMS Dispatch
    */
-  public dispatchSmsSimulation(phone: string, title: string, body: string) {
-    monitoring.info('NotificationEngine:SMS', `[SMS DISPATCHED -> ${phone}] ${title}: ${body}`);
-    monitoring.recordMetric('notification.sms.sent', 1);
+  public async dispatchSmsSimulation(phone: string, title: string, body: string) {
+    const sent = await sendSmsWithTwilio(phone, title, body);
+    monitoring.recordMetric('notification.sms.sent', sent ? 1 : 0);
+    return sent;
   }
 
   /**
    * Simulate or execute Transactional Email Dispatch
    */
-  public dispatchEmailSimulation(email: string, subject: string, htmlOrText: string) {
-    monitoring.info('NotificationEngine:Email', `[EMAIL DISPATCHED -> ${email}] Subject: "${subject}"`);
-    monitoring.recordMetric('notification.email.sent', 1);
+  public async dispatchEmailSimulation(email: string, subject: string, htmlOrText: string) {
+    const sent = await sendEmailWithResend(email, subject, htmlOrText);
+    monitoring.recordMetric('notification.email.sent', sent ? 1 : 0);
+    return sent;
   }
 
   /**

@@ -31,9 +31,13 @@ export const DispatchBookingView: React.FC<DispatchBookingViewProps> = ({ onSucc
   const [customerName, setCustomerName] = useState('');
   const [customerPhone, setCustomerPhone] = useState('');
   const [senderName, setSenderName] = useState('DHL Freight Hub Staging');
+  const [senderEmail, setSenderEmail] = useState('');
+  const [senderPhone, setSenderPhone] = useState('');
   const [senderAddress, setSenderAddress] = useState('Central Slough Logistics Center, UK');
   const [originCity, setOriginCity] = useState('London');
   const [destinationCity, setDestinationCity] = useState('Paris');
+  const [recipientEmail, setRecipientEmail] = useState('');
+  const [recipientPhone, setRecipientPhone] = useState('');
   const [recipientAddress, setRecipientAddress] = useState('');
   const [priority, setPriority] = useState<PriorityLevel>('Express');
   const [weightKg, setWeightKg] = useState<number>(5.0);
@@ -60,8 +64,8 @@ export const DispatchBookingView: React.FC<DispatchBookingViewProps> = ({ onSucc
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!customerName || !recipientAddress) {
-      alert('Please fill in Customer Name and Destination Address.');
+    if (!customerName || !senderEmail || !recipientEmail || !recipientAddress) {
+      alert('Please fill in the sender email, recipient email, customer name, and destination address.');
       return;
     }
 
@@ -73,9 +77,13 @@ export const DispatchBookingView: React.FC<DispatchBookingViewProps> = ({ onSucc
       orderId,
       trackingId,
       customerName,
-      customerPhone: customerPhone || '+44 20 7946 0000',
+      customerPhone: recipientPhone || customerPhone || '',
       senderName,
+      senderEmail,
+      senderPhone: senderPhone || undefined,
       senderAddress,
+      recipientEmail,
+      recipientPhone: recipientPhone || undefined,
       recipientAddress,
       originCity,
       destinationCity,
@@ -192,11 +200,57 @@ export const DispatchBookingView: React.FC<DispatchBookingViewProps> = ({ onSucc
             </div>
 
             <div>
-              <label className="block text-gray-700 font-bold mb-1">Contact Phone Number *</label>
+              <label className="block text-gray-700 font-bold mb-1">Legacy Contact Phone (optional)</label>
               <input
                 type="text"
                 value={customerPhone}
                 onChange={(e) => setCustomerPhone(e.target.value)}
+                placeholder="+44 20 7946 0912"
+                className="w-full bg-slate-50 border border-gray-200 rounded-xl px-3 py-2 text-xs text-gray-900 font-semibold focus:outline-none focus:border-[#D40511]"
+              />
+            </div>
+
+            <div>
+              <label className="block text-gray-700 font-bold mb-1">Sender Email *</label>
+              <input
+                type="email"
+                required
+                value={senderEmail}
+                onChange={(e) => setSenderEmail(e.target.value)}
+                placeholder="sender@company.com"
+                className="w-full bg-slate-50 border border-gray-200 rounded-xl px-3 py-2 text-xs text-gray-900 font-semibold focus:outline-none focus:border-[#D40511]"
+              />
+            </div>
+
+            <div>
+              <label className="block text-gray-700 font-bold mb-1">Sender Mobile (optional)</label>
+              <input
+                type="tel"
+                value={senderPhone}
+                onChange={(e) => setSenderPhone(e.target.value)}
+                placeholder="+44 20 7946 0912"
+                className="w-full bg-slate-50 border border-gray-200 rounded-xl px-3 py-2 text-xs text-gray-900 font-semibold focus:outline-none focus:border-[#D40511]"
+              />
+            </div>
+
+            <div>
+              <label className="block text-gray-700 font-bold mb-1">Receiver Email *</label>
+              <input
+                type="email"
+                required
+                value={recipientEmail}
+                onChange={(e) => setRecipientEmail(e.target.value)}
+                placeholder="receiver@company.com"
+                className="w-full bg-slate-50 border border-gray-200 rounded-xl px-3 py-2 text-xs text-gray-900 font-semibold focus:outline-none focus:border-[#D40511]"
+              />
+            </div>
+
+            <div>
+              <label className="block text-gray-700 font-bold mb-1">Receiver Mobile (optional)</label>
+              <input
+                type="tel"
+                value={recipientPhone}
+                onChange={(e) => setRecipientPhone(e.target.value)}
                 placeholder="+44 20 7946 0912"
                 className="w-full bg-slate-50 border border-gray-200 rounded-xl px-3 py-2 text-xs text-gray-900 font-semibold focus:outline-none focus:border-[#D40511]"
               />
