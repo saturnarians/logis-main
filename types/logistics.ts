@@ -1,17 +1,17 @@
-export type Role = 'superadmin' | 'admin' | 'driver' | 'customer';
+export type Role = "superadmin" | "admin" | "driver" | "customer";
 
-export type ShipmentStatus = 
-  | 'Order Placed'
-  | 'Pending' 
-  | 'In Transit' 
-  | 'Out for Delivery' 
-  | 'Delivered' 
-  | 'Delayed' 
-  | 'Canceled';
+export type ShipmentStatus =
+  | "Order Placed"
+  | "Pending"
+  | "In Transit"
+  | "Out for Delivery"
+  | "Delivered"
+  | "Delayed"
+  | "Canceled";
 
-export type PriorityLevel = 'Standard' | 'Express' | 'Overnight';
+export type PriorityLevel = "Standard" | "Express" | "Overnight";
 
-export type DriverStatus = 'Available' | 'On Duty' | 'Off Duty' | 'Maintenance';
+export type DriverStatus = "Available" | "On Duty" | "Off Duty" | "Maintenance";
 
 export interface RoutePoint {
   lat: number;
@@ -66,23 +66,23 @@ export interface Shipment {
   estimatedDelivery: string;
   actualDelivery?: string;
   createdAt: string;
-  
+
   driverId?: string;
   driverName?: string;
   vehicleNo?: string;
   assignedDriverId?: string;
-  
+
   routePoints: RoutePoint[];
   currentLocation: {
     lat: number;
     lng: number;
     address: string;
   };
-  
+
   costUsd: number;
   revenueUsd: number;
   fuelCostUsd: number;
-  
+
   timeline: TimelineEntry[];
   proofOfDelivery?: ProofOfDelivery;
   flaggedForDelay?: boolean;
@@ -110,8 +110,14 @@ export interface LogisticsAlert {
   id: string;
   shipmentId: string;
   trackingId: string;
-  type: 'delay' | 'capacity' | 'weather' | 'sla_breach' | 'route_stop' | 'pod_required';
-  severity: 'low' | 'medium' | 'high';
+  type:
+    | "delay"
+    | "capacity"
+    | "weather"
+    | "sla_breach"
+    | "route_stop"
+    | "pod_required";
+  severity: "low" | "medium" | "high";
   message: string;
   timestamp: string;
   resolved: boolean;
@@ -120,7 +126,7 @@ export interface LogisticsAlert {
 export interface ExpenseRecord {
   id: string;
   date: string;
-  category: 'fuel' | 'toll' | 'maintenance' | 'driver_payout';
+  category: "fuel" | "toll" | "maintenance" | "driver_payout";
   amountUsd: number;
   vehicleNo: string;
   driverName: string;
@@ -149,7 +155,7 @@ export interface FuelTrend {
   avgCostPerDelivery: number;
 }
 
-export type VehicleStatus = 'Available' | 'En Route' | 'In-Maintenance';
+export type VehicleStatus = "Available" | "En Route" | "In-Maintenance";
 
 export interface Vehicle {
   id: string;
@@ -176,7 +182,7 @@ export interface RoutePlan {
   distanceKm: number;
   estDurationHours: number;
   assignedDriverName: string;
-  status: 'In Progress' | 'Scheduled' | 'Completed' | 'Optimized';
+  status: "In Progress" | "Scheduled" | "Completed" | "Optimized";
   originHub: string;
   destinationHub: string;
   efficiencyScorePct: number;
@@ -186,13 +192,18 @@ export interface InventoryItem {
   id: string;
   sku: string;
   name: string;
-  category: 'Packaging' | 'Cold-Chain' | 'Security & Seals' | 'Labels & Hardware' | 'Customer Freight';
+  category:
+    | "Packaging"
+    | "Cold-Chain"
+    | "Security & Seals"
+    | "Labels & Hardware"
+    | "Customer Freight";
   warehouseHub: string;
   quantity: number;
   minThreshold: number;
   unit: string;
   unitCostUsd: number;
-  status: 'In Stock' | 'Low Stock' | 'Out of Stock';
+  status: "In Stock" | "Low Stock" | "Out of Stock";
   lastRestocked: string;
 }
 
@@ -211,7 +222,7 @@ export interface WarehouseHub {
   totalDocks: number;
   inboundToday: number;
   outboundToday: number;
-  status: 'Normal Operations' | 'High Congestion' | 'Maintenance';
+  status: "Normal Operations" | "High Congestion" | "Maintenance";
 }
 
 export interface InvoiceRecord {
@@ -221,8 +232,8 @@ export interface InvoiceRecord {
   customerName: string;
   customerEmail: string;
   amountUsd: number;
-  paymentType: 'Prepaid' | 'COD' | 'Contract 30D' | 'Credit Card';
-  status: 'Paid' | 'Pending' | 'Overdue' | 'COD Collected';
+  paymentType: "Prepaid" | "COD" | "Contract 30D" | "Credit Card";
+  status: "Paid" | "Pending" | "Overdue" | "COD Collected";
   issueDate: string;
   dueDate: string;
   paidAt?: string;
@@ -266,13 +277,13 @@ export interface AuthUser {
   lastLogin?: string;
 }
 
-export type AIDataAccessMode = 'read_only' | 'human_in_the_loop' | 'read_write';
+export type AIDataAccessMode = "read_only" | "human_in_the_loop" | "read_write";
 
-export type AIActionType = 
-  | 'update_shipment_status' 
-  | 'assign_driver' 
-  | 'create_route_alert' 
-  | 'update_tariff';
+export type AIActionType =
+  | "update_shipment_status"
+  | "assign_driver"
+  | "create_route_alert"
+  | "update_tariff";
 
 export interface PendingAIAction {
   id: string;
@@ -288,15 +299,15 @@ export interface PendingAIAction {
     driverId?: string;
     driverName?: string;
     alertMessage?: string;
-    alertSeverity?: 'low' | 'medium' | 'high';
-    alertType?: 'delay' | 'capacity' | 'weather' | 'sla_breach';
+    alertSeverity?: "low" | "medium" | "high";
+    alertType?: "delay" | "capacity" | "weather" | "sla_breach";
     tariffId?: string;
     basePriceUsd?: number;
     pricePerKgUsd?: number;
     fuelSurchargePct?: number;
     [key: string]: any;
   };
-  status: 'pending' | 'approved' | 'rejected';
+  status: "pending" | "approved" | "rejected";
   timestamp: string;
   proposerPrompt?: string;
 }
@@ -307,7 +318,12 @@ export interface AIAuditLog {
   actor: string;
   action: string;
   details: string;
-  status: 'Executed' | 'Approved' | 'Rejected' | 'Blocked (Read-Only)' | 'AI Off';
+  status:
+    | "Executed"
+    | "Approved"
+    | "Rejected"
+    | "Blocked (Read-Only)"
+    | "AI Off";
 }
 
 export interface AIGovernanceConfig {
@@ -331,4 +347,3 @@ export interface AIGovernanceConfig {
   pendingActions: PendingAIAction[];
   auditLogs: AIAuditLog[];
 }
-

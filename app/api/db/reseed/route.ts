@@ -1,5 +1,5 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
+import { NextRequest, NextResponse } from "next/server";
+import { prisma } from "@/lib/prisma";
 import {
   INITIAL_SHIPMENTS,
   INITIAL_DRIVERS,
@@ -11,7 +11,7 @@ import {
   INITIAL_INVENTORY,
   INITIAL_PERMISSIONS,
   INITIAL_AI_GOVERNANCE,
-} from '@/lib/mockData';
+} from "@/lib/mockData";
 
 export async function POST() {
   try {
@@ -94,8 +94,8 @@ export async function POST() {
           weightKg: s.weightKg,
           parcelType: s.parcelType,
           pieces: s.pieces ?? 1,
-          serviceType: s.serviceType ?? 'Express Air',
-          carrier: s.carrier ?? 'DHL Express',
+          serviceType: s.serviceType ?? "Express Air",
+          carrier: s.carrier ?? "DHL Express",
           temperatureCelsius: s.temperatureCelsius,
           estimatedDelivery: s.estimatedDelivery,
           actualDelivery: s.actualDelivery,
@@ -111,7 +111,9 @@ export async function POST() {
           currentLocationLat: s.currentLocation?.lat ?? 50.1109,
           currentLocationLng: s.currentLocation?.lng ?? 8.6821,
           currentLocationAddr: s.currentLocation?.address ?? s.originCity,
-          proofOfDeliveryJson: s.proofOfDelivery ? JSON.stringify(s.proofOfDelivery) : null,
+          proofOfDeliveryJson: s.proofOfDelivery
+            ? JSON.stringify(s.proofOfDelivery)
+            : null,
           flaggedForDelay: s.flaggedForDelay ?? false,
           delayReason: s.delayReason,
         },
@@ -136,8 +138,8 @@ export async function POST() {
           weightKg: s.weightKg,
           parcelType: s.parcelType,
           pieces: s.pieces ?? 1,
-          serviceType: s.serviceType ?? 'Express Air',
-          carrier: s.carrier ?? 'DHL Express',
+          serviceType: s.serviceType ?? "Express Air",
+          carrier: s.carrier ?? "DHL Express",
           temperatureCelsius: s.temperatureCelsius,
           estimatedDelivery: s.estimatedDelivery,
           actualDelivery: s.actualDelivery,
@@ -153,7 +155,9 @@ export async function POST() {
           currentLocationLat: s.currentLocation?.lat ?? 50.1109,
           currentLocationLng: s.currentLocation?.lng ?? 8.6821,
           currentLocationAddr: s.currentLocation?.address ?? s.originCity,
-          proofOfDeliveryJson: s.proofOfDelivery ? JSON.stringify(s.proofOfDelivery) : null,
+          proofOfDeliveryJson: s.proofOfDelivery
+            ? JSON.stringify(s.proofOfDelivery)
+            : null,
           flaggedForDelay: s.flaggedForDelay ?? false,
           delayReason: s.delayReason,
         },
@@ -232,45 +236,57 @@ export async function POST() {
 
     // 10. Seed AI Governance
     await prisma.aIGovernanceConfig.upsert({
-      where: { id: 'singleton_governance' },
+      where: { id: "singleton_governance" },
       update: {
         aiEnabled: INITIAL_AI_GOVERNANCE.aiEnabled,
         lastModifiedBy: INITIAL_AI_GOVERNANCE.lastModifiedBy,
         lastModifiedAt: INITIAL_AI_GOVERNANCE.lastModifiedAt,
         dataAccessMode: INITIAL_AI_GOVERNANCE.dataAccessMode,
-        readPermissionsJson: JSON.stringify(INITIAL_AI_GOVERNANCE.readPermissions),
-        writePermissionsJson: JSON.stringify(INITIAL_AI_GOVERNANCE.writePermissions),
+        readPermissionsJson: JSON.stringify(
+          INITIAL_AI_GOVERNANCE.readPermissions,
+        ),
+        writePermissionsJson: JSON.stringify(
+          INITIAL_AI_GOVERNANCE.writePermissions,
+        ),
       },
       create: {
-        id: 'singleton_governance',
+        id: "singleton_governance",
         aiEnabled: INITIAL_AI_GOVERNANCE.aiEnabled,
         lastModifiedBy: INITIAL_AI_GOVERNANCE.lastModifiedBy,
         lastModifiedAt: INITIAL_AI_GOVERNANCE.lastModifiedAt,
         dataAccessMode: INITIAL_AI_GOVERNANCE.dataAccessMode,
-        readPermissionsJson: JSON.stringify(INITIAL_AI_GOVERNANCE.readPermissions),
-        writePermissionsJson: JSON.stringify(INITIAL_AI_GOVERNANCE.writePermissions),
+        readPermissionsJson: JSON.stringify(
+          INITIAL_AI_GOVERNANCE.readPermissions,
+        ),
+        writePermissionsJson: JSON.stringify(
+          INITIAL_AI_GOVERNANCE.writePermissions,
+        ),
       },
     });
 
-    const [shipmentCount, driverCount, hubCount, invoiceCount] = await Promise.all([
-      prisma.shipment.count(),
-      prisma.driver.count(),
-      prisma.warehouseHub.count(),
-      prisma.invoiceRecord.count(),
-    ]);
+    const [shipmentCount, driverCount, hubCount, invoiceCount] =
+      await Promise.all([
+        prisma.shipment.count(),
+        prisma.driver.count(),
+        prisma.warehouseHub.count(),
+        prisma.invoiceRecord.count(),
+      ]);
 
     return NextResponse.json({
       success: true,
-      message: 'SQLite database refreshed and seeded with Prisma!',
+      message: "SQLite database refreshed and seeded with Prisma!",
       counts: {
         shipments: shipmentCount,
         drivers: driverCount,
         warehouses: hubCount,
         invoices: invoiceCount,
-      }
+      },
     });
   } catch (error: any) {
-    console.error('Error reseeding SQLite database:', error);
-    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+    console.error("Error reseeding SQLite database:", error);
+    return NextResponse.json(
+      { success: false, error: error.message },
+      { status: 500 },
+    );
   }
 }

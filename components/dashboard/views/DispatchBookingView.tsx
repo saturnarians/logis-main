@@ -1,59 +1,67 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import { useLogistics } from '@/context/LogisticsContext';
-import { PriorityLevel, Shipment, ShipmentStatus } from '@/types/logistics';
-import { downloadWaybillPdf } from '@/lib/waybillPdf';
-import { 
-  Send, 
-  User, 
-  MapPin, 
-  Package, 
-  DollarSign, 
-  Truck, 
-  Calendar, 
-  Sparkles, 
+import React, { useState } from "react";
+import { useLogistics } from "@/context/LogisticsContext";
+import { PriorityLevel, Shipment, ShipmentStatus } from "@/types/logistics";
+import { downloadWaybillPdf } from "@/lib/waybillPdf";
+import {
+  Send,
+  User,
+  MapPin,
+  Package,
+  DollarSign,
+  Truck,
+  Calendar,
+  Sparkles,
   CheckCircle2,
   FileCheck,
   Calculator,
   ArrowRight,
-  Download
-} from 'lucide-react';
+  Download,
+} from "lucide-react";
 
 interface DispatchBookingViewProps {
   onSuccess?: () => void;
 }
 
-export const DispatchBookingView: React.FC<DispatchBookingViewProps> = ({ onSuccess }) => {
+export const DispatchBookingView: React.FC<DispatchBookingViewProps> = ({
+  onSuccess,
+}) => {
   const { drivers, createShipment, tariffs } = useLogistics();
 
   // Form State
-  const [customerName, setCustomerName] = useState('');
-  const [customerPhone, setCustomerPhone] = useState('');
-  const [senderName, setSenderName] = useState('DHL Freight Hub Staging');
-  const [senderEmail, setSenderEmail] = useState('');
-  const [senderPhone, setSenderPhone] = useState('');
-  const [senderAddress, setSenderAddress] = useState('Central Slough Logistics Center, UK');
-  const [originCity, setOriginCity] = useState('London');
-  const [destinationCity, setDestinationCity] = useState('Paris');
-  const [recipientEmail, setRecipientEmail] = useState('');
-  const [recipientPhone, setRecipientPhone] = useState('');
-  const [recipientAddress, setRecipientAddress] = useState('');
-  const [priority, setPriority] = useState<PriorityLevel>('Express');
+  const [customerName, setCustomerName] = useState("");
+  const [customerPhone, setCustomerPhone] = useState("");
+  const [senderName, setSenderName] = useState("DHL Freight Hub Staging");
+  const [senderEmail, setSenderEmail] = useState("");
+  const [senderPhone, setSenderPhone] = useState("");
+  const [senderAddress, setSenderAddress] = useState(
+    "Central Slough Logistics Center, UK",
+  );
+  const [originCity, setOriginCity] = useState("London");
+  const [destinationCity, setDestinationCity] = useState("Paris");
+  const [recipientEmail, setRecipientEmail] = useState("");
+  const [recipientPhone, setRecipientPhone] = useState("");
+  const [recipientAddress, setRecipientAddress] = useState("");
+  const [priority, setPriority] = useState<PriorityLevel>("Express");
   const [weightKg, setWeightKg] = useState<number>(5.0);
-  const [parcelType, setParcelType] = useState('General Commercial Freight');
-  const [estimatedDelivery, setEstimatedDelivery] = useState('2026-08-09 18:00');
-  const [selectedDriverId, setSelectedDriverId] = useState<string>(drivers[0]?.id || '');
-  const [costUsd, setCostUsd] = useState<number>(35.00);
-  const [revenueUsd, setRevenueUsd] = useState<number>(115.00);
-  const [fuelCostUsd, setFuelCostUsd] = useState<number>(12.50);
+  const [parcelType, setParcelType] = useState("General Commercial Freight");
+  const [estimatedDelivery, setEstimatedDelivery] =
+    useState("2026-08-09 18:00");
+  const [selectedDriverId, setSelectedDriverId] = useState<string>(
+    drivers[0]?.id || "",
+  );
+  const [costUsd, setCostUsd] = useState<number>(35.0);
+  const [revenueUsd, setRevenueUsd] = useState<number>(115.0);
+  const [fuelCostUsd, setFuelCostUsd] = useState<number>(12.5);
 
   const [bookingSuccess, setBookingSuccess] = useState<string | null>(null);
   const [createdShipment, setCreatedShipment] = useState<any | null>(null);
 
   // Auto calculate cost when weight or priority changes
   const handleRecalculateRate = () => {
-    const base = priority === 'Overnight' ? 65 : priority === 'Express' ? 40 : 25;
+    const base =
+      priority === "Overnight" ? 65 : priority === "Express" ? 40 : 25;
     const calcCost = Number((base + weightKg * 3.2).toFixed(2));
     const calcRev = Number((calcCost * 2.8).toFixed(2));
     const calcFuel = Number((calcCost * 0.28).toFixed(2));
@@ -65,7 +73,9 @@ export const DispatchBookingView: React.FC<DispatchBookingViewProps> = ({ onSucc
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!customerName || !senderEmail || !recipientEmail || !recipientAddress) {
-      alert('Please fill in the sender email, recipient email, customer name, and destination address.');
+      alert(
+        "Please fill in the sender email, recipient email, customer name, and destination address.",
+      );
       return;
     }
 
@@ -77,7 +87,7 @@ export const DispatchBookingView: React.FC<DispatchBookingViewProps> = ({ onSucc
       orderId,
       trackingId,
       customerName,
-      customerPhone: recipientPhone || customerPhone || '',
+      customerPhone: recipientPhone || customerPhone || "",
       senderName,
       senderEmail,
       senderPhone: senderPhone || undefined,
@@ -87,7 +97,7 @@ export const DispatchBookingView: React.FC<DispatchBookingViewProps> = ({ onSucc
       recipientAddress,
       originCity,
       destinationCity,
-      status: (selectedDriverId ? 'In Transit' : 'Pending') as ShipmentStatus,
+      status: (selectedDriverId ? "In Transit" : "Pending") as ShipmentStatus,
       priority,
       weightKg: Number(weightKg),
       parcelType,
@@ -106,11 +116,13 @@ export const DispatchBookingView: React.FC<DispatchBookingViewProps> = ({ onSucc
 
     createShipment(newShipmentData);
     setCreatedShipment(newShipmentData);
-    setBookingSuccess(`Waybill booked and registered! Assigned to ${assignedDriver?.name || 'Pending Dispatch Queue'}.`);
-    
+    setBookingSuccess(
+      `Waybill booked and registered! Assigned to ${assignedDriver?.name || "Pending Dispatch Queue"}.`,
+    );
+
     // Reset form
-    setCustomerName('');
-    setRecipientAddress('');
+    setCustomerName("");
+    setRecipientAddress("");
     if (onSuccess) onSuccess();
   };
 
@@ -128,7 +140,8 @@ export const DispatchBookingView: React.FC<DispatchBookingViewProps> = ({ onSucc
             </h1>
           </div>
           <p className="text-xs text-gray-500 mt-1">
-            Generate digital waybills, automatically assign field couriers, calculate weight-based tariffs, and initiate SLA tracking.
+            Generate digital waybills, automatically assign field couriers,
+            calculate weight-based tariffs, and initiate SLA tracking.
           </p>
         </div>
 
@@ -147,7 +160,10 @@ export const DispatchBookingView: React.FC<DispatchBookingViewProps> = ({ onSucc
             <CheckCircle2 className="w-6 h-6 text-emerald-600 flex-shrink-0" />
             <div>
               <div className="font-extrabold text-sm text-emerald-900">
-                Waybill Registered: <span className="font-mono text-[#D40511] font-black">{createdShipment.trackingId}</span>
+                Waybill Registered:{" "}
+                <span className="font-mono text-[#D40511] font-black">
+                  {createdShipment.trackingId}
+                </span>
               </div>
               <p className="text-emerald-700 text-xs mt-0.5 font-normal">
                 {bookingSuccess}
@@ -179,7 +195,10 @@ export const DispatchBookingView: React.FC<DispatchBookingViewProps> = ({ onSucc
       )}
 
       {/* Booking Form Card */}
-      <form onSubmit={handleSubmit} className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 space-y-6">
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 space-y-6"
+      >
         {/* Section 1: Customer & Consignee Information */}
         <div>
           <h3 className="text-sm font-extrabold text-gray-900 border-b border-gray-100 pb-2 flex items-center mb-4">
@@ -188,7 +207,9 @@ export const DispatchBookingView: React.FC<DispatchBookingViewProps> = ({ onSucc
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
             <div>
-              <label className="block text-gray-700 font-bold mb-1">Customer / Company Name *</label>
+              <label className="block text-gray-700 font-bold mb-1">
+                Customer / Company Name *
+              </label>
               <input
                 type="text"
                 required
@@ -200,7 +221,9 @@ export const DispatchBookingView: React.FC<DispatchBookingViewProps> = ({ onSucc
             </div>
 
             <div>
-              <label className="block text-gray-700 font-bold mb-1">Legacy Contact Phone (optional)</label>
+              <label className="block text-gray-700 font-bold mb-1">
+                Legacy Contact Phone (optional)
+              </label>
               <input
                 type="text"
                 value={customerPhone}
@@ -211,7 +234,9 @@ export const DispatchBookingView: React.FC<DispatchBookingViewProps> = ({ onSucc
             </div>
 
             <div>
-              <label className="block text-gray-700 font-bold mb-1">Sender Email *</label>
+              <label className="block text-gray-700 font-bold mb-1">
+                Sender Email *
+              </label>
               <input
                 type="email"
                 required
@@ -223,7 +248,9 @@ export const DispatchBookingView: React.FC<DispatchBookingViewProps> = ({ onSucc
             </div>
 
             <div>
-              <label className="block text-gray-700 font-bold mb-1">Sender Mobile (optional)</label>
+              <label className="block text-gray-700 font-bold mb-1">
+                Sender Mobile (optional)
+              </label>
               <input
                 type="tel"
                 value={senderPhone}
@@ -234,7 +261,9 @@ export const DispatchBookingView: React.FC<DispatchBookingViewProps> = ({ onSucc
             </div>
 
             <div>
-              <label className="block text-gray-700 font-bold mb-1">Receiver Email *</label>
+              <label className="block text-gray-700 font-bold mb-1">
+                Receiver Email *
+              </label>
               <input
                 type="email"
                 required
@@ -246,7 +275,9 @@ export const DispatchBookingView: React.FC<DispatchBookingViewProps> = ({ onSucc
             </div>
 
             <div>
-              <label className="block text-gray-700 font-bold mb-1">Receiver Mobile (optional)</label>
+              <label className="block text-gray-700 font-bold mb-1">
+                Receiver Mobile (optional)
+              </label>
               <input
                 type="tel"
                 value={recipientPhone}
@@ -257,7 +288,9 @@ export const DispatchBookingView: React.FC<DispatchBookingViewProps> = ({ onSucc
             </div>
 
             <div className="md:col-span-2">
-              <label className="block text-gray-700 font-bold mb-1">Delivery Destination Address *</label>
+              <label className="block text-gray-700 font-bold mb-1">
+                Delivery Destination Address *
+              </label>
               <input
                 type="text"
                 required
@@ -278,22 +311,36 @@ export const DispatchBookingView: React.FC<DispatchBookingViewProps> = ({ onSucc
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
             <div>
-              <label className="block text-gray-700 font-bold mb-1">Parcel Classification</label>
+              <label className="block text-gray-700 font-bold mb-1">
+                Parcel Classification
+              </label>
               <select
                 value={parcelType}
                 onChange={(e) => setParcelType(e.target.value)}
                 className="w-full bg-slate-50 border border-gray-200 rounded-xl px-3 py-2 text-xs text-gray-900 font-semibold focus:outline-none focus:border-[#D40511]"
               >
-                <option value="High-Value Electronics">High-Value Electronics</option>
-                <option value="Temperature Sensitive Medical">Temperature Sensitive Medical</option>
-                <option value="Industrial Machinery Parts">Industrial Machinery Parts</option>
-                <option value="Designer Apparel & Footwear">Designer Apparel & Footwear</option>
-                <option value="General Commercial Freight">General Commercial Freight</option>
+                <option value="High-Value Electronics">
+                  High-Value Electronics
+                </option>
+                <option value="Temperature Sensitive Medical">
+                  Temperature Sensitive Medical
+                </option>
+                <option value="Industrial Machinery Parts">
+                  Industrial Machinery Parts
+                </option>
+                <option value="Designer Apparel & Footwear">
+                  Designer Apparel & Footwear
+                </option>
+                <option value="General Commercial Freight">
+                  General Commercial Freight
+                </option>
               </select>
             </div>
 
             <div>
-              <label className="block text-gray-700 font-bold mb-1">Gross Weight (kg)</label>
+              <label className="block text-gray-700 font-bold mb-1">
+                Gross Weight (kg)
+              </label>
               <input
                 type="number"
                 step="0.1"
@@ -308,7 +355,9 @@ export const DispatchBookingView: React.FC<DispatchBookingViewProps> = ({ onSucc
             </div>
 
             <div>
-              <label className="block text-gray-700 font-bold mb-1">Priority Tier</label>
+              <label className="block text-gray-700 font-bold mb-1">
+                Priority Tier
+              </label>
               <select
                 value={priority}
                 onChange={(e) => {
@@ -319,7 +368,9 @@ export const DispatchBookingView: React.FC<DispatchBookingViewProps> = ({ onSucc
               >
                 <option value="Standard">Standard (2-3 Business Days)</option>
                 <option value="Express">Express (Next Day 24h)</option>
-                <option value="Overnight">Overnight First Class (Early AM)</option>
+                <option value="Overnight">
+                  Overnight First Class (Early AM)
+                </option>
               </select>
             </div>
           </div>
@@ -333,7 +384,9 @@ export const DispatchBookingView: React.FC<DispatchBookingViewProps> = ({ onSucc
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
             <div>
-              <label className="block text-gray-700 font-bold mb-1">Assign Courier / Field Agent</label>
+              <label className="block text-gray-700 font-bold mb-1">
+                Assign Courier / Field Agent
+              </label>
               <select
                 value={selectedDriverId}
                 onChange={(e) => setSelectedDriverId(e.target.value)}
@@ -349,7 +402,9 @@ export const DispatchBookingView: React.FC<DispatchBookingViewProps> = ({ onSucc
             </div>
 
             <div>
-              <label className="block text-gray-700 font-bold mb-1">Estimated Delivery Timestamp</label>
+              <label className="block text-gray-700 font-bold mb-1">
+                Estimated Delivery Timestamp
+              </label>
               <input
                 type="text"
                 value={estimatedDelivery}
@@ -363,22 +418,35 @@ export const DispatchBookingView: React.FC<DispatchBookingViewProps> = ({ onSucc
         {/* Price & Tariffs Preview */}
         <div className="bg-slate-50 p-4 rounded-xl border border-gray-200 flex flex-wrap items-center justify-between gap-4 text-xs">
           <div>
-            <span className="text-gray-500 font-bold block">Quoted Customer Tariff</span>
-            <div className="text-xl font-black text-gray-900">${revenueUsd} <span className="text-xs font-normal text-gray-500">USD</span></div>
+            <span className="text-gray-500 font-bold block">
+              Quoted Customer Tariff
+            </span>
+            <div className="text-xl font-black text-gray-900">
+              ${revenueUsd}{" "}
+              <span className="text-xs font-normal text-gray-500">USD</span>
+            </div>
           </div>
 
           <div className="flex items-center space-x-6 font-mono text-gray-600">
             <div>
-              <span className="text-[10px] text-gray-400 block font-sans font-bold">Estimated Cost</span>
+              <span className="text-[10px] text-gray-400 block font-sans font-bold">
+                Estimated Cost
+              </span>
               <span className="font-bold text-gray-800">${costUsd}</span>
             </div>
             <div>
-              <span className="text-[10px] text-gray-400 block font-sans font-bold">Fuel Surcharge</span>
+              <span className="text-[10px] text-gray-400 block font-sans font-bold">
+                Fuel Surcharge
+              </span>
               <span className="font-bold text-gray-800">${fuelCostUsd}</span>
             </div>
             <div>
-              <span className="text-[10px] text-gray-400 block font-sans font-bold">Est. Margin</span>
-              <span className="font-bold text-emerald-600">+{(((revenueUsd - costUsd) / revenueUsd) * 100).toFixed(0)}%</span>
+              <span className="text-[10px] text-gray-400 block font-sans font-bold">
+                Est. Margin
+              </span>
+              <span className="font-bold text-emerald-600">
+                +{(((revenueUsd - costUsd) / revenueUsd) * 100).toFixed(0)}%
+              </span>
             </div>
           </div>
         </div>

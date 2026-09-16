@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from "@prisma/client";
 import {
   INITIAL_SHIPMENTS,
   INITIAL_DRIVERS,
@@ -11,14 +11,14 @@ import {
   INITIAL_PERMISSIONS,
   INITIAL_EXPENSES,
   INITIAL_AI_GOVERNANCE,
-} from '../lib/mockData';
-import { PrismaUserRepository } from '../server/services/repository/auth.prisma.repository';
-import { ScryptPasswordHasher } from '../server/services/repository/argon2.passwordhasher';
+} from "../lib/mockData";
+import { PrismaUserRepository } from "../server/services/repository/auth.prisma.repository";
+import { ScryptPasswordHasher } from "../server/services/repository/argon2.passwordhasher";
 
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log('Seeding SQLite database with DHL Logistics data...');
+  console.log("Seeding SQLite database with DHL Logistics data...");
 
   // 1. Seed Warehouses
   for (const wh of INITIAL_WAREHOUSES) {
@@ -99,8 +99,8 @@ async function main() {
         weightKg: s.weightKg,
         parcelType: s.parcelType,
         pieces: s.pieces ?? 1,
-        serviceType: s.serviceType ?? 'Express Air',
-        carrier: s.carrier ?? 'DHL Express',
+        serviceType: s.serviceType ?? "Express Air",
+        carrier: s.carrier ?? "DHL Express",
         temperatureCelsius: s.temperatureCelsius,
         estimatedDelivery: s.estimatedDelivery,
         actualDelivery: s.actualDelivery,
@@ -116,7 +116,9 @@ async function main() {
         currentLocationLat: s.currentLocation?.lat ?? 50.1109,
         currentLocationLng: s.currentLocation?.lng ?? 8.6821,
         currentLocationAddr: s.currentLocation?.address ?? s.originCity,
-        proofOfDeliveryJson: s.proofOfDelivery ? JSON.stringify(s.proofOfDelivery) : null,
+        proofOfDeliveryJson: s.proofOfDelivery
+          ? JSON.stringify(s.proofOfDelivery)
+          : null,
         flaggedForDelay: s.flaggedForDelay ?? false,
         delayReason: s.delayReason,
       },
@@ -127,11 +129,11 @@ async function main() {
         customerName: s.customerName,
         customerPhone: s.customerPhone,
         senderName: s.senderName,
-          senderEmail: s.senderEmail,
-          senderPhone: s.senderPhone,
+        senderEmail: s.senderEmail,
+        senderPhone: s.senderPhone,
         senderAddress: s.senderAddress,
-          recipientEmail: s.recipientEmail,
-          recipientPhone: s.recipientPhone,
+        recipientEmail: s.recipientEmail,
+        recipientPhone: s.recipientPhone,
         recipientAddress: s.recipientAddress,
         originCity: s.originCity,
         destinationCity: s.destinationCity,
@@ -141,8 +143,8 @@ async function main() {
         weightKg: s.weightKg,
         parcelType: s.parcelType,
         pieces: s.pieces ?? 1,
-        serviceType: s.serviceType ?? 'Express Air',
-        carrier: s.carrier ?? 'DHL Express',
+        serviceType: s.serviceType ?? "Express Air",
+        carrier: s.carrier ?? "DHL Express",
         temperatureCelsius: s.temperatureCelsius,
         estimatedDelivery: s.estimatedDelivery,
         actualDelivery: s.actualDelivery,
@@ -158,7 +160,9 @@ async function main() {
         currentLocationLat: s.currentLocation?.lat ?? 50.1109,
         currentLocationLng: s.currentLocation?.lng ?? 8.6821,
         currentLocationAddr: s.currentLocation?.address ?? s.originCity,
-        proofOfDeliveryJson: s.proofOfDelivery ? JSON.stringify(s.proofOfDelivery) : null,
+        proofOfDeliveryJson: s.proofOfDelivery
+          ? JSON.stringify(s.proofOfDelivery)
+          : null,
         flaggedForDelay: s.flaggedForDelay ?? false,
         delayReason: s.delayReason,
       },
@@ -238,23 +242,31 @@ async function main() {
 
   // 10. Seed AI Governance
   await prisma.aIGovernanceConfig.upsert({
-    where: { id: 'singleton_governance' },
+    where: { id: "singleton_governance" },
     update: {
       aiEnabled: INITIAL_AI_GOVERNANCE.aiEnabled,
       lastModifiedBy: INITIAL_AI_GOVERNANCE.lastModifiedBy,
       lastModifiedAt: INITIAL_AI_GOVERNANCE.lastModifiedAt,
       dataAccessMode: INITIAL_AI_GOVERNANCE.dataAccessMode,
-      readPermissionsJson: JSON.stringify(INITIAL_AI_GOVERNANCE.readPermissions),
-      writePermissionsJson: JSON.stringify(INITIAL_AI_GOVERNANCE.writePermissions),
+      readPermissionsJson: JSON.stringify(
+        INITIAL_AI_GOVERNANCE.readPermissions,
+      ),
+      writePermissionsJson: JSON.stringify(
+        INITIAL_AI_GOVERNANCE.writePermissions,
+      ),
     },
     create: {
-      id: 'singleton_governance',
+      id: "singleton_governance",
       aiEnabled: INITIAL_AI_GOVERNANCE.aiEnabled,
       lastModifiedBy: INITIAL_AI_GOVERNANCE.lastModifiedBy,
       lastModifiedAt: INITIAL_AI_GOVERNANCE.lastModifiedAt,
       dataAccessMode: INITIAL_AI_GOVERNANCE.dataAccessMode,
-      readPermissionsJson: JSON.stringify(INITIAL_AI_GOVERNANCE.readPermissions),
-      writePermissionsJson: JSON.stringify(INITIAL_AI_GOVERNANCE.writePermissions),
+      readPermissionsJson: JSON.stringify(
+        INITIAL_AI_GOVERNANCE.readPermissions,
+      ),
+      writePermissionsJson: JSON.stringify(
+        INITIAL_AI_GOVERNANCE.writePermissions,
+      ),
     },
   });
 
@@ -271,60 +283,60 @@ async function main() {
   const userRepository = new PrismaUserRepository(prisma);
   const passwordHasher = new ScryptPasswordHasher();
 
-  const seedPassword = process.env.SEED_DEFAULT_PASSWORD || 'password123';
+  const seedPassword = process.env.SEED_DEFAULT_PASSWORD || "password123";
 
   const staffUsers = [
     {
-      id: 'usr-superadmin',
-      name: 'Alex Rodriguez',
-      email: 'superadmin@dhl.com',
+      id: "usr-superadmin",
+      name: "Alex Rodriguez",
+      email: "superadmin@dhl.com",
       passwordHash: await passwordHasher.hash(seedPassword),
-      role: 'superadmin' as const,
-      staffId: 'DHL-DIR-001',
-      hub: 'Global Operations Headquarters',
-      department: 'Executive Logistics Command',
-      phone: '+44 20 7946 0991',
-      avatarUrl: 'https://picsum.photos/seed/superadmin/120/120',
+      role: "superadmin" as const,
+      staffId: "DHL-DIR-001",
+      hub: "Global Operations Headquarters",
+      department: "Executive Logistics Command",
+      phone: "+44 20 7946 0991",
+      avatarUrl: "https://picsum.photos/seed/superadmin/120/120",
       isActive: true,
     },
     {
-      id: 'usr-admin',
-      name: 'Sarah Jenkins',
-      email: 'admin@dhl.com',
+      id: "usr-admin",
+      name: "Sarah Jenkins",
+      email: "admin@dhl.com",
       passwordHash: await passwordHasher.hash(seedPassword),
-      role: 'admin' as const,
-      staffId: 'DHL-MGR-442',
-      hub: 'London Central Gateway',
-      department: 'Dispatch & Fleet Logistics',
-      phone: '+44 20 7946 0834',
-      avatarUrl: 'https://picsum.photos/seed/admin/120/120',
+      role: "admin" as const,
+      staffId: "DHL-MGR-442",
+      hub: "London Central Gateway",
+      department: "Dispatch & Fleet Logistics",
+      phone: "+44 20 7946 0834",
+      avatarUrl: "https://picsum.photos/seed/admin/120/120",
       isActive: true,
     },
     {
-      id: 'usr-customer',
-      name: 'Customer User',
-      email: 'customer@dhl.com',
+      id: "usr-customer",
+      name: "Customer User",
+      email: "customer@dhl.com",
       passwordHash: await passwordHasher.hash(seedPassword),
-      role: 'customer' as const,
-      staffId: 'DHL-CUST-001',
-      hub: 'London Central Gateway',
-      department: 'Retail Logistics',
-      phone: '+44 20 7946 0000',
-      avatarUrl: 'https://picsum.photos/seed/customer/120/120',
+      role: "customer" as const,
+      staffId: "DHL-CUST-001",
+      hub: "London Central Gateway",
+      department: "Retail Logistics",
+      phone: "+44 20 7946 0000",
+      avatarUrl: "https://picsum.photos/seed/customer/120/120",
       isActive: true,
     },
     {
-      id: 'usr-driver-default',
-      name: 'Marcus Vance',
-      email: 'driver@dhl.com',
+      id: "usr-driver-default",
+      name: "Marcus Vance",
+      email: "driver@dhl.com",
       passwordHash: await passwordHasher.hash(seedPassword),
-      role: 'driver' as const,
-      staffId: 'DHL-DRV-101',
-      hub: 'London Central Gateway',
-      vehicleId: 'DHL-V-901',
-      department: 'Express Last-Mile Courier',
-      phone: '+1 (555) 234-5678',
-      avatarUrl: 'https://picsum.photos/seed/driver1/120/120',
+      role: "driver" as const,
+      staffId: "DHL-DRV-101",
+      hub: "London Central Gateway",
+      vehicleId: "DHL-V-901",
+      department: "Express Last-Mile Courier",
+      phone: "+1 (555) 234-5678",
+      avatarUrl: "https://picsum.photos/seed/driver1/120/120",
       isActive: true,
     },
   ];
@@ -335,8 +347,8 @@ async function main() {
 
   // Seed all drivers from INITIAL_DRIVERS
   for (const driver of INITIAL_DRIVERS) {
-    const emailName = driver.name.toLowerCase().replace(/\s+/g, '.');
-    const staffId = `DHL-DRV-${driver.id.replace('drv-', '')}`;
+    const emailName = driver.name.toLowerCase().replace(/\s+/g, ".");
+    const staffId = `DHL-DRV-${driver.id.replace("drv-", "")}`;
     const passwordHash = await passwordHasher.hash(seedPassword);
 
     await userRepository.upsertUser({
@@ -344,18 +356,20 @@ async function main() {
       name: driver.name,
       email: `${emailName}@dhl.com`,
       passwordHash,
-      role: 'driver',
+      role: "driver",
       staffId,
-      hub: driver.activeRouteName || 'London Central Gateway',
+      hub: driver.activeRouteName || "London Central Gateway",
       vehicleId: driver.vehicleNo,
-      department: 'Express Fleet Courier',
+      department: "Express Fleet Courier",
       phone: driver.phone,
       avatarUrl: driver.avatar,
-      isActive: driver.status !== 'Off Duty',
+      isActive: driver.status !== "Off Duty",
     });
   }
 
-  console.log('✅ SQLite Database seeded successfully with SuperAdmin, Admin, Driver, and Customer Auth Users!');
+  console.log(
+    "✅ SQLite Database seeded successfully with SuperAdmin, Admin, Driver, and Customer Auth Users!",
+  );
 }
 
 main()
