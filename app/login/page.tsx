@@ -1,28 +1,28 @@
-'use client';
+"use client";
 
-import React, { useState, Suspense } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { signIn } from 'next-auth/react';
-import { useLogistics } from '@/context/LogisticsContext';
-import { PublicHeader } from '@/components/public/PublicHeader';
-import { PublicFooter } from '@/components/public/PublicFooter';
-import { 
-  ShieldCheck, 
-  Truck, 
-  Building2, 
-  Crown, 
-  Lock, 
-  Mail, 
-  User, 
-  ArrowRight, 
-  CheckCircle2, 
-  AlertCircle, 
+import React, { useState, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { signIn } from "next-auth/react";
+import { useLogistics } from "@/context/LogisticsContext";
+import { PublicHeader } from "@/components/public/PublicHeader";
+import { PublicFooter } from "@/components/public/PublicFooter";
+import {
+  ShieldCheck,
+  Truck,
+  Building2,
+  Crown,
+  Lock,
+  Mail,
+  User,
+  ArrowRight,
+  CheckCircle2,
+  AlertCircle,
   Sparkles,
   Package,
   Eye,
   EyeOff,
-} from 'lucide-react';
-import { AICopilotModal } from '@/components/dashboard/AICopilotModal';
+} from "lucide-react";
+import { AICopilotModal } from "@/components/dashboard/AICopilotModal";
 
 function LoginPageContent() {
   const router = useRouter();
@@ -30,63 +30,73 @@ function LoginPageContent() {
   const { loginUser, registerUser, warehouses } = useLogistics();
 
   // Mode: 'login' | 'register'
-  const initialMode = searchParams.get('mode') === 'register' ? 'register' : 'login';
-  const [authMode, setAuthMode] = useState<'login' | 'register'>(initialMode);
+  const initialMode =
+    searchParams.get("mode") === "register" ? "register" : "login";
+  const [authMode, setAuthMode] = useState<"login" | "register">(initialMode);
 
   // Selected Target Role for login/register: 'driver' | 'admin' | 'superadmin'
-  const [selectedRole, setSelectedRole] = useState<'driver' | 'admin' | 'superadmin'>('superadmin');
+  const [selectedRole, setSelectedRole] = useState<
+    "driver" | "admin" | "superadmin"
+  >("superadmin");
 
   // Login form state
-  const [emailOrStaffId, setEmailOrStaffId] = useState('superadmin@dhl.com');
-  const [password, setPassword] = useState('password123');
-  const [terminalHub, setTerminalHub] = useState('London Central Gateway');
+  const [emailOrStaffId, setEmailOrStaffId] = useState("superadmin@dhl.com");
+  const [password, setPassword] = useState("password123");
+  const [terminalHub, setTerminalHub] = useState("London Central Gateway");
   const [rememberMe, setRememberMe] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
 
   // Register form state
-  const [regName, setRegName] = useState('');
-  const [regEmail, setRegEmail] = useState('');
-  const [regStaffId, setRegStaffId] = useState('');
-  const [regHub, setRegHub] = useState(warehouses[0]?.name || 'London Central Gateway');
-  const [regVehicleId, setRegVehicleId] = useState('DHL-EV-402');
-  const [regPassword, setRegPassword] = useState('');
-  const [regConfirmPassword, setRegConfirmPassword] = useState('');
+  const [regName, setRegName] = useState("");
+  const [regEmail, setRegEmail] = useState("");
+  const [regStaffId, setRegStaffId] = useState("");
+  const [regHub, setRegHub] = useState(
+    warehouses[0]?.name || "London Central Gateway",
+  );
+  const [regVehicleId, setRegVehicleId] = useState("DHL-EV-402");
+  const [regPassword, setRegPassword] = useState("");
+  const [regConfirmPassword, setRegConfirmPassword] = useState("");
   const [regAgreed, setRegAgreed] = useState(true);
 
   // Feedback status
-  const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
+  const [feedback, setFeedback] = useState<{
+    type: "success" | "error";
+    message: string;
+  } | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showAuthLoader, setShowAuthLoader] = useState(false);
   const [copilotOpen, setCopilotOpen] = useState(false);
 
   // Fast Demo 1-Click Login handlers with NextAuth signIn
-  const handleQuickDemoLogin = async (targetRole: 'driver' | 'admin' | 'superadmin') => {
+  const handleQuickDemoLogin = async (
+    targetRole: "driver" | "admin" | "superadmin",
+  ) => {
     setSelectedRole(targetRole);
     setIsSubmitting(true);
     setShowAuthLoader(true);
     setFeedback(null);
 
-    let defaultEmail = 'superadmin@dhl.com';
-    let defaultStaffId = 'DHL-DIR-001';
-    let defaultName = 'Alex Rodriguez';
+    let defaultEmail = "superadmin@dhl.com";
+    let defaultStaffId = "DHL-DIR-001";
+    let defaultName = "Alex Rodriguez";
 
-    if (targetRole === 'admin') {
-      defaultEmail = 'admin@dhl.com';
-      defaultStaffId = 'DHL-MGR-442';
-      defaultName = 'Sarah Jenkins';
-    } else if (targetRole === 'driver') {
-      defaultEmail = 'driver@dhl.com';
-      defaultStaffId = 'DHL-DRV-101';
-      defaultName = 'Marcus Vance';
+    if (targetRole === "admin") {
+      defaultEmail = "admin@dhl.com";
+      defaultStaffId = "DHL-MGR-442";
+      defaultName = "Sarah Jenkins";
+    } else if (targetRole === "driver") {
+      defaultEmail = "driver@dhl.com";
+      defaultStaffId = "DHL-DRV-101";
+      defaultName = "Marcus Vance";
     }
 
     setEmailOrStaffId(defaultEmail);
 
     try {
       // Authenticate via NextAuth
-      const result = await signIn('credentials', {
+      const result = await signIn("credentials", {
         email: defaultEmail,
-        password: 'password123',
+        password: "password123",
         redirect: false,
       });
 
@@ -96,19 +106,19 @@ function LoginPageContent() {
         staffId: defaultStaffId,
         name: defaultName,
         hub: terminalHub,
-        vehicleId: targetRole === 'driver' ? 'DHL-EV-402' : undefined,
+        vehicleId: targetRole === "driver" ? "DHL-EV-402" : undefined,
       });
 
       setFeedback({
-        type: 'success',
+        type: "success",
         message: `Authenticated via NextAuth as ${targetRole.toUpperCase()} (${defaultName}). Entering dashboard...`,
       });
 
-      const destination = '/dashboard';
+      const destination = "/dashboard";
 
       window.location.assign(destination);
     } catch (err: any) {
-      setFeedback({ type: 'error', message: 'Authentication error occurred.' });
+      setFeedback({ type: "error", message: "Authentication error occurred." });
       setShowAuthLoader(false);
     } finally {
       setIsSubmitting(false);
@@ -123,35 +133,35 @@ function LoginPageContent() {
     setFeedback(null);
 
     try {
-      const res = await signIn('credentials', {
+      const res = await signIn("credentials", {
         email: emailOrStaffId,
         password: password,
         redirect: false,
       });
 
       if (res?.error) {
-        setFeedback({ type: 'error', message: res.error });
+        setFeedback({ type: "error", message: res.error });
         setIsSubmitting(false);
         return;
       }
 
       loginUser(selectedRole, {
-        email: emailOrStaffId.includes('@') ? emailOrStaffId : undefined,
-        staffId: !emailOrStaffId.includes('@') ? emailOrStaffId : undefined,
+        email: emailOrStaffId.includes("@") ? emailOrStaffId : undefined,
+        staffId: !emailOrStaffId.includes("@") ? emailOrStaffId : undefined,
         hub: terminalHub,
-        vehicleId: selectedRole === 'driver' ? 'DHL-EV-402' : undefined,
+        vehicleId: selectedRole === "driver" ? "DHL-EV-402" : undefined,
       });
 
       setFeedback({
-        type: 'success',
+        type: "success",
         message: `Welcome back! NextAuth verified for ${selectedRole.toUpperCase()}. Redirecting...`,
       });
 
-      const destination = '/dashboard';
+      const destination = "/dashboard";
 
       window.location.assign(destination);
     } catch (err: any) {
-      setFeedback({ type: 'error', message: 'Sign in failed. Please retry.' });
+      setFeedback({ type: "error", message: "Sign in failed. Please retry." });
       setShowAuthLoader(false);
     } finally {
       setIsSubmitting(false);
@@ -161,7 +171,11 @@ function LoginPageContent() {
   // Submit Register Form
   const handleRegisterSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setFeedback({ type: 'error', message: 'Registration is not available. Use an approved staff account to sign in.' });
+    setFeedback({
+      type: "error",
+      message:
+        "Registration is not available. Use an approved staff account to sign in.",
+    });
   };
 
   if (isSubmitting) {
@@ -172,11 +186,19 @@ function LoginPageContent() {
             <div className="h-8 w-8 animate-spin rounded-full border-4 border-[#FFCC00]/30 border-t-[#FFCC00]" />
           </div>
           <div className="mb-3 flex items-center justify-center gap-2">
-            <span className="text-3xl font-black italic tracking-tighter text-[#D40511]">DHL</span>
-            <span className="text-xs font-black uppercase tracking-[0.25em] text-gray-500">Operations</span>
+            <span className="text-3xl font-black italic tracking-tighter text-[#D40511]">
+              DHL
+            </span>
+            <span className="text-xs font-black uppercase tracking-[0.25em] text-gray-500">
+              Operations
+            </span>
           </div>
-          <h2 className="text-xl font-black text-gray-900">Secure access in progress</h2>
-          <p className="mt-2 text-sm text-gray-600">Authenticating your staff profile and preparing the dashboard…</p>
+          <h2 className="text-xl font-black text-gray-900">
+            Secure access in progress
+          </h2>
+          <p className="mt-2 text-sm text-gray-600">
+            Authenticating your staff profile and preparing the dashboard…
+          </p>
           <div className="mt-6 flex items-center justify-center gap-2">
             <span className="h-2.5 w-2.5 animate-pulse rounded-full bg-[#D40511]" />
             <span className="h-2.5 w-2.5 animate-pulse rounded-full bg-[#FFCC00] [animation-delay:0.15s]" />
@@ -190,7 +212,10 @@ function LoginPageContent() {
   return (
     <div className="min-h-screen bg-slate-100/70 flex flex-col justify-between text-gray-900 font-sans">
       <div>
-        <PublicHeader activeTab="dashboard" onOpenCopilot={() => setCopilotOpen(true)} />
+        <PublicHeader
+          activeTab="dashboard"
+          onOpenCopilot={() => setCopilotOpen(true)}
+        />
 
         <main className="max-w-4xl mx-auto px-4 sm:px-6 py-8">
           {/* Header Banner */}
@@ -200,10 +225,13 @@ function LoginPageContent() {
               <span>DHL OPERATIONS IDENTITY & ACCESS CONTROL</span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-gray-900 tracking-tight">
-              {authMode === 'login' ? 'Operational Staff Sign In' : 'Register New Personnel Profile'}
+              {authMode === "login"
+                ? "Operational Staff Sign In"
+                : "Register New Personnel Profile"}
             </h1>
             <p className="text-xs sm:text-sm text-gray-600 max-w-lg mx-auto mt-1">
-              Secure telematics access for courier drivers, dispatch station controllers, and executive logistics directors.
+              Secure telematics access for courier drivers, dispatch station
+              controllers, and executive logistics directors.
             </p>
           </div>
 
@@ -222,7 +250,7 @@ function LoginPageContent() {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <button
                 type="button"
-                onClick={() => handleQuickDemoLogin('driver')}
+                onClick={() => handleQuickDemoLogin("driver")}
                 className="bg-slate-50 hover:bg-red-50 hover:border-red-300 border border-gray-200 rounded-xl p-3 text-left transition-all group"
               >
                 <div className="flex items-center justify-between mb-1">
@@ -233,13 +261,17 @@ function LoginPageContent() {
                     FIELD COURIER
                   </span>
                 </div>
-                <div className="font-bold text-xs text-gray-900">Marcus Vance</div>
-                <div className="text-[11px] text-gray-500 font-mono">DHL-EV-402 (Driver View)</div>
+                <div className="font-bold text-xs text-gray-900">
+                  Marcus Vance
+                </div>
+                <div className="text-[11px] text-gray-500 font-mono">
+                  DHL-EV-402 (Driver View)
+                </div>
               </button>
 
               <button
                 type="button"
-                onClick={() => handleQuickDemoLogin('admin')}
+                onClick={() => handleQuickDemoLogin("admin")}
                 className="bg-slate-50 hover:bg-amber-50 hover:border-amber-300 border border-gray-200 rounded-xl p-3 text-left transition-all group"
               >
                 <div className="flex items-center justify-between mb-1">
@@ -250,13 +282,17 @@ function LoginPageContent() {
                     STATION ADMIN
                   </span>
                 </div>
-                <div className="font-bold text-xs text-gray-900">Sarah Jenkins</div>
-                <div className="text-[11px] text-gray-500 font-mono">London Hub Dispatch</div>
+                <div className="font-bold text-xs text-gray-900">
+                  Sarah Jenkins
+                </div>
+                <div className="text-[11px] text-gray-500 font-mono">
+                  London Hub Dispatch
+                </div>
               </button>
 
               <button
                 type="button"
-                onClick={() => handleQuickDemoLogin('superadmin')}
+                onClick={() => handleQuickDemoLogin("superadmin")}
                 className="bg-slate-50 hover:bg-emerald-50 hover:border-emerald-300 border border-gray-200 rounded-xl p-3 text-left transition-all group"
               >
                 <div className="flex items-center justify-between mb-1">
@@ -267,8 +303,12 @@ function LoginPageContent() {
                     SUPERADMIN
                   </span>
                 </div>
-                <div className="font-bold text-xs text-gray-900">Alex Rodriguez</div>
-                <div className="text-[11px] text-gray-500 font-mono">Global Command & Fleet</div>
+                <div className="font-bold text-xs text-gray-900">
+                  Alex Rodriguez
+                </div>
+                <div className="text-[11px] text-gray-500 font-mono">
+                  Global Command & Fleet
+                </div>
               </button>
             </div>
           </div>
@@ -279,13 +319,13 @@ function LoginPageContent() {
             <div className="grid grid-cols-2 border-b border-gray-200 bg-slate-50">
               <button
                 onClick={() => {
-                  setAuthMode('login');
+                  setAuthMode("login");
                   setFeedback(null);
                 }}
                 className={`py-3.5 text-xs font-black uppercase tracking-wider transition-all flex items-center justify-center space-x-2 ${
-                  authMode === 'login'
-                    ? 'bg-white text-[#D40511] border-b-2 border-[#D40511]'
-                    : 'text-gray-500 hover:text-gray-900'
+                  authMode === "login"
+                    ? "bg-white text-[#D40511] border-b-2 border-[#D40511]"
+                    : "text-gray-500 hover:text-gray-900"
                 }`}
               >
                 <Lock className="w-4 h-4" />
@@ -294,13 +334,13 @@ function LoginPageContent() {
 
               <button
                 onClick={() => {
-                  setAuthMode('register');
+                  setAuthMode("register");
                   setFeedback(null);
                 }}
                 className={`py-3.5 text-xs font-black uppercase tracking-wider transition-all flex items-center justify-center space-x-2 ${
-                  authMode === 'register'
-                    ? 'bg-white text-[#D40511] border-b-2 border-[#D40511]'
-                    : 'text-gray-500 hover:text-gray-900'
+                  authMode === "register"
+                    ? "bg-white text-[#D40511] border-b-2 border-[#D40511]"
+                    : "text-gray-500 hover:text-gray-900"
                 }`}
               >
                 <User className="w-4 h-4" />
@@ -316,9 +356,24 @@ function LoginPageContent() {
                 </label>
                 <div className="grid grid-cols-3 gap-3">
                   {[
-                    { id: 'driver', label: 'Field Driver', desc: 'Mobile manifest & PoD', icon: Truck },
-                    { id: 'admin', label: 'Operations Admin', desc: 'Hub dispatch & billing', icon: Building2 },
-                    { id: 'superadmin', label: 'Superadmin', desc: 'Full logistics oversight', icon: Crown },
+                    {
+                      id: "driver",
+                      label: "Field Driver",
+                      desc: "Mobile manifest & PoD",
+                      icon: Truck,
+                    },
+                    {
+                      id: "admin",
+                      label: "Operations Admin",
+                      desc: "Hub dispatch & billing",
+                      icon: Building2,
+                    },
+                    {
+                      id: "superadmin",
+                      label: "Superadmin",
+                      desc: "Full logistics oversight",
+                      icon: Crown,
+                    },
                   ].map((item) => {
                     const Icon = item.icon;
                     const isSelected = selectedRole === item.id;
@@ -328,25 +383,33 @@ function LoginPageContent() {
                         type="button"
                         onClick={() => {
                           setSelectedRole(item.id as any);
-                          if (authMode === 'login') {
-                            if (item.id === 'driver') setEmailOrStaffId('driver@dhl.com');
-                            else if (item.id === 'admin') setEmailOrStaffId('admin@dhl.com');
-                            else setEmailOrStaffId('superadmin@dhl.com');
+                          if (authMode === "login") {
+                            if (item.id === "driver")
+                              setEmailOrStaffId("driver@dhl.com");
+                            else if (item.id === "admin")
+                              setEmailOrStaffId("admin@dhl.com");
+                            else setEmailOrStaffId("superadmin@dhl.com");
                           }
                         }}
                         className={`p-3 rounded-xl text-left border-2 transition-all ${
                           isSelected
-                            ? 'border-[#D40511] bg-red-50/50 shadow-sm'
-                            : 'border-gray-200 bg-slate-50 hover:bg-slate-100 text-gray-600'
+                            ? "border-[#D40511] bg-red-50/50 shadow-sm"
+                            : "border-gray-200 bg-slate-50 hover:bg-slate-100 text-gray-600"
                         }`}
                       >
                         <div className="flex items-center space-x-2">
-                          <Icon className={`w-4 h-4 ${isSelected ? 'text-[#D40511]' : 'text-gray-500'}`} />
-                          <span className={`text-xs font-black ${isSelected ? 'text-[#D40511]' : 'text-gray-800'}`}>
+                          <Icon
+                            className={`w-4 h-4 ${isSelected ? "text-[#D40511]" : "text-gray-500"}`}
+                          />
+                          <span
+                            className={`text-xs font-black ${isSelected ? "text-[#D40511]" : "text-gray-800"}`}
+                          >
                             {item.label}
                           </span>
                         </div>
-                        <span className="text-[10px] text-gray-500 mt-0.5 block">{item.desc}</span>
+                        <span className="text-[10px] text-gray-500 mt-0.5 block">
+                          {item.desc}
+                        </span>
                       </button>
                     );
                   })}
@@ -357,12 +420,12 @@ function LoginPageContent() {
               {feedback && (
                 <div
                   className={`p-3.5 rounded-xl border text-xs font-bold flex items-center space-x-2 ${
-                    feedback.type === 'success'
-                      ? 'bg-emerald-50 text-emerald-800 border-emerald-300'
-                      : 'bg-red-50 text-red-800 border-red-300'
+                    feedback.type === "success"
+                      ? "bg-emerald-50 text-emerald-800 border-emerald-300"
+                      : "bg-red-50 text-red-800 border-red-300"
                   }`}
                 >
-                  {feedback.type === 'success' ? (
+                  {feedback.type === "success" ? (
                     <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0" />
                   ) : (
                     <AlertCircle className="w-4 h-4 text-red-600 flex-shrink-0" />
@@ -372,7 +435,7 @@ function LoginPageContent() {
               )}
 
               {/* LOGIN MODE FORM */}
-              {authMode === 'login' ? (
+              {authMode === "login" ? (
                 <form onSubmit={handleLoginSubmit} className="space-y-4">
                   <div>
                     <label className="block text-xs font-bold text-gray-700 mb-1">
@@ -393,10 +456,16 @@ function LoginPageContent() {
 
                   <div>
                     <div className="flex items-center justify-between mb-1">
-                      <label className="text-xs font-bold text-gray-700">Security Passcode *</label>
+                      <label className="text-xs font-bold text-gray-700">
+                        Security Passcode *
+                      </label>
                       <button
                         type="button"
-                        onClick={() => alert('Demo Reset: You can use any passcode or click 1-Click Quick Demo Login above.')}
+                        onClick={() =>
+                          alert(
+                            "Demo Reset: You can use any passcode or click 1-Click Quick Demo Login above.",
+                          )
+                        }
                         className="text-[11px] font-bold text-[#D40511] hover:underline"
                       >
                         Forgot Passcode?
@@ -405,7 +474,7 @@ function LoginPageContent() {
                     <div className="relative">
                       <Lock className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
                       <input
-                        type={showPassword ? 'text' : 'password'}
+                        type={showPassword ? "text" : "password"}
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         placeholder="Enter password or passcode"
@@ -417,14 +486,20 @@ function LoginPageContent() {
                         onClick={() => setShowPassword(!showPassword)}
                         className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
                       >
-                        {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                        {showPassword ? (
+                          <EyeOff className="w-4 h-4" />
+                        ) : (
+                          <Eye className="w-4 h-4" />
+                        )}
                       </button>
                     </div>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-xs font-bold text-gray-700 mb-1">Assigned Station / Hub</label>
+                      <label className="block text-xs font-bold text-gray-700 mb-1">
+                        Assigned Station / Hub
+                      </label>
                       <select
                         value={terminalHub}
                         onChange={(e) => setTerminalHub(e.target.value)}
@@ -456,7 +531,9 @@ function LoginPageContent() {
                     disabled={isSubmitting}
                     className="w-full bg-[#D40511] hover:bg-red-700 text-white font-black text-xs sm:text-sm py-3.5 px-4 rounded-xl shadow transition-all flex items-center justify-center space-x-2 disabled:opacity-50"
                   >
-                    <span>Authorize & Open {selectedRole.toUpperCase()} Dashboard</span>
+                    <span>
+                      Authorize & Open {selectedRole.toUpperCase()} Dashboard
+                    </span>
                     <ArrowRight className="w-4 h-4" />
                   </button>
                 </form>
@@ -465,7 +542,9 @@ function LoginPageContent() {
                 <form onSubmit={handleRegisterSubmit} className="space-y-4">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-xs font-bold text-gray-700 mb-1">Full Legal Name *</label>
+                      <label className="block text-xs font-bold text-gray-700 mb-1">
+                        Full Legal Name *
+                      </label>
                       <input
                         type="text"
                         required
@@ -477,7 +556,9 @@ function LoginPageContent() {
                     </div>
 
                     <div>
-                      <label className="block text-xs font-bold text-gray-700 mb-1">Official DHL Staff ID *</label>
+                      <label className="block text-xs font-bold text-gray-700 mb-1">
+                        Official DHL Staff ID *
+                      </label>
                       <input
                         type="text"
                         required
@@ -491,7 +572,9 @@ function LoginPageContent() {
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-xs font-bold text-gray-700 mb-1">Official Work Email *</label>
+                      <label className="block text-xs font-bold text-gray-700 mb-1">
+                        Official Work Email *
+                      </label>
                       <input
                         type="email"
                         required
@@ -503,7 +586,9 @@ function LoginPageContent() {
                     </div>
 
                     <div>
-                      <label className="block text-xs font-bold text-gray-700 mb-1">Assigned Facility / Depot</label>
+                      <label className="block text-xs font-bold text-gray-700 mb-1">
+                        Assigned Facility / Depot
+                      </label>
                       <select
                         value={regHub}
                         onChange={(e) => setRegHub(e.target.value)}
@@ -518,9 +603,11 @@ function LoginPageContent() {
                     </div>
                   </div>
 
-                  {selectedRole === 'driver' && (
+                  {selectedRole === "driver" && (
                     <div>
-                      <label className="block text-xs font-bold text-gray-700 mb-1">Assigned Fleet Vehicle ID</label>
+                      <label className="block text-xs font-bold text-gray-700 mb-1">
+                        Assigned Fleet Vehicle ID
+                      </label>
                       <input
                         type="text"
                         value={regVehicleId}
@@ -533,7 +620,9 @@ function LoginPageContent() {
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-xs font-bold text-gray-700 mb-1">Create Password</label>
+                      <label className="block text-xs font-bold text-gray-700 mb-1">
+                        Create Password
+                      </label>
                       <input
                         type="password"
                         value={regPassword}
@@ -544,7 +633,9 @@ function LoginPageContent() {
                     </div>
 
                     <div>
-                      <label className="block text-xs font-bold text-gray-700 mb-1">Confirm Password</label>
+                      <label className="block text-xs font-bold text-gray-700 mb-1">
+                        Confirm Password
+                      </label>
                       <input
                         type="password"
                         value={regConfirmPassword}
@@ -564,7 +655,9 @@ function LoginPageContent() {
                         className="mt-0.5 rounded text-[#D40511] focus:ring-0"
                       />
                       <span>
-                        I agree to the DHL Operations Security Protocol, Telematics Monitoring Policy, and Chain of Custody standards.
+                        I agree to the DHL Operations Security Protocol,
+                        Telematics Monitoring Policy, and Chain of Custody
+                        standards.
                       </span>
                     </label>
                   </div>
@@ -588,7 +681,7 @@ function LoginPageContent() {
                 <span>Need customer package tracking instead?</span>
               </div>
               <button
-                onClick={() => router.push('/track')}
+                onClick={() => router.push("/track")}
                 className="font-bold text-[#D40511] hover:underline flex items-center space-x-1"
               >
                 <span>Go to Public Consignment Tracker</span>
@@ -600,21 +693,28 @@ function LoginPageContent() {
       </div>
 
       <PublicFooter />
-      <AICopilotModal isOpen={copilotOpen} onClose={() => setCopilotOpen(false)} />
+      <AICopilotModal
+        isOpen={copilotOpen}
+        onClose={() => setCopilotOpen(false)}
+      />
     </div>
   );
 }
 
 export default function LoginPage() {
   return (
-    <Suspense fallback={
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center p-8">
-        <div className="text-center space-y-3">
-          <div className="w-10 h-10 border-4 border-[#D40511] border-t-transparent rounded-full animate-spin mx-auto" />
-          <p className="text-xs font-bold text-gray-600 font-mono">Loading DHL Authorization Portal...</p>
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-slate-50 flex items-center justify-center p-8">
+          <div className="text-center space-y-3">
+            <div className="w-10 h-10 border-4 border-[#D40511] border-t-transparent rounded-full animate-spin mx-auto" />
+            <p className="text-xs font-bold text-gray-600 font-mono">
+              Loading DHL Authorization Portal...
+            </p>
+          </div>
         </div>
-      </div>
-    }>
+      }
+    >
       <LoginPageContent />
     </Suspense>
   );
