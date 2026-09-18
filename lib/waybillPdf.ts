@@ -360,7 +360,7 @@ export function downloadWaybillPdf(shipment: Partial<Shipment>): void {
         <p><strong>Assigned Courier:</strong> ${driver}</p>
         <p><strong>Fleet Vehicle:</strong> ${vehicle}</p>
         <p><strong>Routing Checkpoint:</strong> ${originCity} &rarr; ${destCity} Direct Flight Scan</p>
-        <p><strong>Recorded By:</strong> DHL Operations Express Dispatch</p>
+        <p><strong>Recorded By:</strong> DHL</p>
       </div>
       <div class="otp-box">
         <div class="otp-label">Handover OTP Code</div>

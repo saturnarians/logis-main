@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { TawkMessenger } from "./tawk";
 import {
   ArrowUp,
   ArrowUpRight,
@@ -110,7 +111,7 @@ export function DHLHomepageLanding() {
                   Customer Service
                 </Link>
               </div>
-              <div>
+              {/* <div>
                 <button
                   type="button"
                   onClick={() => router.push("/login")}
@@ -119,7 +120,7 @@ export function DHLHomepageLanding() {
                   <span>Customer Portal Logins</span>
                   <ChevronDown className="ml-1 h-3.5 w-3.5 text-[var(--text-secondary)]" />
                 </button>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
@@ -163,13 +164,13 @@ export function DHLHomepageLanding() {
             >
               Customer Service
             </Link>
-            <Link
+            {/* <Link
               href="/login"
               className="flex items-center justify-between border-b border-[var(--glass-border-subtle)] py-2 transition-colors hover:text-[var(--dhl-red)]"
             >
               <span>Customer Portal Logins</span>
               <ChevronRight className="h-3.5 w-3.5" />
-            </Link>
+            </Link> */}
             <div className="flex justify-between border-t border-[var(--glass-border-subtle)] pt-2 text-xs font-normal text-[var(--text-secondary)]">
               <Link href="/track" className="flex items-center">
                 <MapPin className="mr-1 h-3.5 w-3.5" />
@@ -269,7 +270,7 @@ export function DHLHomepageLanding() {
               </Link>
 
               <Link
-                href="/login"
+                href="/#"
                 className="group relative flex flex-col items-center justify-between p-6 text-center transition-colors hover:bg-[var(--surface-sunken)]"
               >
                 <div className="yellow-corner-badge" />
@@ -364,12 +365,12 @@ export function DHLHomepageLanding() {
                   </Link>
                 </li>
                 <li>
-                  <Link
+                  {/* <Link
                     href="/login"
                     className="transition-colors hover:text-[var(--dhl-red)]"
                   >
                     Customer Portal Logins
-                  </Link>
+                  </Link> */}
                 </li>
                 <li>
                   <Link
@@ -606,6 +607,7 @@ export function DHLHomepageLanding() {
           </button>
         </div>
       </footer>
+      <TawkMessenger />
     </div>
   );
 }

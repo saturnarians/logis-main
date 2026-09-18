@@ -6,6 +6,7 @@ import { useLogistics } from '@/context/LogisticsContext';
 import { downloadWaybillPdf } from '@/lib/waybillPdf';
 import { PublicHeader } from '@/components/public/PublicHeader';
 import { PublicFooter } from '@/components/public/PublicFooter';
+import { TawkMessenger } from '@/components/public/tawk';
 import { 
   Package, 
   Search, 
@@ -72,12 +73,27 @@ function TrackPageContent() {
       }
     }
 
+    const STATUS_ORDER: Record<string, number> = {
+      'Order Placed': 0,
+      'Pending': 1,
+      'In Transit': 2,
+      'Out for Delivery': 3,
+      'Delivered': 4,
+      'Delayed': 5,
+      'Canceled': 6,
+    };
+
     // Sort chronologically (Order Placed -> Pending -> In Transit -> Out for Delivery -> Delivered)
     const result = Array.from(statusMap.values());
     result.sort((a, b) => {
       const timeA = new Date(a.timestamp).getTime() || 0;
       const timeB = new Date(b.timestamp).getTime() || 0;
-      return timeA - timeB;
+      if (timeA !== timeB) {
+        return timeA - timeB;
+      }
+      const orderA = STATUS_ORDER[a.status] ?? 99;
+      const orderB = STATUS_ORDER[b.status] ?? 99;
+      return orderA - orderB;
     });
 
     return result;
@@ -119,7 +135,7 @@ function TrackPageContent() {
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col justify-between text-gray-900 font-sans">
       <div>
-        <PublicHeader activeTab="track" onOpenCopilot={toggleCopilot} />
+        {/* <PublicHeader activeTab="track" onOpenCopilot={toggleCopilot} /> */}
 
         {/* Hero & Search Header */}
         <section className="bg-gradient-to-b from-[#FFCC00]/20 via-white to-slate-50 border-b border-gray-200 py-8 px-4 sm:px-6">
@@ -642,6 +658,7 @@ function TrackPageContent() {
 
       {/* Public Footer */}
       <PublicFooter />
+      <TawkMessenger />
     </div>
   );
 }

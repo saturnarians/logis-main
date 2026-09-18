@@ -119,6 +119,7 @@ export const DispatchBookingView: React.FC<DispatchBookingViewProps> = ({
     setBookingSuccess(
       `Waybill booked and registered! Assigned to ${assignedDriver?.name || "Pending Dispatch Queue"}.`,
     );
+    downloadWaybillPdf(newShipmentData);
 
     // Reset form
     setCustomerName("");
