@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { logger, monitoring } from "@/lib/logger";
+import { notifications } from "@/lib/system/notifications";
 import type {
   CreateShipmentDto,
   UpdateShipmentDto,
@@ -255,6 +256,31 @@ export class ShipmentService {
         "ShipmentService",
         `Successfully generated shipment: ${created.trackingId}`,
       );
+
+      const recipientEmail = created.recipientEmail || created.senderEmail;
+      console.log(`[ShipmentService:Debug] Attempting to send email for created shipment ${created.trackingId}... Target: ${recipientEmail || "none"}`);
+      if (recipientEmail) {
+        try {
+          const res = await notifications.send({
+            title: `Shipment Created: ${created.trackingId}`,
+            message: `Shipment ${created.trackingId} to ${created.destinationCity} has been successfully created.`,
+            channel: "email",
+            category: "shipment_update",
+            priority: "medium",
+            recipientEmail,
+          });
+          if (res.deliveredChannels.includes("email")) {
+            console.log(`[ShipmentService:Debug] Email notification sent successfully to ${recipientEmail}`);
+          } else {
+            console.log(`[ShipmentService:Debug] Email notification delivery failed for ${recipientEmail} (Check Resend API key / domain restrictions).`);
+          }
+        } catch (emailError) {
+          console.log(`[ShipmentService:Debug] Failed to call notification service for ${recipientEmail}:`, emailError);
+        }
+      } else {
+        console.log(`[ShipmentService:Debug] Skipped email sending for ${created.trackingId}: No recipientEmail or senderEmail provided.`);
+      }
+
       return created;
     } catch (error: any) {
       logger.error(
@@ -323,6 +349,31 @@ export class ShipmentService {
         "ShipmentService",
         `Updated shipment ${trackingId} successfully`,
       );
+
+      const targetEmail = updated.recipientEmail || updated.senderEmail;
+      console.log(`[ShipmentService:Debug] Attempting to send email for updated shipment ${trackingId}... Target: ${targetEmail || "none"}`);
+      if (targetEmail) {
+        try {
+          const res = await notifications.send({
+            title: `Shipment Updated: ${updated.trackingId}`,
+            message: `Shipment ${updated.trackingId} status updated to ${updated.status}.`,
+            channel: "email",
+            category: "shipment_update",
+            priority: "medium",
+            recipientEmail: targetEmail,
+          });
+          if (res.deliveredChannels.includes("email")) {
+            console.log(`[ShipmentService:Debug] Email notification sent successfully to ${targetEmail}`);
+          } else {
+            console.log(`[ShipmentService:Debug] Email notification delivery failed for ${targetEmail} (Check Resend API key / domain restrictions).`);
+          }
+        } catch (emailError) {
+          console.log(`[ShipmentService:Debug] Failed to call notification service for ${targetEmail}:`, emailError);
+        }
+      } else {
+        console.log(`[ShipmentService:Debug] Skipped email sending for updated shipment ${trackingId}: No recipientEmail or senderEmail provided.`);
+      }
+
       return updated;
     } catch (error: any) {
       logger.error(

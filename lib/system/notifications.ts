@@ -22,27 +22,97 @@ const DEFAULT_FROM_EMAIL =
   process.env.RESEND_FROM_EMAIL || "onboarding@resend.dev";
 const DEFAULT_TWILIO_FROM = process.env.TWILIO_FROM_NUMBER || "";
 
+export function buildEmailTemplate(title: string, bodyContent: string): string {
+  const contentHtml = bodyContent.startsWith("<")
+    ? bodyContent
+    : `<p style="margin: 0 0 16px 0; color: #475569; font-size: 15px; line-height: 1.6;">${bodyContent}</p>`;
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${title}</title>
+</head>
+<body style="margin: 0; padding: 0; background-color: #f4f6f8; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+  <table border="0" cellpadding="0" cellspacing="0" width="100%" style="table-layout: fixed; background-color: #f4f6f8; padding: 40px 0;">
+    <tr>
+      <td align="center">
+        <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);">
+          <!-- Header -->
+          <tr>
+            <td style="background-color: #002B49; padding: 24px 32px;">
+              <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                <tr>
+                  <td>
+                    <span style="color: #FFCC00; font-size: 24px; font-weight: 800; letter-spacing: -0.5px;">DHL</span>
+                    <span style="color: #ffffff; font-size: 16px; font-weight: 600; margin-left: 8px;">Logistics Express</span>
+                  </td>
+                  <td align="right">
+                    <span style="background-color: rgba(255, 204, 0, 0.2); color: #FFCC00; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 20px; text-transform: uppercase;">Notification</span>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Body -->
+          <tr>
+            <td style="padding: 32px;">
+              <h1 style="margin: 0 0 16px 0; color: #002B49; font-size: 20px; font-weight: 700;">${title}</h1>
+              ${contentHtml}
+              
+              <!-- Info Box -->
+              <div style="background-color: #f8fafc; border-left: 4px solid #002B49; padding: 16px; border-radius: 0 8px 8px 0; margin: 24px 0;">
+                <p style="margin: 0; color: #64748b; font-size: 13px;">
+                  Real-time status updates and tracking details are accessible via your logistics portal dashboard.
+                </p>
+              </div>
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td style="background-color: #f8fafc; border-top: 1px solid #e2e8f0; padding: 20px 32px; text-align: center;">
+              <p style="margin: 0 0 4px 0; color: #94a3b8; font-size: 12px;">DHL Express Global Logistics Platform</p>
+              <p style="margin: 0; color: #cbd5e1; font-size: 11px;">Automated system message — please do not reply directly.</p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>`;
+}
+
 async function sendEmailWithResend(
   email: string,
   subject: string,
   html: string,
-) {
+  retryCount = 0,
+): Promise<boolean> {
   if (!resend) {
     monitoring.warn(
       "NotificationEngine:Email",
       "RESEND_API_KEY is not configured; skipping real email send.",
       { email, subject },
     );
+    console.log("[NotificationEngine:Email] RESEND_API_KEY is missing/unconfigured.");
     return false;
   }
+
+  const finalHtml = html.includes("<html")
+    ? html
+    : buildEmailTemplate(subject, html);
 
   try {
     const response = await resend.emails.send({
       from: DEFAULT_FROM_EMAIL,
       to: [email],
       subject,
-      html,
-      text: html.replace(/<[^>]*>/g, "").trim() || subject,
+      html: finalHtml,
+      text: finalHtml.replace(/<[^>]*>/g, "").trim() || subject,
     });
 
     if (response.error) {
@@ -54,8 +124,15 @@ async function sendEmailWithResend(
       `Real email sent via Resend to ${email}`,
       { subject, id: response.data?.id },
     );
+    console.log(`[NotificationEngine:Email] Success! Resend email sent to ${email} (ID: ${response.data?.id})`);
     return true;
-  } catch (error) {
+  } catch (error: any) {
+    if (retryCount < 1) {
+      console.warn(`[NotificationEngine:Email] Delivery attempt failed (${error?.message || error}). Retrying in 500ms...`);
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      return sendEmailWithResend(email, subject, html, retryCount + 1);
+    }
+    console.error("[NotificationEngine:Email] Resend delivery error:", error?.message || error);
     monitoring.error(
       "NotificationEngine:Email",
       "Resend email delivery failed",
