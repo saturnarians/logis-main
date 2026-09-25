@@ -58,13 +58,13 @@ store/
 ### 1. Install dependencies
 
 ```bash
-npm install
+bun install
 ```
 
 ### 2. Run the app locally
 
 ```bash
-npm run dev
+bun run dev
 ```
 
 Then open:
@@ -76,10 +76,10 @@ http://localhost:3000
 ## Available Scripts
 
 ```bash
-npm run dev
-npm run build
-npm run start
-npm run lint
+bun run dev
+bun run build
+bun run start
+bun run lint
 ```
 
 ## Default Public Pages
