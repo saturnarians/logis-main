@@ -2,11 +2,16 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { PrismaUserRepository } from '@/server/services/repository/auth.prisma.repository';
 import { ScryptPasswordHasher } from '@/server/services/repository/argon2.passwordhasher';
+import { API_RATE_LIMITS, rateLimitRequest } from '@/lib/rate-limit';
+import { withApiLogging } from '@/lib/api-monitoring';
 
 const userRepo = new PrismaUserRepository(prisma);
 const passwordHasher = new ScryptPasswordHasher();
 
-export async function GET(req: NextRequest) {
+async function getUsers(req: NextRequest) {
+  const rateLimitResponse = rateLimitRequest(req, API_RATE_LIMITS.read);
+  if (rateLimitResponse) return rateLimitResponse;
+
   try {
     const { searchParams } = new URL(req.url);
     const identifier = searchParams.get('identifier');
@@ -27,7 +32,10 @@ export async function GET(req: NextRequest) {
   }
 }
 
-export async function POST(req: NextRequest) {
+async function createUser(req: NextRequest) {
+  const rateLimitResponse = rateLimitRequest(req, API_RATE_LIMITS.write);
+  if (rateLimitResponse) return rateLimitResponse;
+
   try {
     const body = await req.json();
     const { name, email, password, passwordHash: rawPassword, role, staffId, hub, vehicleId, department, phone } = body;
@@ -60,7 +68,10 @@ export async function POST(req: NextRequest) {
   }
 }
 
-export async function PUT(req: NextRequest) {
+async function updateUser(req: NextRequest) {
+  const rateLimitResponse = rateLimitRequest(req, API_RATE_LIMITS.write);
+  if (rateLimitResponse) return rateLimitResponse;
+
   try {
     const body = await req.json();
     const { id, email, name, role, staffId, hub, vehicleId, department, phone, isActive, password } = body;
@@ -99,7 +110,10 @@ export async function PUT(req: NextRequest) {
   }
 }
 
-export async function DELETE(req: NextRequest) {
+async function deleteUser(req: NextRequest) {
+  const rateLimitResponse = rateLimitRequest(req, API_RATE_LIMITS.write);
+  if (rateLimitResponse) return rateLimitResponse;
+
   try {
     const { searchParams } = new URL(req.url);
     const id = searchParams.get('id');
@@ -123,3 +137,8 @@ export async function DELETE(req: NextRequest) {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
 }
+
+export const GET = withApiLogging(getUsers);
+export const POST = withApiLogging(createUser);
+export const PUT = withApiLogging(updateUser);
+export const DELETE = withApiLogging(deleteUser);

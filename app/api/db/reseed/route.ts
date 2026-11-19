@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { API_RATE_LIMITS, rateLimitRequest } from "@/lib/rate-limit";
+import { withApiLogging } from "@/lib/api-monitoring";
 import {
   INITIAL_SHIPMENTS,
   INITIAL_DRIVERS,
@@ -13,7 +15,10 @@ import {
   INITIAL_AI_GOVERNANCE,
 } from "@/lib/mockData";
 
-export async function POST() {
+async function reseedDatabase(req: NextRequest) {
+  const rateLimitResponse = rateLimitRequest(req, API_RATE_LIMITS.dbReseed);
+  if (rateLimitResponse) return rateLimitResponse;
+
   try {
     // 1. Seed Warehouses
     for (const wh of INITIAL_WAREHOUSES) {
@@ -187,6 +192,7 @@ export async function POST() {
           });
         }
       }
+
     }
 
     // 5. Seed Alerts
@@ -290,3 +296,5 @@ export async function POST() {
     );
   }
 }
+
+export const POST = withApiLogging(reseedDatabase);

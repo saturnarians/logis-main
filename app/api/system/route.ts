@@ -7,8 +7,13 @@ import {
   MarkNotificationReadSchema,
   TestMonitoringEventSchema 
 } from '@/types/dto';
+import { API_RATE_LIMITS, rateLimitRequest } from '@/lib/rate-limit';
+import { withApiLogging } from '@/lib/api-monitoring';
 
-export async function GET(req: NextRequest) {
+async function getSystemStatus(req: NextRequest) {
+  const rateLimitResponse = rateLimitRequest(req, API_RATE_LIMITS.read);
+  if (rateLimitResponse) return rateLimitResponse;
+
   try {
     const { searchParams } = new URL(req.url);
     const role = searchParams.get('role') as any;
@@ -37,7 +42,10 @@ export async function GET(req: NextRequest) {
   }
 }
 
-export async function POST(req: NextRequest) {
+async function postSystemAction(req: NextRequest) {
+  const rateLimitResponse = rateLimitRequest(req, API_RATE_LIMITS.write);
+  if (rateLimitResponse) return rateLimitResponse;
+
   try {
     const body = await req.json();
     const action = body.action;
@@ -103,3 +111,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ success: false, error: error.message || 'System request failed' }, { status: 500 });
   }
 }
+
+export const GET = withApiLogging(getSystemStatus);
+export const POST = withApiLogging(postSystemAction);

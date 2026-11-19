@@ -1,14 +1,29 @@
 import { NextRequest } from "next/server";
 import { shipmentController } from "@/server/controllers/shipment.controller";
+import { API_RATE_LIMITS, rateLimitRequest } from "@/lib/rate-limit";
+import { withApiLogging } from "@/lib/api-monitoring";
 
-export async function GET(req: NextRequest) {
+async function getShipments(req: NextRequest) {
+  const rateLimitResponse = rateLimitRequest(req, API_RATE_LIMITS.read);
+  if (rateLimitResponse) return rateLimitResponse;
+
   return shipmentController.list(req);
 }
 
-export async function POST(req: NextRequest) {
+async function createShipment(req: NextRequest) {
+  const rateLimitResponse = rateLimitRequest(req, API_RATE_LIMITS.write);
+  if (rateLimitResponse) return rateLimitResponse;
+
   return shipmentController.create(req);
 }
 
-export async function PUT(req: NextRequest) {
+async function updateShipment(req: NextRequest) {
+  const rateLimitResponse = rateLimitRequest(req, API_RATE_LIMITS.write);
+  if (rateLimitResponse) return rateLimitResponse;
+
   return shipmentController.update(req);
 }
+
+export const GET = withApiLogging(getShipments);
+export const POST = withApiLogging(createShipment);
+export const PUT = withApiLogging(updateShipment);

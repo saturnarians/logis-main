@@ -23,7 +23,7 @@ async function main() {
   // 1. Seed Warehouses
   for (const wh of INITIAL_WAREHOUSES) {
     await prisma.warehouseHub.upsert({
-      where: { code: wh.code },
+      where: { id: wh.id },
       update: wh,
       create: wh,
     });
@@ -70,7 +70,7 @@ async function main() {
   // 3. Seed Vehicles
   for (const v of INITIAL_VEHICLES) {
     await prisma.vehicle.upsert({
-      where: { plateNo: v.plateNo },
+      where: { id: v.id },
       update: v,
       create: v,
     });
@@ -79,7 +79,7 @@ async function main() {
   // 4. Seed Shipments & Timelines
   for (const s of INITIAL_SHIPMENTS) {
     const shipmentRecord = await prisma.shipment.upsert({
-      where: { trackingId: s.trackingId },
+      where: { id: s.id },
       update: {
         orderId: s.orderId,
         customerName: s.customerName,
@@ -207,7 +207,7 @@ async function main() {
   // 6. Seed Invoices
   for (const inv of INITIAL_INVOICES) {
     await prisma.invoiceRecord.upsert({
-      where: { invoiceNo: inv.invoiceNo },
+      where: { id: inv.id },
       update: inv,
       create: inv,
     });
@@ -225,7 +225,7 @@ async function main() {
   // 8. Seed Inventory
   for (const it of INITIAL_INVENTORY) {
     await prisma.inventoryItem.upsert({
-      where: { sku: it.sku },
+      where: { id: it.id },
       update: it,
       create: it,
     });
@@ -354,7 +354,10 @@ async function main() {
     await userRepository.upsertUser({
       id: `usr-${driver.id}`,
       name: driver.name,
-      email: `${emailName}@dhlfastlink.com`,
+      email:
+        driver.id === "drv-101"
+          ? "driver@dhlfastlink.com"
+          : `${emailName}@dhlfastlink.com`,
       passwordHash,
       role: "driver",
       staffId,

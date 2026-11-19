@@ -1,7 +1,12 @@
 import { GoogleGenAI } from '@google/genai';
 import { NextRequest, NextResponse } from 'next/server';
+import { API_RATE_LIMITS, rateLimitRequest } from '@/lib/rate-limit';
+import { withApiLogging } from '@/lib/api-monitoring';
 
-export async function POST(req: NextRequest) {
+async function runCopilot(req: NextRequest) {
+  const rateLimitResponse = rateLimitRequest(req, API_RATE_LIMITS.ai);
+  if (rateLimitResponse) return rateLimitResponse;
+
   try {
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) {
@@ -91,6 +96,8 @@ DATA ACCESS RULES:
          "note": "AI Proposed Dispatch Transition"
        }
      }
+
+     export const POST = withApiLogging(runCopilot);
      \`\`\`
      (Supported actionTypes: "update_shipment_status", "assign_driver", "create_route_alert", "update_tariff")
      Reassure the user that the action has been submitted to the Human-in-the-Loop pending queue for SuperAdmin approval.

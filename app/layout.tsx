@@ -1,7 +1,7 @@
 import type {Metadata} from 'next';
 import './globals.css';
 import { AppProviders } from '@/components/providers/AppProviders';
-import { GlobalCopilotHost } from '@/components/common/GlobalCopilotHost';
+// import { GlobalCopilotHost } from '@/components/common/GlobalCopilotHost';
 
 export const metadata: Metadata = {
   title: 'DHLFastLink Express & Logistics Platform',
@@ -14,7 +14,7 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
       <body suppressHydrationWarning>
         <AppProviders>
           {children}
-          <GlobalCopilotHost />
+          {/* <GlobalCopilotHost /> */}
         </AppProviders>
       </body>
     </html>

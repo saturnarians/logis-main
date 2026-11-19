@@ -1,7 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { API_RATE_LIMITS, rateLimitRequest } from '@/lib/rate-limit';
+import { withApiLogging } from '@/lib/api-monitoring';
 
-export async function GET() {
+async function getDatabaseSnapshot(req: NextRequest) {
+  const rateLimitResponse = rateLimitRequest(req, API_RATE_LIMITS.dbSync);
+  if (rateLimitResponse) return rateLimitResponse;
+
   try {
     const [
       shipments,
@@ -90,3 +95,5 @@ export async function GET() {
     );
   }
 }
+
+export const GET = withApiLogging(getDatabaseSnapshot);

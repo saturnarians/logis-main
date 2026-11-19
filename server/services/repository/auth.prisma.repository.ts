@@ -92,6 +92,7 @@ export class PrismaUserRepository
     const existing = await this.prisma.authUser.findFirst({
       where: {
         OR: [
+          ...(user.id ? [{ id: user.id }] : []),
           { email: user.email.toLowerCase() },
           { staffId: user.staffId },
         ],
