@@ -1,26 +1,26 @@
 /**
  * Server-side Waybill PDF Generator for Email Attachments
- * Generates a standard valid PDF 1.4 binary buffer for DHL Express Air Waybill (AWB).
+ * Generates a standard valid PDF 1.4 binary buffer for DHLFastLink Express Air Waybill (AWB).
  */
 export function generateWaybillPdfBuffer(shipment: any): Buffer {
-  const trackingId = shipment.trackingId || "DHL-EU-000000";
+  const trackingId = shipment.trackingId || "DHLFastLink-EU-000000";
   const orderId = shipment.orderId || "ORD-2026-000";
   const customerName = shipment.customerName || "Valued Customer";
   const originCity = shipment.originCity || "European Hub";
   const destCity = shipment.destinationCity || shipment.destCity || "Destination";
   const weight = shipment.weightKg !== undefined ? `${shipment.weightKg} KG` : "1.0 KG";
-  const carrier = shipment.carrier || "DHL Express";
+  const carrier = shipment.carrier || "DHLFastLink Express";
   const serviceType = shipment.serviceType || "Express Air";
   const dateStr = shipment.createdAt || new Date().toISOString().substring(0, 10);
   const cost = shipment.costUsd !== undefined ? `$${Number(shipment.costUsd).toFixed(2)}` : "$45.00";
-  const senderName = shipment.senderName || "DHL Central Hub";
+  const senderName = shipment.senderName || "DHLFastLink Central Hub";
 
   // Sanitize text for PDF Type1 standard encoding (remove parentheses)
   const clean = (str: string) => (str || "").replace(/[()]/g, "");
 
   const contentText = [
     "BT",
-    "/F1 18 Tf 40 740 Td (DHL EXPRESS AIR WAYBILL) Tj",
+    "/F1 18 Tf 40 740 Td (DHLFastLink EXPRESS AIR WAYBILL) Tj",
     "/F1 11 Tf 0 -28 Td (Tracking Number: " + clean(trackingId) + ") Tj",
     "0 -18 Td (Order ID: " + clean(orderId) + ") Tj",
     "0 -18 Td (Issue Date: " + clean(dateStr) + ") Tj",
@@ -38,7 +38,7 @@ export function generateWaybillPdfBuffer(shipment: any): Buffer {
     "0 -16 Td (Weight: " + clean(weight) + ") Tj",
     "0 -16 Td (Declared Cost: " + clean(cost) + ") Tj",
     "0 -36 Td (------------------------------------------------------------------------------------------------) Tj",
-    "/F1 9 Tf 0 -16 Td (Official Waybill Document - DHL Global Logistics Autonomous Platform) Tj",
+    "/F1 9 Tf 0 -16 Td (Official Waybill Document - DHLFastLink Global Logistics Autonomous Platform) Tj",
     "ET"
   ].join("\n");
 

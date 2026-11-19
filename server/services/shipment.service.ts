@@ -185,7 +185,7 @@ export class ShipmentService {
 
       const generatedTracking =
         dto.trackingId ||
-        `DHL-EU-${Math.floor(100000 + Math.random() * 900000)}`;
+        `DHLFastLink-EU-${Math.floor(100000 + Math.random() * 900000)}`;
 
       const created = await prisma.shipment.create({
         data: {
@@ -210,7 +210,7 @@ export class ShipmentService {
           parcelType: dto.parcelType || "Parcel Box",
           pieces: dto.pieces || 1,
           serviceType: dto.serviceType || "Express Air",
-          carrier: dto.carrier || "DHL Express",
+          carrier: dto.carrier || "DHLFastLink Express",
           temperatureCelsius: dto.temperatureCelsius,
           estimatedDelivery:
             dto.estimatedDelivery ||
@@ -242,7 +242,7 @@ export class ShipmentService {
                   .replace("T", " ")
                   .substring(0, 16),
                 note: `Electronic shipping instructions received. Package ready for pickup in ${dto.originCity}.`,
-                updatedBy: "DHL",
+                updatedBy: "DHLFastLink",
               },
             ],
           },
@@ -334,7 +334,7 @@ export class ShipmentService {
               dto.timelineEntry.timestamp ||
               new Date().toISOString().replace("T", " ").substring(0, 16),
             note: dto.timelineEntry.note,
-            updatedBy: "DHL",
+            updatedBy: "DHLFastLink",
           },
         };
       }

@@ -23,10 +23,10 @@ import {
   Youtube,
 } from "lucide-react";
 
-export function DHLHomepageLanding() {
+export function DHLFastLinkHomepageLanding() {
   const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [trackingInput, setTrackingInput] = useState("DHL-8942-01");
+  const [trackingInput, setTrackingInput] = useState("DHLFastLink-8942-01");
 
   const handleTrackSubmit = (event: React.FormEvent) => {
     event.preventDefault();
@@ -43,16 +43,16 @@ export function DHLHomepageLanding() {
   return (
     <div className="min-h-screen bg-[var(--surface-base)] text-[var(--text-primary)]">
       <header className="w-full">
-        <div className="hidden bg-[var(--dhl-yellow)] md:block">
+        <div className="hidden bg-[var(--dhlfastlink-yellow)] md:block">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="flex h-14 items-center justify-between">
               <Link
                 href="#"
-                className="dhl-logo flex items-center space-x-1 py-2"
+                className="dhlfastlink-logo flex items-center space-x-1 py-2"
               >
-                <span className="dhl-stripes" />
-                <span className="text-[var(--dhl-red)] text-3xl font-black italic tracking-tighter">
-                  DHL
+                <span className="dhlfastlink-stripes" />
+                <span className="text-[var(--dhlfastlink-red)] text-3xl font-black italic tracking-tighter">
+                  DHLFastLink
                 </span>
               </Link>
 
@@ -90,7 +90,7 @@ export function DHLHomepageLanding() {
               <div className="flex items-center space-x-8">
                 <Link
                   href="/track"
-                  className="border-b-2 border-transparent py-3 transition-colors hover:border-[var(--dhl-red)] hover:text-[var(--dhl-red)]"
+                  className="border-b-2 border-transparent py-3 transition-colors hover:border-[var(--dhlfastlink-red)] hover:text-[var(--dhlfastlink-red)]"
                 >
                   Track
                 </Link>
@@ -98,7 +98,7 @@ export function DHLHomepageLanding() {
                   <button
                     type="button"
                     onClick={() => router.push("/track")}
-                    className="flex items-center py-3 transition-colors hover:text-[var(--dhl-red)] focus:outline-none"
+                    className="flex items-center py-3 transition-colors hover:text-[var(--dhlfastlink-red)] focus:outline-none"
                   >
                     <span>Ship</span>
                     <ChevronDown className="ml-1 h-3.5 w-3.5 text-[var(--text-secondary)]" />
@@ -106,7 +106,7 @@ export function DHLHomepageLanding() {
                 </div>
                 <Link
                   href="/track"
-                  className="border-b-2 border-transparent py-3 transition-colors hover:border-[var(--dhl-red)] hover:text-[var(--dhl-red)]"
+                  className="border-b-2 border-transparent py-3 transition-colors hover:border-[var(--dhlfastlink-red)] hover:text-[var(--dhlfastlink-red)]"
                 >
                   Customer Service
                 </Link>
@@ -115,7 +115,7 @@ export function DHLHomepageLanding() {
                 <button
                   type="button"
                   onClick={() => router.push("/login")}
-                  className="flex items-center py-3 transition-colors hover:text-[var(--dhl-red)] focus:outline-none"
+                  className="flex items-center py-3 transition-colors hover:text-[var(--dhlfastlink-red)] focus:outline-none"
                 >
                   <span>Customer Portal Logins</span>
                   <ChevronDown className="ml-1 h-3.5 w-3.5 text-[var(--text-secondary)]" />
@@ -125,11 +125,11 @@ export function DHLHomepageLanding() {
           </div>
         </div>
 
-        <div className="flex items-center justify-between bg-[var(--dhl-yellow)] px-4 py-3 shadow-md md:hidden">
-          <Link href="#" className="dhl-logo flex items-center space-x-1">
-            <span className="dhl-stripes" />
-            <span className="text-[var(--dhl-red)] text-2xl font-black italic tracking-tighter">
-              DHL
+        <div className="flex items-center justify-between bg-[var(--dhlfastlink-yellow)] px-4 py-3 shadow-md md:hidden">
+          <Link href="#" className="dhlfastlink-logo flex items-center space-x-1">
+            <span className="dhlfastlink-stripes" />
+            <span className="text-[var(--dhlfastlink-red)] text-2xl font-black italic tracking-tighter">
+              DHLFastLink
             </span>
           </Link>
 
@@ -147,26 +147,26 @@ export function DHLHomepageLanding() {
           <div className="space-y-3 border-b border-[var(--glass-border-subtle)] bg-[var(--surface-raised)] px-4 py-3 text-sm font-semibold text-[var(--text-primary)] shadow-lg md:hidden">
             <Link
               href="/track"
-              className="block border-b border-[var(--glass-border-subtle)] py-2 transition-colors hover:text-[var(--dhl-red)]"
+              className="block border-b border-[var(--glass-border-subtle)] py-2 transition-colors hover:text-[var(--dhlfastlink-red)]"
             >
               Track
             </Link>
             <Link
               href="/track"
-              className="flex items-center justify-between border-b border-[var(--glass-border-subtle)] py-2 transition-colors hover:text-[var(--dhl-red)]"
+              className="flex items-center justify-between border-b border-[var(--glass-border-subtle)] py-2 transition-colors hover:text-[var(--dhlfastlink-red)]"
             >
               <span>Ship</span>
               <ChevronRight className="h-3.5 w-3.5" />
             </Link>
             <Link
               href="/track"
-              className="block border-b border-[var(--glass-border-subtle)] py-2 transition-colors hover:text-[var(--dhl-red)]"
+              className="block border-b border-[var(--glass-border-subtle)] py-2 transition-colors hover:text-[var(--dhlfastlink-red)]"
             >
               Customer Service
             </Link>
             {/* <Link
               href="/login"
-              className="flex items-center justify-between border-b border-[var(--glass-border-subtle)] py-2 transition-colors hover:text-[var(--dhl-red)]"
+              className="flex items-center justify-between border-b border-[var(--glass-border-subtle)] py-2 transition-colors hover:text-[var(--dhlfastlink-red)]"
             >
               <span>Customer Portal Logins</span>
               <ChevronRight className="h-3.5 w-3.5" />
@@ -206,7 +206,7 @@ export function DHLHomepageLanding() {
                 />
                 <button
                   type="submit"
-                  className="flex-shrink-0 rounded-lg bg-[var(--dhl-red)] px-10 py-3.5 text-base font-bold text-white transition-colors hover:bg-[var(--dhl-red-hover)]"
+                  className="flex-shrink-0 rounded-lg bg-[var(--dhlfastlink-red)] px-10 py-3.5 text-base font-bold text-white transition-colors hover:bg-[var(--dhlfastlink-red-hover)]"
                 >
                   Track
                 </button>
@@ -221,11 +221,11 @@ export function DHLHomepageLanding() {
                   value={trackingInput}
                   onChange={(event) => setTrackingInput(event.target.value)}
                   placeholder="Enter your tracking number(s)"
-                  className="w-full rounded-xl border border-[var(--glass-border-subtle)] p-3.5 text-sm text-[var(--text-primary)] placeholder:text-[var(--text-secondary)] focus:border-[var(--dhl-yellow)] focus:outline-none"
+                  className="w-full rounded-xl border border-[var(--glass-border-subtle)] p-3.5 text-sm text-[var(--text-primary)] placeholder:text-[var(--text-secondary)] focus:border-[var(--dhlfastlink-yellow)] focus:outline-none"
                 />
                 <button
                   type="submit"
-                  className="w-full rounded-xl bg-[var(--dhl-red)] py-3.5 text-base font-bold text-white shadow transition-colors hover:bg-[var(--dhl-red-hover)]"
+                  className="w-full rounded-xl bg-[var(--dhlfastlink-red)] py-3.5 text-base font-bold text-white shadow transition-colors hover:bg-[var(--dhlfastlink-red-hover)]"
                 >
                   Track
                 </button>
@@ -240,7 +240,7 @@ export function DHLHomepageLanding() {
                 className="group flex flex-col items-center justify-between p-6 text-center transition-colors hover:bg-[var(--surface-sunken)]"
               >
                 <div className="flex flex-col items-center">
-                  <div className="mb-3 text-3xl text-[var(--dhl-red)] transition-transform group-hover:scale-110">
+                  <div className="mb-3 text-3xl text-[var(--dhlfastlink-red)] transition-transform group-hover:scale-110">
                     <CalendarRange className="h-8 w-8" />
                   </div>
                   <h3 className="mb-1 text-lg font-bold text-[var(--text-primary)]">
@@ -257,7 +257,7 @@ export function DHLHomepageLanding() {
                 className="group flex flex-col items-center justify-between p-6 text-center transition-colors hover:bg-[var(--surface-sunken)]"
               >
                 <div className="flex flex-col items-center">
-                  <div className="mb-3 text-3xl text-[var(--dhl-red)] transition-transform group-hover:scale-110">
+                  <div className="mb-3 text-3xl text-[var(--dhlfastlink-red)] transition-transform group-hover:scale-110">
                     <ReceiptText className="h-8 w-8" />
                   </div>
                   <h3 className="mb-1 text-lg font-bold text-[var(--text-primary)]">
@@ -275,11 +275,11 @@ export function DHLHomepageLanding() {
               >
                 <div className="yellow-corner-badge" />
                 <div className="flex flex-col items-center">
-                  <div className="mb-3 text-3xl text-[var(--dhl-red)] transition-transform group-hover:scale-110">
+                  <div className="mb-3 text-3xl text-[var(--dhlfastlink-red)] transition-transform group-hover:scale-110">
                     <Building2 className="h-8 w-8" />
                   </div>
                   <h3 className="mb-1 text-lg font-bold text-[var(--text-primary)]">
-                    DHL for Business
+                    DHLFastLink for Business
                   </h3>
                   <p className="max-w-xs text-xs leading-relaxed text-[var(--text-secondary)]">
                     Shipping regularly? Request a business account and profit
@@ -297,7 +297,7 @@ export function DHLHomepageLanding() {
               <div className="relative h-64 overflow-hidden sm:h-72">
                 <img
                   src="https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&w=1000&q=80"
-                  alt="DHL electric courier van"
+                  alt="DHLFastLink electric courier van"
                   className="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
                 />
               </div>
@@ -305,10 +305,10 @@ export function DHLHomepageLanding() {
                 <div>
                   <Link
                     href="#"
-                    className="group mb-3 inline-flex items-center text-xl font-extrabold text-[var(--text-primary)] hover:text-[var(--dhl-red)]"
+                    className="group mb-3 inline-flex items-center text-xl font-extrabold text-[var(--text-primary)] hover:text-[var(--dhlfastlink-red)]"
                   >
                     <span>Sustainability</span>
-                    <ChevronRight className="ml-2 h-4 w-4 text-[var(--dhl-red)] transition-transform group-hover:translate-x-1" />
+                    <ChevronRight className="ml-2 h-4 w-4 text-[var(--dhlfastlink-red)] transition-transform group-hover:translate-x-1" />
                   </Link>
                   <p className="text-sm leading-relaxed text-[var(--text-secondary)]">
                     Sustainable business begins with low carbon supply chains.
@@ -324,7 +324,7 @@ export function DHLHomepageLanding() {
               <div className="relative h-64 overflow-hidden sm:h-72">
                 <img
                   src="https://images.unsplash.com/photo-1586528116493-a029325540fa?auto=format&fit=crop&w=1000&q=80"
-                  alt="DHL logistics and connectivity"
+                  alt="DHLFastLink logistics and connectivity"
                   className="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
                 />
               </div>
@@ -332,13 +332,13 @@ export function DHLHomepageLanding() {
                 <div>
                   <Link
                     href="#"
-                    className="group mb-3 inline-flex items-center text-xl font-extrabold text-[var(--text-primary)] hover:text-[var(--dhl-red)]"
+                    className="group mb-3 inline-flex items-center text-xl font-extrabold text-[var(--text-primary)] hover:text-[var(--dhlfastlink-red)]"
                   >
                     <span>Globalization holds firm at a record level</span>
-                    <ArrowUpRight className="ml-2 h-4 w-4 text-[var(--dhl-red)]" />
+                    <ArrowUpRight className="ml-2 h-4 w-4 text-[var(--dhlfastlink-red)]" />
                   </Link>
                   <p className="text-sm leading-relaxed text-[var(--text-secondary)]">
-                    The DHL Global Connectedness Report 2026 offers the most
+                    The DHLFastLink Global Connectedness Report 2026 offers the most
                     comprehensive view of globalization available.
                   </p>
                 </div>
@@ -352,14 +352,14 @@ export function DHLHomepageLanding() {
         <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
             <div>
-              <h4 className="mb-4 text-base font-bold text-[var(--dhl-red)]">
+              <h4 className="mb-4 text-base font-bold text-[var(--dhlfastlink-red)]">
                 Quick Links
               </h4>
               <ul className="space-y-3 text-sm font-medium text-[var(--text-secondary)]">
                 <li>
                   <Link
                     href="/track"
-                    className="transition-colors hover:text-[var(--dhl-red)]"
+                    className="transition-colors hover:text-[var(--dhlfastlink-red)]"
                   >
                     Customer Service
                   </Link>
@@ -367,7 +367,7 @@ export function DHLHomepageLanding() {
                 <li>
                   {/* <Link
                     href="/login"
-                    className="transition-colors hover:text-[var(--dhl-red)]"
+                    className="transition-colors hover:text-[var(--dhlfastlink-red)]"
                   >
                     Customer Portal Logins
                   </Link> */}
@@ -375,7 +375,7 @@ export function DHLHomepageLanding() {
                 <li>
                   <Link
                     href="/login"
-                    className="inline-flex items-center transition-colors hover:text-[var(--dhl-red)]"
+                    className="inline-flex items-center transition-colors hover:text-[var(--dhlfastlink-red)]"
                   >
                     <span>Developer Portal</span>
                     <ArrowUpRight className="ml-1 h-3.5 w-3.5 text-[var(--text-tertiary)]" />
@@ -384,7 +384,7 @@ export function DHLHomepageLanding() {
                 <li>
                   <Link
                     href="/track"
-                    className="transition-colors hover:text-[var(--dhl-red)]"
+                    className="transition-colors hover:text-[var(--dhlfastlink-red)]"
                   >
                     Get a Quote
                   </Link>
@@ -392,9 +392,9 @@ export function DHLHomepageLanding() {
                 <li>
                   <Link
                     href="/login"
-                    className="transition-colors hover:text-[var(--dhl-red)]"
+                    className="transition-colors hover:text-[var(--dhlfastlink-red)]"
                   >
-                    DHL for Business
+                    DHLFastLink for Business
                   </Link>
                 </li>
               </ul>
@@ -408,23 +408,23 @@ export function DHLHomepageLanding() {
                 <li>
                   <Link
                     href="#"
-                    className="transition-colors hover:text-[var(--dhl-red)]"
+                    className="transition-colors hover:text-[var(--dhlfastlink-red)]"
                   >
-                    DHL Express
+                    DHLFastLink Express
                   </Link>
                 </li>
                 <li>
                   <Link
                     href="#"
-                    className="transition-colors hover:text-[var(--dhl-red)]"
+                    className="transition-colors hover:text-[var(--dhlfastlink-red)]"
                   >
-                    DHL Global Forwarding
+                    DHLFastLink Global Forwarding
                   </Link>
                 </li>
                 <li>
                   <Link
                     href="#"
-                    className="transition-colors hover:text-[var(--dhl-red)]"
+                    className="transition-colors hover:text-[var(--dhlfastlink-red)]"
                   >
                     Other Global Divisions
                   </Link>
@@ -440,15 +440,15 @@ export function DHLHomepageLanding() {
                 <li>
                   <Link
                     href="#"
-                    className="transition-colors hover:text-[var(--dhl-red)]"
+                    className="transition-colors hover:text-[var(--dhlfastlink-red)]"
                   >
-                    About DHL
+                    About DHLFastLink
                   </Link>
                 </li>
                 <li>
                   <Link
                     href="#"
-                    className="inline-flex items-center transition-colors hover:text-[var(--dhl-red)]"
+                    className="inline-flex items-center transition-colors hover:text-[var(--dhlfastlink-red)]"
                   >
                     <span>Delivered</span>
                     <ArrowUpRight className="ml-1 h-3.5 w-3.5 text-[var(--text-tertiary)]" />
@@ -457,7 +457,7 @@ export function DHLHomepageLanding() {
                 <li>
                   <Link
                     href="#"
-                    className="inline-flex items-center transition-colors hover:text-[var(--dhl-red)]"
+                    className="inline-flex items-center transition-colors hover:text-[var(--dhlfastlink-red)]"
                   >
                     <span>Careers</span>
                     <ArrowUpRight className="ml-1 h-3.5 w-3.5 text-[var(--text-tertiary)]" />
@@ -466,7 +466,7 @@ export function DHLHomepageLanding() {
                 <li>
                   <Link
                     href="#"
-                    className="transition-colors hover:text-[var(--dhl-red)]"
+                    className="transition-colors hover:text-[var(--dhlfastlink-red)]"
                   >
                     Press Center
                   </Link>
@@ -474,7 +474,7 @@ export function DHLHomepageLanding() {
                 <li>
                   <Link
                     href="#"
-                    className="inline-flex items-center transition-colors hover:text-[var(--dhl-red)]"
+                    className="inline-flex items-center transition-colors hover:text-[var(--dhlfastlink-red)]"
                   >
                     <span>Investors</span>
                     <ArrowUpRight className="ml-1 h-3.5 w-3.5 text-[var(--text-tertiary)]" />
@@ -483,7 +483,7 @@ export function DHLHomepageLanding() {
                 <li>
                   <Link
                     href="#"
-                    className="transition-colors hover:text-[var(--dhl-red)]"
+                    className="transition-colors hover:text-[var(--dhlfastlink-red)]"
                   >
                     Sustainability
                   </Link>
@@ -491,7 +491,7 @@ export function DHLHomepageLanding() {
                 <li>
                   <Link
                     href="#"
-                    className="transition-colors hover:text-[var(--dhl-red)]"
+                    className="transition-colors hover:text-[var(--dhlfastlink-red)]"
                   >
                     Brand Partnerships
                   </Link>
@@ -506,11 +506,11 @@ export function DHLHomepageLanding() {
             <div className="flex flex-col items-start justify-between space-y-4 md:flex-row md:items-center md:space-y-0">
               <div className="flex items-center space-x-1">
                 <span
-                  className="dhl-stripes"
+                  className="dhlfastlink-stripes"
                   style={{ height: "14px", width: "24px" }}
                 />
                 <span className="text-xl font-black italic tracking-tighter text-[var(--text-primary)]">
-                  DHL
+                  DHLFastLink
                 </span>
                 <span className="ml-1 text-xs font-bold uppercase tracking-wide text-[var(--text-secondary)]">
                   Group
@@ -524,28 +524,28 @@ export function DHLHomepageLanding() {
                 <a
                   href="#"
                   aria-label="YouTube"
-                  className="text-lg text-[var(--text-primary)] transition-colors hover:text-[var(--dhl-red)]"
+                  className="text-lg text-[var(--text-primary)] transition-colors hover:text-[var(--dhlfastlink-red)]"
                 >
                   <Youtube className="h-4 w-4" />
                 </a>
                 <a
                   href="#"
                   aria-label="Facebook"
-                  className="text-lg text-[var(--text-primary)] transition-colors hover:text-[var(--dhl-red)]"
+                  className="text-lg text-[var(--text-primary)] transition-colors hover:text-[var(--dhlfastlink-red)]"
                 >
                   <Facebook className="h-4 w-4" />
                 </a>
                 <a
                   href="#"
                   aria-label="LinkedIn"
-                  className="text-lg text-[var(--text-primary)] transition-colors hover:text-[var(--dhl-red)]"
+                  className="text-lg text-[var(--text-primary)] transition-colors hover:text-[var(--dhlfastlink-red)]"
                 >
                   <Linkedin className="h-4 w-4" />
                 </a>
                 <a
                   href="#"
                   aria-label="Instagram"
-                  className="text-lg text-[var(--text-primary)] transition-colors hover:text-[var(--dhl-red)]"
+                  className="text-lg text-[var(--text-primary)] transition-colors hover:text-[var(--dhlfastlink-red)]"
                 >
                   <Instagram className="h-4 w-4" />
                 </a>
@@ -556,37 +556,37 @@ export function DHLHomepageLanding() {
               <div className="flex flex-wrap gap-x-6 gap-y-2 font-medium">
                 <Link
                   href="#"
-                  className="transition-colors hover:text-[var(--dhl-red)]"
+                  className="transition-colors hover:text-[var(--dhlfastlink-red)]"
                 >
                   Fraud Awareness
                 </Link>
                 <Link
                   href="#"
-                  className="transition-colors hover:text-[var(--dhl-red)]"
+                  className="transition-colors hover:text-[var(--dhlfastlink-red)]"
                 >
                   Legal Notice
                 </Link>
                 <Link
                   href="#"
-                  className="transition-colors hover:text-[var(--dhl-red)]"
+                  className="transition-colors hover:text-[var(--dhlfastlink-red)]"
                 >
                   Terms of Use
                 </Link>
                 <Link
                   href="#"
-                  className="transition-colors hover:text-[var(--dhl-red)]"
+                  className="transition-colors hover:text-[var(--dhlfastlink-red)]"
                 >
                   Privacy Notice
                 </Link>
                 <Link
                   href="#"
-                  className="transition-colors hover:text-[var(--dhl-red)]"
+                  className="transition-colors hover:text-[var(--dhlfastlink-red)]"
                 >
                   Additional Information
                 </Link>
                 <Link
                   href="#"
-                  className="transition-colors hover:text-[var(--dhl-red)]"
+                  className="transition-colors hover:text-[var(--dhlfastlink-red)]"
                 >
                   Cookie Settings
                 </Link>
@@ -601,7 +601,7 @@ export function DHLHomepageLanding() {
             type="button"
             aria-label="Scroll to top"
             onClick={handleScrollToTop}
-            className="fixed bottom-6 right-6 z-50 flex h-12 w-12 items-center justify-center rounded-2xl bg-[var(--dhl-red)] text-white shadow-lg transition-all hover:bg-[var(--dhl-red-hover)] focus:outline-none"
+            className="fixed bottom-6 right-6 z-50 flex h-12 w-12 items-center justify-center rounded-2xl bg-[var(--dhlfastlink-red)] text-white shadow-lg transition-all hover:bg-[var(--dhlfastlink-red-hover)] focus:outline-none"
           >
             <ChevronUp className="h-5 w-5" />
           </button>

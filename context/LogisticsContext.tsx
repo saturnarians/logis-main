@@ -44,9 +44,9 @@ const DEFAULT_USERS: AuthUser[] = [
   {
     id: "usr-superadmin",
     name: "Alex Rodriguez",
-    email: "superadmin@dhl.com",
+    email: "superadmin@dhlfastlink.com",
     role: "superadmin",
-    staffId: "DHL-DIR-001",
+    staffId: "DHLFastLink-DIR-001",
     hub: "Global Operations Headquarters",
     department: "Executive Logistics Command",
     phone: "+44 20 7946 0991",
@@ -55,9 +55,9 @@ const DEFAULT_USERS: AuthUser[] = [
   {
     id: "usr-admin",
     name: "Sarah Jenkins",
-    email: "admin@dhl.com",
+    email: "admin@dhlfastlink.com",
     role: "admin",
-    staffId: "DHL-MGR-442",
+    staffId: "DHLFastLink-MGR-442",
     hub: "London Central Gateway",
     department: "Dispatch & Fleet Logistics",
     phone: "+44 20 7946 0834",
@@ -66,11 +66,11 @@ const DEFAULT_USERS: AuthUser[] = [
   {
     id: "usr-driver",
     name: "Marcus Vance",
-    email: "driver@dhl.com",
+    email: "driver@dhlfastlink.com",
     role: "driver",
-    staffId: "DHL-DRV-101",
+    staffId: "DHLFastLink-DRV-101",
     hub: "London Central Gateway",
-    vehicleId: "DHL-EV-402",
+    vehicleId: "DHLFastLink-EV-402",
     department: "Express Last-Mile Courier",
     phone: "+44 7700 900123",
     lastLogin: "2026-08-14 07:30",
@@ -296,15 +296,15 @@ export const LogisticsProvider: React.FC<{ children: React.ReactNode }> = ({
             : targetRole === "admin"
               ? "Station Controller"
               : "Field Courier"),
-        email: credentials?.email || `${targetRole}@dhl.com`,
+        email: credentials?.email || `${targetRole}@dhlfastlink.com`,
         role: targetRole,
         staffId:
           credentials?.staffId ||
-          `DHL-ID-${Math.floor(1000 + Math.random() * 9000)}`,
+          `DHLFastLink-ID-${Math.floor(1000 + Math.random() * 9000)}`,
         hub: credentials?.hub || "London Central Gateway",
         vehicleId:
           credentials?.vehicleId ||
-          (targetRole === "driver" ? "DHL-EV-402" : undefined),
+          (targetRole === "driver" ? "DHLFastLink-EV-402" : undefined),
         department:
           targetRole === "superadmin"
             ? "Executive Logistics Command"
@@ -372,7 +372,7 @@ export const LogisticsProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const [isSimulating, setIsSimulating] = useState<boolean>(true);
   const [trackedShipmentId, setTrackedShipmentId] = useState<string | null>(
-    "DHL-8942-01",
+    "DHLFastLink-8942-01",
   );
 
   // AI Copilot state
@@ -568,7 +568,7 @@ export const LogisticsProvider: React.FC<{ children: React.ReactNode }> = ({
             location: location || s.currentLocation.address,
             timestamp,
             note: note || `Status updated to ${newStatus}`,
-            updatedBy: "DHL",
+            updatedBy: "DHLFastLink",
           };
 
           const isDelivered = newStatus === "Delivered";
@@ -620,7 +620,7 @@ export const LogisticsProvider: React.FC<{ children: React.ReactNode }> = ({
               "Transit Depot",
             timestamp,
             note: note || `Status updated to ${newStatus}`,
-            updatedBy: "DHL",
+            updatedBy: "DHLFastLink",
           },
         }),
       });
@@ -643,7 +643,7 @@ export const LogisticsProvider: React.FC<{ children: React.ReactNode }> = ({
     const randomCode = Math.floor(100000 + Math.random() * 900000).toString();
     const trackingId =
       newShipmentData.trackingId ||
-      `DHL-${Math.floor(1000 + Math.random() * 9000)}-${Math.floor(10 + Math.random() * 90)}`;
+      `DHLFastLink-${Math.floor(1000 + Math.random() * 9000)}-${Math.floor(10 + Math.random() * 90)}`;
     const orderId =
       newShipmentData.orderId ||
       `ORD-2026-${Math.floor(100 + Math.random() * 900)}`;
@@ -685,7 +685,7 @@ export const LogisticsProvider: React.FC<{ children: React.ReactNode }> = ({
           location: `${newShipmentData.originCity} Central Depot`,
           timestamp,
           note: `Shipment order registered. Assigned to courier: ${driver ? driver.name : "Pending Dispatch Queue"}`,
-          updatedBy: "DHL",
+          updatedBy: "DHLFastLink",
         },
       ],
       proofOfDelivery: {
@@ -721,7 +721,7 @@ export const LogisticsProvider: React.FC<{ children: React.ReactNode }> = ({
           orderId,
           customerName: newShipmentData.customerName,
           customerPhone: newShipmentData.customerPhone || "+44 20 7946 0000",
-          senderName: newShipmentData.senderName || "DHL Hub",
+          senderName: newShipmentData.senderName || "DHLFastLink Hub",
           senderEmail: newShipmentData.senderEmail,
           senderPhone: newShipmentData.senderPhone,
           senderAddress:
@@ -1092,7 +1092,7 @@ export const LogisticsProvider: React.FC<{ children: React.ReactNode }> = ({
       const newAlert: LogisticsAlert = {
         id: `alt-${Date.now()}`,
         shipmentId: action.payload.shipmentId || "ship-001",
-        trackingId: action.payload.trackingId || "DHL-SYS-ALERT",
+        trackingId: action.payload.trackingId || "DHLFastLink-SYS-ALERT",
         type: action.payload.alertType || "weather",
         severity: action.payload.alertSeverity || "medium",
         message: action.payload.alertMessage,
@@ -1228,7 +1228,7 @@ export const LogisticsProvider: React.FC<{ children: React.ReactNode }> = ({
         const newAlert: LogisticsAlert = {
           id: `alt-${Date.now()}`,
           shipmentId: actionData.payload.shipmentId || "ship-001",
-          trackingId: actionData.payload.trackingId || "DHL-SYS-ALERT",
+          trackingId: actionData.payload.trackingId || "DHLFastLink-SYS-ALERT",
           type: actionData.payload.alertType || "weather",
           severity: actionData.payload.alertSeverity || "medium",
           message: actionData.payload.alertMessage,

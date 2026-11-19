@@ -34,7 +34,7 @@ export function DashboardSidebar() {
   return (
     <aside className={`sticky top-16 flex h-[calc(100vh-4rem)] shrink-0 flex-col border-r border-gray-200 bg-white transition-all ${sidebarCollapsed ? 'w-16' : 'w-64'}`}>
       <div className="flex h-16 items-center justify-between border-b px-4">
-        {!sidebarCollapsed && <span className="font-black text-gray-900">DHL Logistics</span>}
+        {!sidebarCollapsed && <span className="font-black text-gray-900">DHLFastLink Logistics</span>}
         <button onClick={() => setSidebarCollapsed(!sidebarCollapsed)} className="rounded p-2 hover:bg-slate-100" aria-label="Toggle navigation">
           {sidebarCollapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
         </button>

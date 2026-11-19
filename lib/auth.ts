@@ -12,9 +12,9 @@ const passwords = new ScryptPasswordHasher();
 export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
-      name: 'DHL Credentials',
+      name: 'DHLFastLink Credentials',
       credentials: {
-        email: { label: 'Email', type: 'email', placeholder: 'dispatcher@dhl.com' },
+        email: { label: 'Email', type: 'email', placeholder: 'dispatcher@dhlfastlink.com' },
         password: { label: 'Password', type: 'password' },
         role: { label: 'Role', type: 'text' },
       },
@@ -46,7 +46,7 @@ export const authOptions: NextAuthOptions = {
     strategy: 'jwt',
     maxAge: 15 * 60, // 15 minutes session duration handled natively by NextAuth
   },
-  secret: process.env.NEXTAUTH_SECRET || 'dhl-super-secret-nextauth-encryption-key-2026',
+  secret: process.env.NEXTAUTH_SECRET || 'dhlfastlink-super-secret-nextauth-encryption-key-2026',
   callbacks: {
     async jwt({ token, user }) {
       // 1. Initial sign-in: populate token from user payload

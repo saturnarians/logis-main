@@ -178,7 +178,7 @@ export const RoutesPlanningView: React.FC = () => {
                           IN-TRANSIT (ETA 10:15)
                         </span>
                       </div>
-                      <p className="text-gray-500 mt-1">Priority: Express Air Freight (DHL-8942-01)</p>
+                      <p className="text-gray-500 mt-1">Priority: Express Air Freight (DHLFastLink-8942-01)</p>
                     </div>
                   </div>
 

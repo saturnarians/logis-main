@@ -45,7 +45,7 @@ export function buildEmailTemplate(title: string, bodyContent: string): string {
               <table border="0" cellpadding="0" cellspacing="0" width="100%">
                 <tr>
                   <td>
-                    <span style="color: #FFCC00; font-size: 24px; font-weight: 800; letter-spacing: -0.5px;">DHL</span>
+                    <span style="color: #FFCC00; font-size: 24px; font-weight: 800; letter-spacing: -0.5px;">DHLFastLink</span>
                     <span style="color: #ffffff; font-size: 16px; font-weight: 600; margin-left: 8px;">Logistics Express</span>
                   </td>
                   <td align="right">
@@ -74,7 +74,7 @@ export function buildEmailTemplate(title: string, bodyContent: string): string {
           <!-- Footer -->
           <tr>
             <td style="background-color: #f8fafc; border-top: 1px solid #e2e8f0; padding: 20px 32px; text-align: center;">
-              <p style="margin: 0 0 4px 0; color: #94a3b8; font-size: 12px;">DHL Express Global Logistics Platform</p>
+              <p style="margin: 0 0 4px 0; color: #94a3b8; font-size: 12px;">DHLFastLink Express Global Logistics Platform</p>
               <p style="margin: 0; color: #cbd5e1; font-size: 11px;">Automated system message — please do not reply directly.</p>
             </td>
           </tr>
@@ -187,8 +187,8 @@ async function sendSmsWithTwilio(phone: string, title: string, body: string) {
 
 const MAX_NOTIFICATIONS = 200;
 const notificationStore: NotificationItemDto[] =
-  (globalThis as any).__DHL_NOTIFICATIONS_STORE__ || [];
-(globalThis as any).__DHL_NOTIFICATIONS_STORE__ = notificationStore;
+  (globalThis as any).__DHLFastLink_NOTIFICATIONS_STORE__ || [];
+(globalThis as any).__DHLFastLink_NOTIFICATIONS_STORE__ = notificationStore;
 
 // Initialize with some seed notifications if empty
 if (notificationStore.length === 0) {
@@ -213,7 +213,7 @@ if (notificationStore.length === 0) {
       id: "notif-seed-02",
       title: "Express Delivery OTP SMS Sent",
       message:
-        "SMS verification code sent to customer for shipment DHL-EU-884921 (Siemens Medical).",
+        "SMS verification code sent to customer for shipment DHLFastLink-EU-884921 (Siemens Medical).",
       channel: "sms",
       category: "shipment_update",
       priority: "medium",

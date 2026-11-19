@@ -18,7 +18,7 @@ import { ScryptPasswordHasher } from "../server/services/repository/argon2.passw
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log("Seeding SQLite database with DHL Logistics data...");
+  console.log("Seeding SQLite database with DHLFastLink Logistics data...");
 
   // 1. Seed Warehouses
   for (const wh of INITIAL_WAREHOUSES) {
@@ -100,7 +100,7 @@ async function main() {
         parcelType: s.parcelType,
         pieces: s.pieces ?? 1,
         serviceType: s.serviceType ?? "Express Air",
-        carrier: s.carrier ?? "DHL Express",
+        carrier: s.carrier ?? "DHLFastLink Express",
         temperatureCelsius: s.temperatureCelsius,
         estimatedDelivery: s.estimatedDelivery,
         actualDelivery: s.actualDelivery,
@@ -144,7 +144,7 @@ async function main() {
         parcelType: s.parcelType,
         pieces: s.pieces ?? 1,
         serviceType: s.serviceType ?? "Express Air",
-        carrier: s.carrier ?? "DHL Express",
+        carrier: s.carrier ?? "DHLFastLink Express",
         temperatureCelsius: s.temperatureCelsius,
         estimatedDelivery: s.estimatedDelivery,
         actualDelivery: s.actualDelivery,
@@ -289,10 +289,10 @@ async function main() {
     {
       id: "usr-superadmin",
       name: "Alex Rodriguez",
-      email: "superadmin@dhl.com",
+      email: "superadmin@dhlfastlink.com",
       passwordHash: await passwordHasher.hash(seedPassword),
       role: "superadmin" as const,
-      staffId: "DHL-DIR-001",
+      staffId: "DHLFastLink-DIR-001",
       hub: "Global Operations Headquarters",
       department: "Executive Logistics Command",
       phone: "+44 20 7946 0991",
@@ -302,10 +302,10 @@ async function main() {
     {
       id: "usr-admin",
       name: "Sarah Jenkins",
-      email: "admin@dhl.com",
+      email: "admin@dhlfastlink.com",
       passwordHash: await passwordHasher.hash(seedPassword),
       role: "admin" as const,
-      staffId: "DHL-MGR-442",
+      staffId: "DHLFastLink-MGR-442",
       hub: "London Central Gateway",
       department: "Dispatch & Fleet Logistics",
       phone: "+44 20 7946 0834",
@@ -315,10 +315,10 @@ async function main() {
     {
       id: "usr-customer",
       name: "Customer User",
-      email: "customer@dhl.com",
+      email: "customer@dhlfastlink.com",
       passwordHash: await passwordHasher.hash(seedPassword),
       role: "customer" as const,
-      staffId: "DHL-CUST-001",
+      staffId: "DHLFastLink-CUST-001",
       hub: "London Central Gateway",
       department: "Retail Logistics",
       phone: "+44 20 7946 0000",
@@ -328,12 +328,12 @@ async function main() {
     {
       id: "usr-driver-default",
       name: "Marcus Vance",
-      email: "driver@dhl.com",
+      email: "driver@dhlfastlink.com",
       passwordHash: await passwordHasher.hash(seedPassword),
       role: "driver" as const,
-      staffId: "DHL-DRV-101",
+      staffId: "DHLFastLink-DRV-101",
       hub: "London Central Gateway",
-      vehicleId: "DHL-V-901",
+      vehicleId: "DHLFastLink-V-901",
       department: "Express Last-Mile Courier",
       phone: "+1 (555) 234-5678",
       avatarUrl: "https://picsum.photos/seed/driver1/120/120",
@@ -348,13 +348,13 @@ async function main() {
   // Seed all drivers from INITIAL_DRIVERS
   for (const driver of INITIAL_DRIVERS) {
     const emailName = driver.name.toLowerCase().replace(/\s+/g, ".");
-    const staffId = `DHL-DRV-${driver.id.replace("drv-", "")}`;
+    const staffId = `DHLFastLink-DRV-${driver.id.replace("drv-", "")}`;
     const passwordHash = await passwordHasher.hash(seedPassword);
 
     await userRepository.upsertUser({
       id: `usr-${driver.id}`,
       name: driver.name,
-      email: `${emailName}@dhl.com`,
+      email: `${emailName}@dhlfastlink.com`,
       passwordHash,
       role: "driver",
       staffId,

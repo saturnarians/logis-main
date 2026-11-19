@@ -35,7 +35,7 @@ export function DriverPortal() {
   const driverState = useAppSelector((state) => state.driver);
 
   const [activeTab, setActiveTab] = useState<'route' | 'scanner' | 'pod' | 'vehicle'>('route');
-  const [selectedShipmentId, setSelectedShipmentId] = useState<string>(shipments[0]?.trackingId || 'DHL-EU-884920');
+  const [selectedShipmentId, setSelectedShipmentId] = useState<string>(shipments[0]?.trackingId || 'DHLFastLink-EU-884920');
   const [signatureName, setSignatureName] = useState('');
   const [podSuccessNotice, setPodSuccessNotice] = useState<string | null>(null);
   const [isSubmittingPod, setIsSubmittingPod] = useState(false);
@@ -88,7 +88,7 @@ export function DriverPortal() {
                 <span className="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#FFCC00]/20 text-[#D40511] border border-[#FFCC00]/40">
                   Active Fleet Courier
                 </span>
-                <span className="text-xs text-gray-500 font-mono">STAFF-ID: DHL-DRV-088</span>
+                <span className="text-xs text-gray-500 font-mono">STAFF-ID: DHLFastLink-DRV-088</span>
               </div>
               <h1 className="text-xl md:text-2xl font-black text-gray-900 mt-1">
                 {currentUser?.name || 'Klaus Lindner'}
@@ -269,7 +269,7 @@ export function DriverPortal() {
         <div className="liquid-glass-card p-6 rounded-2xl max-w-2xl mx-auto space-y-5 text-center">
           <h2 className="text-lg font-black text-gray-900">Handheld Optical Parcel Scanner</h2>
           <p className="text-xs text-gray-600">
-            Position the camera reticle over the DHL Code 128 / QR waybill label.
+            Position the camera reticle over the DHLFastLink Code 128 / QR waybill label.
           </p>
 
           <div className="relative w-full aspect-video bg-black/90 rounded-2xl overflow-hidden border-2 border-white/20 flex items-center justify-center shadow-inner">
@@ -350,7 +350,7 @@ export function DriverPortal() {
             Pre-Trip Safety & Vehicle Inspection Checklist
           </h2>
           <p className="text-xs text-gray-600">
-            Mandatory daily safety audit compliant with DHL Fleet Telematics ISO 9001 regulations.
+            Mandatory daily safety audit compliant with DHLFastLink Fleet Telematics ISO 9001 regulations.
           </p>
 
           <div className="space-y-3">

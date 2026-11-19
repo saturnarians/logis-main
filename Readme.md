@@ -1,12 +1,12 @@
-# DHL Clone Logistics Platform
+# DHLFastLink Logistics Platform
 
-A simple DHL-inspired logistics and operations dashboard built with Next.js. This project includes a public landing page, shipment tracking flow, staff login, and role-based dashboard experiences for operations teams.
+A logistics and operations dashboard for DHLFastLink built with Next.js. It includes a public landing page, shipment tracking flow, staff login, and role-based dashboard experiences for operations teams.
 
 ## Project Overview
 
 This app is designed to mimic a modern logistics company experience with:
 
-- public DHL-style homepage
+- public DHLFastLink homepage
 - shipment tracking page
 - staff login and access flow
 - operations dashboard for admin and driver roles
@@ -25,7 +25,7 @@ This app is designed to mimic a modern logistics company experience with:
 
 ## Main Features
 
-- Responsive public homepage inspired by DHL branding
+- Responsive public homepage using DHLFastLink branding
 - Tracking search for consignments and shipments
 - Secure login flow for staff users
 - Role-based dashboard structure
@@ -70,7 +70,7 @@ bun run dev
 Then open:
 
 ```bash
-http://localhost:3000
+http://localhost:3001
 ```
 
 ## Available Scripts
@@ -92,7 +92,7 @@ bun run lint
 
 ## Notes
 
-This is a frontend-heavy DHL-inspired clone and operations prototype. It is intended to demonstrate a logistics platform UI and workflow rather than a production-grade shipping system.
+This logistics operations prototype demonstrates DHLFastLink workflows and is not intended as a production-grade shipping system.
 
 ## License
 

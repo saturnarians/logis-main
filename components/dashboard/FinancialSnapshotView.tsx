@@ -10,7 +10,7 @@ export const FinancialSnapshotView: React.FC = () => {
   const [addExpenseOpen, setAddExpenseOpen] = useState(false);
   const [category, setCategory] = useState<'fuel' | 'toll' | 'maintenance' | 'driver_payout'>('fuel');
   const [amountUsd, setAmountUsd] = useState('180.00');
-  const [vehicleNo, setVehicleNo] = useState('DHL-V-901');
+  const [vehicleNo, setVehicleNo] = useState('DHLFastLink-V-901');
   const [driverName, setDriverName] = useState('Marcus Vance');
   const [note, setNote] = useState('Diesel fill-up Slough Depot');
 

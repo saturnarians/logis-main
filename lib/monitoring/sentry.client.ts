@@ -23,14 +23,14 @@ class SentryClientTracker {
   private config: SentryClientConfig = {
     dsn: process.env.NEXT_PUBLIC_SENTRY_DSN || 'https://demo-sentry-key@o0.ingest.sentry.io/000000',
     environment: process.env.NODE_ENV || 'development',
-    release: 'dhl-logistics-v1.0.0',
+    release: 'dhlfastlink-logistics-v1.0.0',
     tracesSampleRate: 1.0,
   };
 
   private breadcrumbs: BreadcrumbDto[] = [];
   private userContext: SentryUserContext | null = null;
   private tags: Record<string, string> = {
-    app: 'dhl-logistics-portal',
+    app: 'dhlfastlink-logistics-portal',
     platform: 'nextjs-client',
   };
   private extras: Record<string, any> = {};

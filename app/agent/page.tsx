@@ -100,7 +100,7 @@ const PRESET_PROMPTS = [
   'Analyze traffic congestion on London-Frankfurt lane and propose optimized waypoints',
   'Audit carbon footprint for all overnight express shipments and suggest EV re-allocations',
   'Simulate 12% fuel price surge impact on Western European cross-border freight tariffs',
-  'Review delayed consignment DHL-8942-01 and trigger automated driver re-assignment',
+  'Review delayed consignment DHLFastLink-8942-01 and trigger automated driver re-assignment',
   'Scan fleet maintenance logs for vans with EV battery degradation exceeding 15%',
 ];
 
@@ -158,7 +158,7 @@ export default function AgentCommandCenterPage() {
     {
       id: 'hist-1',
       time: '10:42 AM',
-      prompt: 'Dynamic routing for vehicle DHL-EV-402',
+      prompt: 'Dynamic routing for vehicle DHLFastLink-EV-402',
       agentName: 'AutoRoute-Optimizer',
       status: 'Executed',
       impact: 'Saved 24 min & 1.8 kg CO2',
@@ -228,7 +228,7 @@ export default function AgentCommandCenterPage() {
       } else if (text.toLowerCase().includes('delay') || text.toLowerCase().includes('reassign')) {
         toolName = 'dispatch_emergency_reassignment';
         payloadData = {
-          trackingId: shipments[0]?.trackingId || 'DHL-8942-01',
+          trackingId: shipments[0]?.trackingId || 'DHLFastLink-8942-01',
           assignedDriverId: 'drv-101',
           urgency: 'HIGH',
           customerSmsDispatched: true,
@@ -457,7 +457,7 @@ export default function AgentCommandCenterPage() {
                         rows={3}
                         value={promptInput}
                         onChange={(e) => setPromptInput(e.target.value)}
-                        placeholder={`Instruct ${selectedAgent.name} (e.g. "Recalculate route for DHL-EV-402 to avoid motorway congestion and update customer ETA")...`}
+                        placeholder={`Instruct ${selectedAgent.name} (e.g. "Recalculate route for DHLFastLink-EV-402 to avoid motorway congestion and update customer ETA")...`}
                         className="w-full p-3.5 rounded-2xl border border-gray-200 focus:border-[#D40511] focus:ring-2 focus:ring-[#D40511]/20 outline-none text-xs font-medium resize-none shadow-inner"
                       />
 

@@ -2,6 +2,8 @@
 
 import TawkMessengerReact from '@tawk.to/tawk-messenger-react';
 
+const noop = () => {};
+
 interface TawkMessengerProps {
   propertyId?: string;
   widgetId?: string;
@@ -15,7 +17,28 @@ export function TawkMessenger({ propertyId, widgetId }: TawkMessengerProps) {
     <TawkMessengerReact
       propertyId={propId}
       widgetId={wId}
-
+      onLoad={noop}
+      onBeforeLoad={noop}
+      onStatusChange={(status) => {
+        console.log('Widget status:', status);
+      }}
+      onChatMaximized={noop}
+      onChatMinimized={noop}
+      onChatHidden={noop}
+      onChatStarted={noop}
+      onChatEnded={noop}
+      onPrechatSubmit={noop}
+      onOfflineSubmit={noop}
+      onChatMessageVisitor={noop}
+      onChatMessageAgent={noop}
+      onChatMessageSystem={noop}
+      onAgentJoinChat={noop}
+      onAgentLeaveChat={noop}
+      onChatSatisfaction={noop}
+      onVisitorNameChanged={noop}
+      onFileUpload={noop}
+      onTagsUpdated={noop}
+      onUnreadCountChanged={noop}
       customStyle={{
         visibility: {
           desktop: {

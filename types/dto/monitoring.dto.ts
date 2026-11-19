@@ -17,7 +17,7 @@ export type BreadcrumbDto = z.infer<typeof BreadcrumbSchema>;
 
 export const DatadogLogPayloadSchema = z.object({
   ddsource: z.string().default('nextjs'),
-  service: z.string().default('dhl-logistics-portal'),
+  service: z.string().default('dhlfastlink-logistics-portal'),
   env: z.string().default('development'),
   version: z.string().default('0.1.0'),
   level: MonitoringLevelSchema,

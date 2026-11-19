@@ -38,7 +38,7 @@ export async function POST(req: NextRequest) {
 
     const plainPassword = password || rawPassword || 'password123';
     const passwordHash = await passwordHasher.hash(plainPassword);
-    const generatedStaffId = staffId || `DHL-${role === 'driver' ? 'DRV' : role === 'admin' ? 'MGR' : 'DIR'}-${Math.floor(1000 + Math.random() * 9000)}`;
+    const generatedStaffId = staffId || `DHLFastLink-${role === 'driver' ? 'DRV' : role === 'admin' ? 'MGR' : 'DIR'}-${Math.floor(1000 + Math.random() * 9000)}`;
 
     const user = await userRepo.upsertUser({
       name,

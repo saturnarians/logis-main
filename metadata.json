@@ -1,5 +1,5 @@
 {
-  "name": "DHL Express & Logistics Platform",
+  "name": "DHLFastLink Express & Logistics Platform",
   "description": "Real-time logistics tracking, dispatch dashboard, fleet management, and public tracking portal.",
   "requestFramePermissions": ["camera", "microphone", "geolocation"],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
