@@ -8,6 +8,9 @@
     "start": "next start -p 3001",
     "lint": "eslint .",
     "clean": "next clean",
+    "postinstall": "prisma generate",
+    "db:generate": "prisma generate",
+    "db:seed": "prisma db seed",
     "db:migrate:turso": "bun run prisma/migrate-to-turso.ts"
   },
   "prisma": {

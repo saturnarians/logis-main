@@ -3,19 +3,25 @@ import { PrismaLibSQL } from '@prisma/adapter-libsql';
 import { PrismaClient } from '@prisma/client';
 import path from 'path';
 
-if (!process.env.DATABASE_URL) {
-  process.env.DATABASE_URL = `file:${path.join(process.cwd(), 'prisma', 'dev.db')}`;
-}
+// if (!process.env.DATABASE_URL) {
+//   process.env.DATABASE_URL = `file:${path.join(process.cwd(), 'prisma', 'dev.db')}`;
+// }
 
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
 };
 
+const isProduction = process.env.NODE_ENV === 'production';
+
 function createPrismaClient() {
   const tursoUrl = process.env.TURSO_DATABASE_URL;
   const tursoAuthToken = process.env.TURSO_AUTH_TOKEN;
+
+  // const log: ('error' | 'warn')[] =
+  //   process.env.NODE_ENV === 'development' ? ['error', 'warn'] : ['error'];
+
   const log: ('error' | 'warn')[] =
-    process.env.NODE_ENV === 'development' ? ['error', 'warn'] : ['error'];
+  isProduction ? ['error'] : ['error', 'warn'];
 
   if (tursoUrl || tursoAuthToken) {
     if (!tursoUrl || !tursoAuthToken) {
@@ -29,14 +35,14 @@ function createPrismaClient() {
   }
 
   return new PrismaClient({
-    datasources: { db: { url: process.env.DATABASE_URL } },
+    datasources: { db: { url: process.env.TURSO_DATABASE_URL } },
     log,
   });
 }
 
 export const prisma = globalForPrisma.prisma ?? createPrismaClient();
 
-if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
+// if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
 
 export default prisma;
 
