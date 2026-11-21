@@ -462,7 +462,7 @@ function TrackPageContent() {
                               <Building2 className="w-3 h-3" />
                               <span>Location: {entry.location}</span>
                               <span>•</span>
-                              <span>Recorded by: DHLFastLink</span>
+                              {/* <span>Recorded by: DHLFastLink</span> */}
                             </div>
                           </div>
                         </div>

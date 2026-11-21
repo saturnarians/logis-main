@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { prisma } from "../lib/prisma";
 import {
   INITIAL_SHIPMENTS,
   INITIAL_DRIVERS,
@@ -15,10 +15,8 @@ import {
 import { PrismaUserRepository } from "../server/services/repository/auth.prisma.repository";
 import { ScryptPasswordHasher } from "../server/services/repository/argon2.passwordhasher";
 
-const prisma = new PrismaClient();
-
 async function main() {
-  console.log("Seeding SQLite database with DHLFastLink Logistics data...");
+  console.log("Seeding database with DHLFastLink Logistics data...");
 
   // 1. Seed Warehouses
   for (const wh of INITIAL_WAREHOUSES) {

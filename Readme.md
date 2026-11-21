@@ -61,7 +61,27 @@ store/
 bun install
 ```
 
-### 2. Run the app locally
+### 2. Configure the database
+
+The app uses local SQLite when neither Turso variable is set. To use Turso, set both `TURSO_DATABASE_URL` and `TURSO_AUTH_TOKEN`; setting only one is a configuration error. Keep `DATABASE_URL` pointed at the local SQLite database; Prisma uses it for schema generation and as the source for the initial data copy.
+
+```env
+DATABASE_URL=<your-local-file-url>
+TURSO_DATABASE_URL=libsql://<your-database>.turso.io
+TURSO_AUTH_TOKEN=<your-token>
+```
+
+To copy the local schema and data into a new, empty Turso database:
+
+```bash
+bun run db:migrate:turso
+```
+
+The importer applies the checked-in Prisma SQL migrations and copies all app tables in a transaction. It refuses to copy into a Turso database that already contains app data or has an unexpected schema. It does not delete or overwrite remote data.
+
+For later schema changes, create migrations against local SQLite with Prisma, then apply each migration SQL file with `turso db shell <database-name> < path/to/migration.sql`; Prisma Migrate does not apply migrations directly to Turso in this setup.
+
+### 3. Run the app locally
 
 ```bash
 bun run dev
