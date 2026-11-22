@@ -6,6 +6,7 @@ import { setTerminalLogsModalOpen } from '@/store/slices/uiSlice';
 import { addLog, setLogs } from '@/store/slices/terminalLogsSlice';
 import { Terminal, AlertCircle, AlertTriangle, Info, RefreshCw, Trash2, X, CheckCircle2 } from 'lucide-react';
 import { LogEntry } from '@/lib/logger';
+import { apiFetch } from '@/lib/api-client';
 
 export function TerminalLogsModal() {
   const dispatch = useAppDispatch();
@@ -17,7 +18,7 @@ export function TerminalLogsModal() {
   const fetchLogs = async () => {
     try {
       setLoading(true);
-      const res = await fetch('/api/logs');
+      const res = await apiFetch('/api/logs');
       if (res.ok) {
         const json = await res.json();
         if (json.success && json.data) {
@@ -37,7 +38,7 @@ export function TerminalLogsModal() {
     if (isOpen) {
       const load = async () => {
         try {
-          const res = await fetch('/api/logs');
+          const res = await apiFetch('/api/logs');
           if (res.ok && isMounted) {
             const json = await res.json();
             if (json.success && json.data) {
@@ -102,7 +103,7 @@ export function TerminalLogsModal() {
             </button>
             <button
               onClick={async () => {
-                await fetch('/api/logs', { method: 'DELETE' });
+                await apiFetch('/api/logs', { method: 'DELETE' });
                 setLocalLogs([]);
               }}
               className="p-1.5 rounded-lg bg-white/10 hover:bg-red-500/30 text-gray-300 hover:text-red-300 transition-colors"

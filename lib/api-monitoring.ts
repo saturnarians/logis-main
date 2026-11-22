@@ -15,10 +15,12 @@ export function withApiLogging<
       path,
     };
 
+    console.log("[api:be] request started", JSON.stringify(details));
+
     try {
       const response = await handler(request, ...context);
       console.log(
-        "[api] request completed",
+        "[api:be] request completed",
         JSON.stringify({
           ...details,
           status: response.status,
@@ -28,7 +30,7 @@ export function withApiLogging<
       return response;
     } catch (error) {
       console.error(
-        "[api] request failed",
+        "[api:be] request failed",
         JSON.stringify({
           ...details,
           status: 500,

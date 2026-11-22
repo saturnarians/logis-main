@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useLogistics } from '@/context/LogisticsContext';
+import { apiFetch } from '@/lib/api-client';
 import { 
   Mic, 
   MicOff, 
@@ -306,7 +307,7 @@ export const AICopilotModal: React.FC<AICopilotModalProps> = ({ isOpen, onClose 
     };
 
     try {
-      const res = await fetch('/api/gemini/copilot', {
+      const res = await apiFetch('/api/gemini/copilot', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 

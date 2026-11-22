@@ -22,21 +22,31 @@ export const authOptions: NextAuthOptions = {
         try {
           const parsed = LoginCredentialsSchema.safeParse(credentials);
           if (!parsed.success) {
-            logger.warn('NextAuth', 'Failed login credentials validation', parsed.error.format());
+            logger.warn('NextAuth', 'Failed login credentials validation', { reason: 'invalid_credentials_format' });
+            console.log('[auth:be] sign-in rejected', JSON.stringify({ reason: 'invalid_credentials_format' }));
             return null;
           }
 
           const user = await users.findByIdentifier(parsed.data.email);
           if (!user || !user.isActive || !(await passwords.verify(user.passwordHash, parsed.data.password))) {
+            logger.warn('NextAuth', 'Sign-in rejected', { reason: 'invalid_credentials' });
+            console.log('[auth:be] sign-in rejected', JSON.stringify({ reason: 'invalid_credentials' }));
             return null;
           }
 
-          logger.info('NextAuth', `Authorized login for ${user.email}`);
+          logger.info('NextAuth', 'Authorized login', { role: user.role });
+          console.log('[auth:be] sign-in accepted', JSON.stringify({ role: user.role }));
           await users.updateLastLogin(user.id, new Date());
           const { passwordHash, ...authorizedUser } = user;
           return authorizedUser;
         } catch (error: any) {
-          logger.error('NextAuth', 'Authentication error in authorize()', error);
+          logger.error('NextAuth', 'Authentication error in authorize()', {
+            errorName: error instanceof Error ? error.name : 'UnknownError',
+          });
+          console.error(
+            '[auth:be] sign-in failed',
+            JSON.stringify({ errorName: error instanceof Error ? error.name : 'UnknownError' }),
+          );
           return null;
         }
       },
@@ -51,6 +61,7 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       // 1. Initial sign-in: populate token from user payload
       if (user) {
+        console.log('[auth:be] session token created');
         token.id = user.id;
         token.role = (user as any).role;
         token.staffId = (user as any).staffId;

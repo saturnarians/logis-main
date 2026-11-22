@@ -19,6 +19,14 @@ export function AuthGuard({ children, allowedRoles = ['superadmin', 'admin', 'dr
 
   // Effect runs every render, before any conditional returns
   useEffect(() => {
+    if (status === 'loading') return;
+
+    const authorized = status === 'authenticated' && Boolean(role && allowedRoles.includes(role));
+    console.log(
+      '[authz:fe] protected view checked',
+      JSON.stringify({ status, authorized, role: role ?? null }),
+    );
+
     if (status === 'unauthenticated' || (status === 'authenticated' && (!role || !allowedRoles.includes(role)))) {
       router.replace('/login');
     }

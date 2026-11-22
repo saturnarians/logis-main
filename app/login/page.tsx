@@ -94,13 +94,20 @@ function LoginPageContent() {
 
     try {
       // Authenticate via NextAuth
+      console.log('[auth:fe] sign-in started', JSON.stringify({ flow: 'demo' }));
       const result = await signIn("credentials", {
         email: defaultEmail,
         password: "password123",
         redirect: false,
       });
 
-      if (result?.error) throw new Error(result.error);
+      if (result?.error) {
+        console.log('[auth:fe] sign-in rejected', JSON.stringify({ flow: 'demo' }));
+        setFeedback({ type: "error", message: "Authentication error occurred." });
+        setShowAuthLoader(false);
+        return;
+      }
+      console.log('[auth:fe] sign-in accepted', JSON.stringify({ flow: 'demo', role: targetRole }));
       loginUser(targetRole, {
         email: defaultEmail,
         staffId: defaultStaffId,
@@ -118,6 +125,7 @@ function LoginPageContent() {
 
       window.location.assign(destination);
     } catch (err: any) {
+      console.log('[auth:fe] sign-in failed', JSON.stringify({ flow: 'demo' }));
       setFeedback({ type: "error", message: "Authentication error occurred." });
       setShowAuthLoader(false);
     } finally {
@@ -133,6 +141,7 @@ function LoginPageContent() {
     setFeedback(null);
 
     try {
+      console.log('[auth:fe] sign-in started', JSON.stringify({ flow: 'credentials' }));
       const res = await signIn("credentials", {
         email: emailOrStaffId,
         password: password,
@@ -140,11 +149,13 @@ function LoginPageContent() {
       });
 
       if (res?.error) {
+        console.log('[auth:fe] sign-in rejected', JSON.stringify({ flow: 'credentials' }));
         setFeedback({ type: "error", message: res.error });
         setIsSubmitting(false);
         return;
       }
 
+      console.log('[auth:fe] sign-in accepted', JSON.stringify({ flow: 'credentials', role: selectedRole }));
       loginUser(selectedRole, {
         email: emailOrStaffId.includes("@") ? emailOrStaffId : undefined,
         staffId: !emailOrStaffId.includes("@") ? emailOrStaffId : undefined,
@@ -161,6 +172,7 @@ function LoginPageContent() {
 
       window.location.assign(destination);
     } catch (err: any) {
+      console.log('[auth:fe] sign-in failed', JSON.stringify({ flow: 'credentials' }));
       setFeedback({ type: "error", message: "Sign in failed. Please retry." });
       setShowAuthLoader(false);
     } finally {

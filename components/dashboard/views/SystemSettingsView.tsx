@@ -9,6 +9,7 @@ import type {
   SendNotificationDto
 } from '@/types/dto';
 import { sentryClient } from '@/lib/monitoring';
+import { apiFetch } from '@/lib/api-client';
 import { 
   Settings, 
   ShieldCheck, 
@@ -108,7 +109,7 @@ export const SystemSettingsView: React.FC = () => {
 
   const fetchSystemData = async () => {
     try {
-      const res = await fetch('/api/system');
+      const res = await apiFetch('/api/system');
       const data = await res.json();
       if (data.success && data.data) {
         if (data.data.cron?.jobs) setCronJobs(data.data.cron.jobs);
@@ -125,7 +126,7 @@ export const SystemSettingsView: React.FC = () => {
     let isMounted = true;
     const loadInitialData = async () => {
       try {
-        const res = await fetch('/api/system');
+        const res = await apiFetch('/api/system');
         const data = await res.json();
         if (isMounted && data.success && data.data) {
           if (data.data.cron?.jobs) setCronJobs(data.data.cron.jobs);
@@ -148,7 +149,7 @@ export const SystemSettingsView: React.FC = () => {
   const handleRunCron = async (jobName: string) => {
     setIsTriggeringCron(jobName);
     try {
-      const res = await fetch('/api/system', {
+      const res = await apiFetch('/api/system', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action: 'runCron', payload: { jobName, force: true } }),
@@ -171,7 +172,7 @@ export const SystemSettingsView: React.FC = () => {
     e.preventDefault();
     setIsSendingNotif(true);
     try {
-      const res = await fetch('/api/system', {
+      const res = await apiFetch('/api/system', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action: 'sendNotification', payload: notifForm }),
@@ -206,7 +207,7 @@ export const SystemSettingsView: React.FC = () => {
 
   const handleTestDatadog = async () => {
     try {
-      const res = await fetch('/api/system', {
+      const res = await apiFetch('/api/system', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

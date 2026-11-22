@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
+import { apiFetch } from "@/lib/api-client";
 import {
   Role,
   Shipment,
@@ -343,7 +344,7 @@ export const LogisticsProvider: React.FC<{ children: React.ReactNode }> = ({
     }
 
     try {
-      fetch("/api/users", {
+      apiFetch("/api/users", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(account),
@@ -391,7 +392,7 @@ export const LogisticsProvider: React.FC<{ children: React.ReactNode }> = ({
   // Sync state from SQLite on mount
   const refreshDatabase = async () => {
     try {
-      const res = await fetch("/api/db/sync");
+      const res = await apiFetch("/api/db/sync");
       if (res.ok) {
         const json = await res.json();
         if (json.success && json.data) {
@@ -427,7 +428,7 @@ export const LogisticsProvider: React.FC<{ children: React.ReactNode }> = ({
     message: string;
   }> => {
     try {
-      const res = await fetch("/api/db/reseed", { method: "POST" });
+      const res = await apiFetch("/api/db/reseed", { method: "POST" });
       const json = await res.json();
       if (json.success) {
         await refreshDatabase();
@@ -452,7 +453,7 @@ export const LogisticsProvider: React.FC<{ children: React.ReactNode }> = ({
     let isMounted = true;
     const loadInitialData = async () => {
       try {
-        const res = await fetch("/api/db/sync");
+        const res = await apiFetch("/api/db/sync");
         if (!isMounted) return;
         if (res.ok) {
           const json = await res.json();
@@ -605,7 +606,7 @@ export const LogisticsProvider: React.FC<{ children: React.ReactNode }> = ({
       );
       const effectiveTrackingId = targetShipment?.trackingId || id;
 
-      fetch("/api/shipments", {
+      apiFetch("/api/shipments", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -713,7 +714,7 @@ export const LogisticsProvider: React.FC<{ children: React.ReactNode }> = ({
 
     // Persist new shipment to SQLite DB via POST /api/shipments
     try {
-      fetch("/api/shipments", {
+      apiFetch("/api/shipments", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -784,7 +785,7 @@ export const LogisticsProvider: React.FC<{ children: React.ReactNode }> = ({
 
     // Persist driver assignment to SQLite DB
     try {
-      fetch("/api/drivers/assign", {
+      apiFetch("/api/drivers/assign", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ shipmentId, driverId }),
