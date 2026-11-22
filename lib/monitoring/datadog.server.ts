@@ -16,7 +16,7 @@ interface DatadogServerConfig {
 class DatadogBackendTracker {
   private config: DatadogServerConfig = {
     apiKey: process.env.DATADOG_API_KEY || 'mock-datadog-api-key',
-    service: 'dhlfastlink-logistics-backend',
+    service: 'fastlink-logistics-backend',
     env: process.env.NODE_ENV || 'development',
     version: '0.1.0',
     source: 'nextjs',

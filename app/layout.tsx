@@ -4,7 +4,7 @@ import { AppProviders } from '@/components/providers/AppProviders';
 // import { GlobalCopilotHost } from '@/components/common/GlobalCopilotHost';
 
 export const metadata: Metadata = {
-  title: 'DHLFastLink Express & Logistics Platform',
+  title: 'FastLink Express & Logistics Platform',
   description: 'Real-time logistics tracking, dispatch dashboard, fleet management, and public tracking portal.',
 };
 

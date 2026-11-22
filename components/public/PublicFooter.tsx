@@ -15,7 +15,7 @@ export const PublicFooter: React.FC = () => {
             <li className="hover:text-black cursor-pointer">Customer Portal Logins</li>
             <li className="hover:text-black cursor-pointer">Developer Portal ↗</li>
             <li className="hover:text-black cursor-pointer">Get a Quote</li>
-            <li className="hover:text-black cursor-pointer">DHLFastLink for Business</li>
+            <li className="hover:text-black cursor-pointer">FastLink for Business</li>
           </ul>
         </div>
 
@@ -23,8 +23,8 @@ export const PublicFooter: React.FC = () => {
         <div>
           <h4 className="font-extrabold text-sm text-[#D40511] mb-3">Our Divisions</h4>
           <ul className="space-y-2 text-gray-600 font-medium">
-            <li className="hover:text-black cursor-pointer">DHLFastLink Express</li>
-            <li className="hover:text-black cursor-pointer">DHLFastLink Global Forwarding</li>
+            <li className="hover:text-black cursor-pointer">FastLink Express</li>
+            <li className="hover:text-black cursor-pointer">FastLink Global Forwarding</li>
             <li className="hover:text-black cursor-pointer">Other Global Divisions</li>
           </ul>
         </div>
@@ -33,7 +33,7 @@ export const PublicFooter: React.FC = () => {
         <div>
           <h4 className="font-extrabold text-sm text-[#D40511] mb-3">Company Information</h4>
           <ul className="space-y-2 text-gray-600 font-medium">
-            <li className="hover:text-black cursor-pointer">About DHLFastLink</li>
+            <li className="hover:text-black cursor-pointer">About FastLink</li>
             <li className="hover:text-black cursor-pointer">Delivered ↗</li>
             <li className="hover:text-black cursor-pointer">Careers ↗</li>
             <li className="hover:text-black cursor-pointer">Press Center</li>
@@ -49,7 +49,7 @@ export const PublicFooter: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center space-x-2">
             <div className="bg-[#D40511] text-[#FFCC00] font-black italic tracking-tighter text-lg px-2 py-0.5 rounded-sm">
-              DHLFastLink
+              FastLink
             </div>
             <span className="font-bold text-gray-900 text-sm">Group</span>
           </div>
@@ -72,7 +72,7 @@ export const PublicFooter: React.FC = () => {
         </div>
 
         <div className="text-center text-[11px] text-gray-400 mt-4">
-          2026 © - all rights reserved | DHLFastLink Logistics Real-Time Operations Platform
+          2026 © - all rights reserved | FastLink Logistics Real-Time Operations Platform
         </div>
       </div>
     </footer>

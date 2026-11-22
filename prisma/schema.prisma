@@ -30,7 +30,7 @@ model Shipment {
   parcelType         String
   pieces             Int?     @default(1)
   serviceType        String?  @default("Express Air")
-  carrier            String?  @default("DHLFastLink Express")
+  carrier            String?  @default("FastLink Express")
   temperatureCelsius Float?
   estimatedDelivery  String
   actualDelivery     String?

@@ -5,7 +5,7 @@ import LoginPage from '../login/page';
 
 export default function RegisterPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-slate-50 flex items-center justify-center">Loading DHLFastLink Register...</div>}>
+    <Suspense fallback={<div className="min-h-screen bg-slate-50 flex items-center justify-center">Loading FastLink Register...</div>}>
       <LoginPage />
     </Suspense>
   );

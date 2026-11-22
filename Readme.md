@@ -1,12 +1,12 @@
-# DHLFastLink Logistics Platform
+# FastLink Logistics Platform
 
-A logistics and operations dashboard for DHLFastLink built with Next.js. It includes a public landing page, shipment tracking flow, staff login, and role-based dashboard experiences for operations teams.
+A logistics and operations dashboard for FastLink built with Next.js. It includes a public landing page, shipment tracking flow, staff login, and role-based dashboard experiences for operations teams.
 
 ## Project Overview
 
 This app is designed to mimic a modern logistics company experience with:
 
-- public DHLFastLink homepage
+- public FastLink homepage
 - shipment tracking page
 - staff login and access flow
 - operations dashboard for admin and driver roles
@@ -25,7 +25,7 @@ This app is designed to mimic a modern logistics company experience with:
 
 ## Main Features
 
-- Responsive public homepage using DHLFastLink branding
+- Responsive public homepage using FastLink branding
 - Tracking search for consignments and shipments
 - Secure login flow for staff users
 - Role-based dashboard structure
@@ -112,7 +112,7 @@ bun run lint
 
 ## Notes
 
-This logistics operations prototype demonstrates DHLFastLink workflows and is not intended as a production-grade shipping system.
+This logistics operations prototype demonstrates FastLink workflows and is not intended as a production-grade shipping system.
 
 ## License
 

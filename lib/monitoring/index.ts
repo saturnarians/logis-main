@@ -22,8 +22,8 @@ export interface UnifiedLogEntry {
 }
 
 const MAX_LOGS = 200;
-const globalLogs: UnifiedLogEntry[] = (globalThis as any).__DHLFastLink_UNIFIED_LOG_STORE__ || [];
-(globalThis as any).__DHLFastLink_UNIFIED_LOG_STORE__ = globalLogs;
+const globalLogs: UnifiedLogEntry[] = (globalThis as any).__FastLink_UNIFIED_LOG_STORE__ || [];
+(globalThis as any).__FastLink_UNIFIED_LOG_STORE__ = globalLogs;
 
 const ANSI = {
   reset: '\x1b[0m',

@@ -99,7 +99,7 @@ export const SystemSettingsView: React.FC = () => {
     priority: 'high',
     recipientRole: 'driver',
     recipientPhone: '+49 171 000-1234',
-    recipientEmail: 'dispatch@dhlfastlink.com',
+    recipientEmail: 'dispatch@fastlink.com',
   });
 
   const showNotification = (msg: string) => {
@@ -706,7 +706,7 @@ export const SystemSettingsView: React.FC = () => {
                 </div>
                 <div className="flex justify-between py-1 border-b border-gray-100">
                   <span className="text-gray-500">Service:</span>
-                  <span className="font-mono font-bold text-indigo-700">dhlfastlink-logistics-backend</span>
+                  <span className="font-mono font-bold text-indigo-700">fastlink-logistics-backend</span>
                 </div>
                 <div className="flex justify-between py-1 border-b border-gray-100">
                   <span className="text-gray-500">Metric Counters:</span>
@@ -797,7 +797,7 @@ export const SystemSettingsView: React.FC = () => {
                   </span>
                 </div>
                 <h2 className="text-lg sm:text-xl font-black text-gray-900">
-                  DHLFastLink Autonomous AI Copilot Master Kill-Switch
+                  FastLink Autonomous AI Copilot Master Kill-Switch
                 </h2>
                 <p className="text-xs text-gray-500 max-w-2xl">
                   Instantly halt all generative proposals, automated route optimizations, and unattended tariff adjustments across the fleet network.
@@ -1061,7 +1061,7 @@ export const SystemSettingsView: React.FC = () => {
             <div className="bg-slate-50 p-4 rounded-xl border border-gray-200 flex flex-wrap items-center justify-between gap-4">
               <div>
                 <h3 className="font-extrabold text-sm text-gray-900">Webhooks Outbound Dispatch Feed</h3>
-                <p className="text-xs text-gray-500 font-mono text-[11px]">https://api.dhlfastlink-logistics.internal/v1/webhooks/status-stream</p>
+                <p className="text-xs text-gray-500 font-mono text-[11px]">https://api.fastlink-logistics.internal/v1/webhooks/status-stream</p>
               </div>
               <span className="bg-blue-100 text-blue-800 font-extrabold text-xs px-3 py-1 rounded-full border border-blue-300">
                 Listening (200 OK)

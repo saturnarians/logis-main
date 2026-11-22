@@ -19,7 +19,7 @@ export const TalkToAIFloatingButton: React.FC = () => {
             ? 'bg-gradient-to-r from-[#D40511] to-red-700 hover:from-red-700 hover:to-red-800 border-[#FFCC00] focus:ring-amber-400/40'
             : 'bg-gradient-to-r from-gray-800 to-gray-900 hover:from-gray-900 hover:to-black border-red-500/80 focus:ring-red-400/40'
         }`}
-        aria-label="Talk to DHLFastLink AI Voice Assistant"
+        aria-label="Talk to FastLink AI Voice Assistant"
       >
         {/* Pulsating backdrop glow */}
         <span className={`absolute -inset-1 rounded-full opacity-70 blur group-hover:opacity-100 transition duration-1000 group-hover:duration-200 animate-pulse -z-10 ${

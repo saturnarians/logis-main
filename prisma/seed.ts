@@ -16,7 +16,7 @@ import { PrismaUserRepository } from "../server/services/repository/auth.prisma.
 import { ScryptPasswordHasher } from "../server/services/repository/argon2.passwordhasher";
 
 async function main() {
-  console.log("Seeding database with DHLFastLink Logistics data...");
+  console.log("Seeding database with FastLink Logistics data...");
 
   // 1. Seed Warehouses
   for (const wh of INITIAL_WAREHOUSES) {
@@ -98,7 +98,7 @@ async function main() {
         parcelType: s.parcelType,
         pieces: s.pieces ?? 1,
         serviceType: s.serviceType ?? "Express Air",
-        carrier: s.carrier ?? "DHLFastLink Express",
+        carrier: s.carrier ?? "FastLink Express",
         temperatureCelsius: s.temperatureCelsius,
         estimatedDelivery: s.estimatedDelivery,
         actualDelivery: s.actualDelivery,
@@ -142,7 +142,7 @@ async function main() {
         parcelType: s.parcelType,
         pieces: s.pieces ?? 1,
         serviceType: s.serviceType ?? "Express Air",
-        carrier: s.carrier ?? "DHLFastLink Express",
+        carrier: s.carrier ?? "FastLink Express",
         temperatureCelsius: s.temperatureCelsius,
         estimatedDelivery: s.estimatedDelivery,
         actualDelivery: s.actualDelivery,
@@ -287,10 +287,10 @@ async function main() {
     {
       id: "usr-superadmin",
       name: "Alex Rodriguez",
-      email: "superadmin@dhlfastlink.com",
+      email: "superadmin@fastlink.com",
       passwordHash: await passwordHasher.hash(seedPassword),
       role: "superadmin" as const,
-      staffId: "DHLFastLink-DIR-001",
+      staffId: "FastLink-DIR-001",
       hub: "Global Operations Headquarters",
       department: "Executive Logistics Command",
       phone: "+44 20 7946 0991",
@@ -300,10 +300,10 @@ async function main() {
     {
       id: "usr-admin",
       name: "Sarah Jenkins",
-      email: "admin@dhlfastlink.com",
+      email: "admin@fastlink.com",
       passwordHash: await passwordHasher.hash(seedPassword),
       role: "admin" as const,
-      staffId: "DHLFastLink-MGR-442",
+      staffId: "FastLink-MGR-442",
       hub: "London Central Gateway",
       department: "Dispatch & Fleet Logistics",
       phone: "+44 20 7946 0834",
@@ -313,10 +313,10 @@ async function main() {
     {
       id: "usr-customer",
       name: "Customer User",
-      email: "customer@dhlfastlink.com",
+      email: "customer@fastlink.com",
       passwordHash: await passwordHasher.hash(seedPassword),
       role: "customer" as const,
-      staffId: "DHLFastLink-CUST-001",
+      staffId: "FastLink-CUST-001",
       hub: "London Central Gateway",
       department: "Retail Logistics",
       phone: "+44 20 7946 0000",
@@ -326,12 +326,12 @@ async function main() {
     {
       id: "usr-driver-default",
       name: "Marcus Vance",
-      email: "driver@dhlfastlink.com",
+      email: "driver@fastlink.com",
       passwordHash: await passwordHasher.hash(seedPassword),
       role: "driver" as const,
-      staffId: "DHLFastLink-DRV-101",
+      staffId: "FastLink-DRV-101",
       hub: "London Central Gateway",
-      vehicleId: "DHLFastLink-V-901",
+      vehicleId: "FastLink-V-901",
       department: "Express Last-Mile Courier",
       phone: "+1 (555) 234-5678",
       avatarUrl: "https://picsum.photos/seed/driver1/120/120",
@@ -346,7 +346,7 @@ async function main() {
   // Seed all drivers from INITIAL_DRIVERS
   for (const driver of INITIAL_DRIVERS) {
     const emailName = driver.name.toLowerCase().replace(/\s+/g, ".");
-    const staffId = `DHLFastLink-DRV-${driver.id.replace("drv-", "")}`;
+    const staffId = `FastLink-DRV-${driver.id.replace("drv-", "")}`;
     const passwordHash = await passwordHasher.hash(seedPassword);
 
     await userRepository.upsertUser({
@@ -354,8 +354,8 @@ async function main() {
       name: driver.name,
       email:
         driver.id === "drv-101"
-          ? "driver@dhlfastlink.com"
-          : `${emailName}@dhlfastlink.com`,
+          ? "driver@fastlink.com"
+          : `${emailName}@fastlink.com`,
       passwordHash,
       role: "driver",
       staffId,

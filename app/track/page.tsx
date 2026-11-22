@@ -40,7 +40,7 @@ function TrackPageContent() {
   const router = useRouter();
   const { shipments, trackedShipmentId, setTrackedShipmentId, isSimulating, toggleCopilot, openCopilotWithPrompt } = useLogistics();
 
-  const queryCode = searchParams.get('id') || searchParams.get('code') || searchParams.get('trackingId') || trackedShipmentId || 'DHLFastLink-8942-01';
+  const queryCode = searchParams.get('id') || searchParams.get('code') || searchParams.get('trackingId') || trackedShipmentId || 'FastLink-8942-01';
   const effectiveCode = queryCode.trim().toUpperCase();
 
   const [inputCode, setInputCode] = useState(effectiveCode);
@@ -63,12 +63,12 @@ function TrackPageContent() {
       const entry = entries[i];
       const existing = statusMap.get(entry.status);
       if (!existing) {
-        statusMap.set(entry.status, { ...entry, updatedBy: 'DHLFastLink' });
+        statusMap.set(entry.status, { ...entry, updatedBy: 'FastLink' });
       } else {
         const timeEntry = new Date(entry.timestamp).getTime() || 0;
         const timeExisting = new Date(existing.timestamp).getTime() || 0;
         if (timeEntry >= timeExisting) {
-          statusMap.set(entry.status, { ...entry, updatedBy: 'DHLFastLink' });
+          statusMap.set(entry.status, { ...entry, updatedBy: 'FastLink' });
         }
       }
     }
@@ -157,7 +157,7 @@ function TrackPageContent() {
               <div className="flex items-center space-x-2">
                 <button
                   type="button"
-                  onClick={() => openCopilotWithPrompt(`Where is my shipment ${inputCode || 'DHLFastLink-8942-01'}?`)}
+                  onClick={() => openCopilotWithPrompt(`Where is my shipment ${inputCode || 'FastLink-8942-01'}?`)}
                   className="bg-[#D40511] hover:bg-red-700 text-white text-xs font-black px-3.5 py-2 rounded-xl shadow-sm flex items-center space-x-1.5 transition-all"
                 >
                   <Mic className="w-4 h-4 text-[#FFCC00] animate-pulse" />
@@ -182,7 +182,7 @@ function TrackPageContent() {
                     type="text"
                     value={inputCode}
                     onChange={(e) => setInputCode(e.target.value)}
-                    placeholder="Enter DHLFastLink Tracking Code (e.g. DHLFastLink-8942-01)"
+                    placeholder="Enter FastLink Tracking Code (e.g. FastLink-8942-01)"
                     className="w-full pl-11 pr-4 py-3 bg-slate-50 border border-gray-300 rounded-xl text-sm font-mono font-bold text-gray-900 focus:outline-none focus:border-[#D40511] focus:bg-white transition-all uppercase"
                     required
                   />
@@ -239,10 +239,10 @@ function TrackPageContent() {
               </p>
               <div className="mt-6 flex justify-center">
                 <button
-                  onClick={() => handleSelectSample('DHLFastLink-8942-01')}
+                  onClick={() => handleSelectSample('FastLink-8942-01')}
                   className="bg-[#D40511] hover:bg-red-700 text-white font-bold text-xs px-5 py-2.5 rounded-xl shadow"
                 >
-                  Load Sample Shipment (DHLFastLink-8942-01)
+                  Load Sample Shipment (FastLink-8942-01)
                 </button>
               </div>
             </div>
@@ -255,7 +255,7 @@ function TrackPageContent() {
                   <div>
                     <div className="flex items-center space-x-2.5">
                       <span className="bg-[#FFCC00] text-black text-[10px] font-black px-2.5 py-0.5 rounded uppercase tracking-wider">
-                        DHLFastLink AIR EXPRESS
+                        FastLink AIR EXPRESS
                       </span>
                       <h2 className="text-xl sm:text-2xl font-mono font-black tracking-tight text-white">
                         {activeShipment.trackingId}
@@ -264,9 +264,9 @@ function TrackPageContent() {
                     <div className="flex flex-wrap items-center gap-3 text-xs text-gray-400 mt-1.5">
                       <span>Order Ref: <strong className="text-gray-200 font-mono">{activeShipment.orderId}</strong></span>
                       <span>•</span>
-                      <span>Service: <strong className="text-gray-200">{activeShipment.serviceType || 'DHLFastLink Express Worldwide'}</strong></span>
+                      <span>Service: <strong className="text-gray-200">{activeShipment.serviceType || 'FastLink Express Worldwide'}</strong></span>
                       <span>•</span>
-                      <span>Carrier: <strong className="text-gray-200">{activeShipment.carrier || 'DHLFastLink Express'}</strong></span>
+                      <span>Carrier: <strong className="text-gray-200">{activeShipment.carrier || 'FastLink Express'}</strong></span>
                     </div>
                   </div>
 
@@ -462,7 +462,7 @@ function TrackPageContent() {
                               <Building2 className="w-3 h-3" />
                               <span>Location: {entry.location}</span>
                               <span>•</span>
-                              {/* <span>Recorded by: DHLFastLink</span> */}
+                              {/* <span>Recorded by: FastLink</span> */}
                             </div>
                           </div>
                         </div>
@@ -502,7 +502,7 @@ function TrackPageContent() {
                     <div className="relative z-10 flex justify-between items-start">
                       <div className="bg-black/80 backdrop-blur border border-gray-700 px-3 py-2 rounded-xl text-white text-xs space-y-0.5">
                         <span className="text-[10px] text-emerald-400 font-bold block">● ACTIVE BEACON</span>
-                        <div className="font-mono font-bold">Carrier: {activeShipment.carrier || 'DHLFastLink Express'}</div>
+                        <div className="font-mono font-bold">Carrier: {activeShipment.carrier || 'FastLink Express'}</div>
                         <div className="text-gray-400 text-[10px]">Driver ID: {activeShipment.assignedDriverId || activeShipment.driverId || 'Autonomous Staging'}</div>
                       </div>
 
@@ -669,7 +669,7 @@ export default function TrackPage() {
       <div className="min-h-screen bg-slate-50 flex items-center justify-center p-8">
         <div className="text-center space-y-3">
           <div className="w-10 h-10 border-4 border-[#D40511] border-t-transparent rounded-full animate-spin mx-auto" />
-          <p className="text-xs font-bold text-gray-600 font-mono">Loading DHLFastLink Tracking System...</p>
+          <p className="text-xs font-bold text-gray-600 font-mono">Loading FastLink Tracking System...</p>
         </div>
       </div>
     }>

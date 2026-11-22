@@ -1,5 +1,5 @@
-import { DHLFastLinkHomepageLanding } from "@/components/public/DHLFastLinkHomepageLanding";
+import { FastLinkHomepageLanding } from "@/components/public/FastLinkHomepageLanding";
 
 export default function Home() {
-  return <DHLFastLinkHomepageLanding />;
+  return <FastLinkHomepageLanding />;
 }

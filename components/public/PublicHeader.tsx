@@ -67,7 +67,7 @@ export const PublicHeader: React.FC<PublicHeaderProps> = ({ activeTab = 'track',
       {/* <div className="bg-[#111827] text-white px-4 py-1.5 text-xs font-sans flex flex-wrap items-center justify-between gap-2 border-b border-gray-800">
         <div className="flex items-center space-x-2">
           <span className="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-          <span className="font-semibold text-gray-300">DHLFastLink Real-Time Operational Platform</span>
+          <span className="font-semibold text-gray-300">FastLink Real-Time Operational Platform</span>
           <span className="hidden sm:inline text-gray-500">|</span>
           <span className="hidden sm:inline text-gray-400">Secure staff workspace</span>
         </div>
@@ -82,7 +82,7 @@ export const PublicHeader: React.FC<PublicHeaderProps> = ({ activeTab = 'track',
             className="flex items-center space-x-2 text-left focus:outline-none group"
           >
             <div className="bg-[#D40511] text-[#FFCC00] font-black italic tracking-tighter text-2xl px-2.5 py-0.5 rounded-sm shadow-inner flex items-center">
-              <span>DHLFastLink</span>
+              <span>FastLink</span>
               <span className="text-white text-xs not-italic ml-1 font-mono font-normal">EXPRESS</span>
             </div>
           </Link>
@@ -187,7 +187,7 @@ export const PublicHeader: React.FC<PublicHeaderProps> = ({ activeTab = 'track',
             <Search className="w-4 h-4 text-gray-400 mr-1.5" />
             <input
               type="text"
-              placeholder="Track ID (e.g. DHLFastLink-8942-01)"
+              placeholder="Track ID (e.g. FastLink-8942-01)"
               value={headerSearch}
               onChange={(e) => setHeaderSearch(e.target.value)}
               className="w-44 text-xs outline-none text-gray-900 bg-transparent font-mono"
@@ -243,7 +243,7 @@ export const PublicHeader: React.FC<PublicHeaderProps> = ({ activeTab = 'track',
             {/* Drawer Header */}
             <div className="bg-[#FFCC00] px-4 py-4 flex items-center justify-between border-b border-amber-300">
               <div className="bg-[#D40511] text-[#FFCC00] font-black italic tracking-tighter text-xl px-2 py-0.5 rounded-sm">
-                DHLFastLink EXPRESS
+                FastLink EXPRESS
               </div>
               <button
                 onClick={() => setMobileMenuOpen(false)}

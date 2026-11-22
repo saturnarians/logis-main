@@ -78,7 +78,7 @@ export const CreateShipmentSchema = z.object({
   parcelType: z.string().default("Parcel Box"),
   pieces: z.number().int().positive().default(1),
   serviceType: z.string().default("Express Air"),
-  carrier: z.string().default("DHLFastLink Express"),
+  carrier: z.string().default("FastLink Express"),
   temperatureCelsius: z.number().optional(),
   estimatedDelivery: z.string().min(4, "Estimated delivery date required"),
   costUsd: z.number().nonnegative().default(0),

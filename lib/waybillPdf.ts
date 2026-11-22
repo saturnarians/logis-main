@@ -1,16 +1,16 @@
 import { Shipment } from '@/types/logistics';
 
 /**
- * Generates an authentic printable DHLFastLink Express Air Waybill (AWB) document
+ * Generates an authentic printable FastLink Express Air Waybill (AWB) document
  * and opens the browser print/save-as-PDF dialog.
  */
 export function downloadWaybillPdf(shipment: Partial<Shipment>): void {
   if (typeof window === 'undefined') return;
 
-  const trackingId = shipment.trackingId || 'DHLFastLink-0000-00';
+  const trackingId = shipment.trackingId || 'FastLink-0000-00';
   const orderId = shipment.orderId || 'ORD-2026-000';
   const dateStr = shipment.createdAt || new Date().toISOString().replace('T', ' ').substring(0, 16);
-  const senderName = shipment.senderName || 'DHLFastLink Central Hub';
+  const senderName = shipment.senderName || 'FastLink Central Hub';
   const senderAddr = shipment.senderAddress || 'London Central Gateway';
   const originCity = shipment.originCity || 'London';
   const consigneeName = shipment.customerName || 'Valued Consignee';
@@ -21,8 +21,8 @@ export function downloadWaybillPdf(shipment: Partial<Shipment>): void {
   const pieces = shipment.pieces || 1;
   const parcelType = shipment.parcelType || 'Parcel Box';
   const priority = shipment.priority || 'Express';
-  const carrier = shipment.carrier || 'DHLFastLink Express Worldwide';
-  const vehicle = shipment.vehicleNo || 'DHLFastLink-EV-402';
+  const carrier = shipment.carrier || 'FastLink Express Worldwide';
+  const vehicle = shipment.vehicleNo || 'FastLink-EV-402';
   const driver = shipment.driverName || 'Designated Dispatch Courier';
   const cost = shipment.costUsd !== undefined ? `$${shipment.costUsd.toFixed(2)}` : '$45.00';
   const otpCode = shipment.proofOfDelivery?.otpCode || '948210';
@@ -95,7 +95,7 @@ export function downloadWaybillPdf(shipment: Partial<Shipment>): void {
       box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
     }
 
-    /* DHLFastLink Header */
+    /* FastLink Header */
     .header {
       display: flex;
       justify-content: space-between;
@@ -275,7 +275,7 @@ export function downloadWaybillPdf(shipment: Partial<Shipment>): void {
 <body>
   <div class="toolbar">
     <div>
-      <h1>DHLFastLink EXPRESS AIR WAYBILL &bull; ${trackingId}</h1>
+      <h1>FastLink EXPRESS AIR WAYBILL &bull; ${trackingId}</h1>
       <span style="font-size: 11px; color: #94a3b8;">Click Print or select 'Save as PDF' in browser print dialog</span>
     </div>
     <div>
@@ -291,7 +291,7 @@ export function downloadWaybillPdf(shipment: Partial<Shipment>): void {
     <!-- Header -->
     <div class="header">
       <div class="brand-box">
-        <div class="logo-text">DHLFastLink</div>
+        <div class="logo-text">FastLink</div>
         <div class="sub-logo">EXPRESS WORLDWIDE</div>
       </div>
       <div class="doc-title">
@@ -360,7 +360,7 @@ export function downloadWaybillPdf(shipment: Partial<Shipment>): void {
         <p><strong>Assigned Courier:</strong> ${driver}</p>
         <p><strong>Fleet Vehicle:</strong> ${vehicle}</p>
         <p><strong>Routing Checkpoint:</strong> ${originCity} &rarr; ${destCity} Direct Flight Scan</p>
-        <p><strong>Recorded By:</strong> DHLFastLink</p>
+        <p><strong>Recorded By:</strong> FastLink</p>
       </div>
       <div class="otp-box">
         <div class="otp-label">Handover OTP Code</div>
@@ -370,7 +370,7 @@ export function downloadWaybillPdf(shipment: Partial<Shipment>): void {
 
     <!-- Legal Terms -->
     <div class="terms">
-      IMPORTANT NOTICE: By handing over this shipment or receiving this waybill, the shipper agrees to the standard DHLFastLink Express Conditions of Carriage.
+      IMPORTANT NOTICE: By handing over this shipment or receiving this waybill, the shipper agrees to the standard FastLink Express Conditions of Carriage.
       Carrier liability is strictly limited in accordance with the Montreal Convention. All cargo is subject to airfreight security inspection.
     </div>
   </div>

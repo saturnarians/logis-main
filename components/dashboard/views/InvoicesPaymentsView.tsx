@@ -264,7 +264,7 @@ export const InvoicesPaymentsView: React.FC = () => {
                   required
                   value={orderId}
                   onChange={(e) => setOrderId(e.target.value)}
-                  placeholder="e.g. DHLFastLink-8942-01"
+                  placeholder="e.g. FastLink-8942-01"
                   className="w-full bg-slate-50 border border-gray-300 rounded-xl px-3 py-2 text-xs font-mono font-bold"
                 />
               </div>

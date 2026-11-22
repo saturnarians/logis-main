@@ -276,7 +276,7 @@ export function SuperAdminPortal() {
 
                 <button
                   onClick={async () => {
-                    if (confirm('Reseed SQLite database with default DHLFastLink datasets?')) {
+                    if (confirm('Reseed SQLite database with default FastLink datasets?')) {
                       setIsReseeding(true);
                       const res = await reseedDatabase();
                       setIsReseeding(false);

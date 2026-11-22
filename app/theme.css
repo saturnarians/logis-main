@@ -4,17 +4,17 @@
      L = Lightness (0-1), C = Chroma (0-0.4), H = Hue (0-360)
      -------------------------------------------------------------------------- */
 
-  /* DHLFastLink Brand Primaries */
-  --dhlfastlink-red: oklch(0.54 0.24 25.8);
-  --dhlfastlink-red-hover: oklch(0.48 0.25 25.8);
-  --dhlfastlink-red-active: oklch(0.42 0.26 25.8);
-  --dhlfastlink-red-subtle: oklch(0.96 0.03 25.8);
-  --dhlfastlink-red-glow: oklch(0.54 0.24 25.8 / 0.25);
+  /* FastLink Brand Primaries */
+  --fastlink-red: oklch(0.54 0.24 25.8);
+  --fastlink-red-hover: oklch(0.48 0.25 25.8);
+  --fastlink-red-active: oklch(0.42 0.26 25.8);
+  --fastlink-red-subtle: oklch(0.96 0.03 25.8);
+  --fastlink-red-glow: oklch(0.54 0.24 25.8 / 0.25);
 
-  --dhlfastlink-yellow: oklch(0.88 0.19 92.5);
-  --dhlfastlink-yellow-hover: oklch(0.84 0.20 92.5);
-  --dhlfastlink-yellow-subtle: oklch(0.97 0.05 92.5);
-  --dhlfastlink-yellow-glow: oklch(0.88 0.19 92.5 / 0.35);
+  --fastlink-yellow: oklch(0.88 0.19 92.5);
+  --fastlink-yellow-hover: oklch(0.84 0.20 92.5);
+  --fastlink-yellow-subtle: oklch(0.97 0.05 92.5);
+  --fastlink-yellow-glow: oklch(0.88 0.19 92.5 / 0.35);
 
   /* Sophisticated Neutrals & Dark Surface OKLCH */
   --surface-base: oklch(0.985 0.003 250);

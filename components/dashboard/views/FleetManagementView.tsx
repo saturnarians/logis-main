@@ -268,7 +268,7 @@ export const FleetManagementView: React.FC = () => {
                   required
                   value={plateNo}
                   onChange={(e) => setPlateNo(e.target.value)}
-                  placeholder="e.g. DHLFastLink-EV-901"
+                  placeholder="e.g. FastLink-EV-901"
                   className="w-full bg-slate-50 border border-gray-300 rounded-xl px-3 py-2 text-xs font-bold"
                 />
               </div>

@@ -96,14 +96,14 @@ export const AICopilotModal: React.FC<AICopilotModalProps> = ({ isOpen, onClose 
     {
       id: 'm-init',
       role: 'assistant',
-      text: "Hello! I'm your DHLFastLink Air & Ground AI Voice Copilot. You can talk to me directly using your microphone or type any question. Ask me about live package locations, delivery delays, courier assignments, tariffs, or route optimization.",
+      text: "Hello! I'm your FastLink Air & Ground AI Voice Copilot. You can talk to me directly using your microphone or type any question. Ask me about live package locations, delivery delays, courier assignments, tariffs, or route optimization.",
       timestamp: 'Just now',
     },
   ]);
 
-  // Extract DHLFastLink Tracking IDs from text
+  // Extract FastLink Tracking IDs from text
   const extractTrackingIds = (text: string): string[] => {
-    const regex = /DHLFastLink-\d{4}-\d{2}/gi;
+    const regex = /FastLink-\d{4}-\d{2}/gi;
     const matches = text.match(regex);
     return matches ? Array.from(new Set(matches.map((m) => m.toUpperCase()))) : [];
   };
@@ -287,7 +287,7 @@ export const AICopilotModal: React.FC<AICopilotModalProps> = ({ isOpen, onClose 
         origin: s.originCity,
         destination: s.destinationCity || s.destCity,
         customer: s.customerName,
-        carrier: s.carrier || 'DHLFastLink Express',
+        carrier: s.carrier || 'FastLink Express',
         eta: s.estimatedDelivery,
       })),
       driversSummary: drivers.slice(0, 5).map((d) => ({
@@ -449,10 +449,10 @@ export const AICopilotModal: React.FC<AICopilotModalProps> = ({ isOpen, onClose 
   if (!isOpen) return null;
 
   const samplePrompts = [
-    { label: 'Where is package DHLFastLink-8942-01?', prompt: 'Where is package DHLFastLink-8942-01 right now and what is its ETA?' },
+    { label: 'Where is package FastLink-8942-01?', prompt: 'Where is package FastLink-8942-01 right now and what is its ETA?' },
     { label: 'Show delayed shipments', prompt: 'Which shipments are currently delayed and what is the root cause?' },
-    { label: 'Advance status of DHLFastLink-8942-01', prompt: 'Advance the status of shipment DHLFastLink-8942-01 to In Transit' },
-    { label: 'Assign courier to shipment', prompt: 'Assign available driver Marcus Vance to pending shipment DHLFastLink-8942-04' },
+    { label: 'Advance status of FastLink-8942-01', prompt: 'Advance the status of shipment FastLink-8942-01 to In Transit' },
+    { label: 'Assign courier to shipment', prompt: 'Assign available driver Marcus Vance to pending shipment FastLink-8942-04' },
     { label: 'Calculate 10kg shipping tariff', prompt: 'How much would it cost to ship a 10kg urgent package from Munich to London?' },
     { label: 'Broadcast weather alert', prompt: 'Broadcast a severe weather warning alert for Alpine snowfall on route MUC-FRA' },
   ];
@@ -472,7 +472,7 @@ export const AICopilotModal: React.FC<AICopilotModalProps> = ({ isOpen, onClose 
             <div>
               <div className="flex items-center space-x-2">
                 <h3 className="font-extrabold text-base text-white tracking-tight">
-                  DHLFastLink AI Operations & Voice Copilot
+                  FastLink AI Operations & Voice Copilot
                 </h3>
                 {/* Governance Status Pill */}
                 <span className={`text-[10px] font-black px-2 py-0.5 rounded-full uppercase flex items-center space-x-1 ${
@@ -660,7 +660,7 @@ export const AICopilotModal: React.FC<AICopilotModalProps> = ({ isOpen, onClose 
                   {loading ? (
                     <div className="flex items-center space-x-2 text-amber-300 py-2">
                       <Loader2 className="w-4 h-4 animate-spin text-[#FFCC00]" />
-                      <span className="font-semibold">Processing your question with DHLFastLink Telematics...</span>
+                      <span className="font-semibold">Processing your question with FastLink Telematics...</span>
                     </div>
                   ) : latestAssistantMessage ? (
                     latestAssistantMessage.text
@@ -799,7 +799,7 @@ export const AICopilotModal: React.FC<AICopilotModalProps> = ({ isOpen, onClose 
                 {isListening
                   ? 'Speak clearly into your microphone — auto sends on pause'
                   : speechSupported
-                  ? 'Click the microphone to start talking to the DHLFastLink AI Assistant'
+                  ? 'Click the microphone to start talking to the FastLink AI Assistant'
                   : 'Microphone speech recognition is not supported in this browser. Please use keyboard chat.'}
               </p>
             </div>
@@ -834,7 +834,7 @@ export const AICopilotModal: React.FC<AICopilotModalProps> = ({ isOpen, onClose 
                   className={`flex flex-col ${m.role === 'user' ? 'items-end' : 'items-start'}`}
                 >
                   <div className="flex items-center space-x-1.5 mb-1 px-1 text-[10px] text-gray-400">
-                    <span className="font-bold capitalize">{m.role === 'user' ? 'You' : 'DHLFastLink Copilot'}</span>
+                    <span className="font-bold capitalize">{m.role === 'user' ? 'You' : 'FastLink Copilot'}</span>
                     <span>•</span>
                     <span>{m.timestamp}</span>
                   </div>

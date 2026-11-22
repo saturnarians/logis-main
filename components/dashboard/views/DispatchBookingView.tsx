@@ -32,7 +32,7 @@ export const DispatchBookingView: React.FC<DispatchBookingViewProps> = ({
   // Form State
   const [customerName, setCustomerName] = useState("");
   const [customerPhone, setCustomerPhone] = useState("");
-  const [senderName, setSenderName] = useState("DHLFastLink Freight Hub Staging");
+  const [senderName, setSenderName] = useState("FastLink Freight Hub Staging");
   const [senderEmail, setSenderEmail] = useState("");
   const [senderPhone, setSenderPhone] = useState("");
   const [senderAddress, setSenderAddress] = useState(
@@ -80,7 +80,7 @@ export const DispatchBookingView: React.FC<DispatchBookingViewProps> = ({
     }
 
     const assignedDriver = drivers.find((d) => d.id === selectedDriverId);
-    const trackingId = `DHLFastLink-${Math.floor(1000 + Math.random() * 9000)}-${Math.floor(10 + Math.random() * 90)}`;
+    const trackingId = `FastLink-${Math.floor(1000 + Math.random() * 9000)}-${Math.floor(10 + Math.random() * 90)}`;
     const orderId = `ORD-${Math.floor(1000 + Math.random() * 9000)}`;
 
     const newShipmentData = {

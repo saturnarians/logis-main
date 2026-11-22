@@ -114,7 +114,7 @@ export const HelpSupportView: React.FC = () => {
                 required
                 value={ticketSubject}
                 onChange={(e) => setTicketSubject(e.target.value)}
-                placeholder="e.g. Temperature alarm on Medical Waybill DHLFastLink-8942-02"
+                placeholder="e.g. Temperature alarm on Medical Waybill FastLink-8942-02"
                 className="w-full bg-slate-50 border border-gray-200 rounded-xl px-3 py-2 text-xs font-semibold focus:outline-none focus:border-[#D40511]"
               />
             </div>
